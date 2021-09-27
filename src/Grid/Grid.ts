@@ -26,7 +26,7 @@ export class Grid {
     }
 
     public render(): void {
-        this.canvasContext.lineWidth = 1;
+        this.canvasContext.lineWidth = .2;
 
         this.canvasContext.beginPath();
 

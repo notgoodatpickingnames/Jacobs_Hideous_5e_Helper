@@ -1,12 +1,10 @@
 import './App.css';
 
-import { World } from './World/World';
+import { Game } from './Game/Game';
 
 function App() {
     return (
-        <div>
-            <World />
-        </div>
+        <Game />
     );
 }
 

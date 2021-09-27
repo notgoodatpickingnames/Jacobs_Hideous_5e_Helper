@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { Grid } from './Grid';
 
 export function useGrid(canvasRef: HTMLCanvasElement, width: number, height: number, squareSize: number) {
-    const [grid, setGrid] = useState<Grid>();
+    const grid = useRef<Grid>();
 
     useEffect(() => {
         if (Boolean(canvasRef) && width !== undefined && height !== undefined && squareSize !== undefined) {
-            const grid = new Grid(canvasRef, width, height, squareSize);
+            const _grid = new Grid(canvasRef, width, height, squareSize);
 
-            setGrid(grid);
+            grid.current = _grid;
         }
     }, [canvasRef, width, height, squareSize]);
 
