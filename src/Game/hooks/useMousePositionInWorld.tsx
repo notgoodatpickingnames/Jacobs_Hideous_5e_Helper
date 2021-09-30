@@ -3,7 +3,7 @@ import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import useEventListener from '../../Utils/hooks/useEventListener';
 import { Vector2 } from '../../Utils/vector2';
 
-export function useMousePositionInWorld(offset: Vector2, zoom: Vector2, canvas: MutableRefObject<HTMLCanvasElement>) {
+export function useMousePositionInWorld(offset: Vector2, scale: number, canvas: MutableRefObject<HTMLCanvasElement>) {
     const mousePosition = useRef<Vector2>(Vector2.zero);
 
     function onMouseMove(event: MouseEvent): void {
@@ -20,7 +20,10 @@ export function useMousePositionInWorld(offset: Vector2, zoom: Vector2, canvas: 
         const xPos = mousePositionOnPage.x - rect.left + offset.x;
         const yPos = mousePositionOnPage.y - rect.top + offset.y;
 
-        const positionOverCanvas = new Vector2(xPos, yPos);
+        const scaledXPos = xPos / scale;
+        const scaledYPos = yPos / scale;
+
+        const positionOverCanvas = new Vector2(scaledXPos, scaledYPos);
 
         return positionOverCanvas;
     }

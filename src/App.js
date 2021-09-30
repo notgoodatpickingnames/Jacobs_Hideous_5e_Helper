@@ -1,10 +1,13 @@
 import './App.css';
 
-import { Game } from './Game/Game';
+import { Game } from './Game';
+import { WorldContextProvider } from './Game/context/world.context';
 
 function App() {
     return (
-        <Game />
+        <WorldContextProvider>
+            <Game />
+        </WorldContextProvider>
     );
 }
 
