@@ -1,13 +1,27 @@
-import React, { createContext, MutableRefObject, ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+    createContext,
+    Dispatch,
+    MutableRefObject,
+    ReactNode,
+    SetStateAction,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 
 import { Vector2 } from '../../Utils/vector2';
+import { useCanvasContext } from '../hooks/useCanvasContext';
 
 interface WorldContextObject {
+    canvas: MutableRefObject<HTMLCanvasElement>;
+    canvasContext: MutableRefObject<CanvasRenderingContext2D>;
     mousePosition: MutableRefObject<Vector2>;
-    scale: number,
-    setScale: (scale: number) => void;
-    offset: Vector2;
-    setOffset: (offset: Vector2) => void;
+    scale: MutableRefObject<number>,
+    offset: MutableRefObject<Vector2>;
+    backgroundColor: MutableRefObject<string>;
+    panState: Vector2;
+    setPanState: Dispatch<SetStateAction<Vector2>>;
 }
 
 export const WorldContext = createContext<WorldContextObject>({} as WorldContextObject);
@@ -16,39 +30,30 @@ export function useWorldContext(): WorldContextObject {
     return useContext(WorldContext);
 }
 
-interface useWithSideEffectsProps {
-    mousePosition: Vector2,
-    scale: number,
-    offset: Vector2
-}
-
-export function useWorldContextWithSideEffects({mousePosition, scale, offset}: useWithSideEffectsProps): WorldContextObject {
-    const context = useContext(WorldContext);
-
-    useEffect(() => {
-        context.mousePosition.current = mousePosition;
-        context.setScale(scale);
-        context.setOffset(offset);
-    }, [mousePosition, scale, offset]);
-
-    return context;
-}
-
 interface WorldContextProviderProps {
     children: ReactNode[];
 }
 
 export function WorldContextProvider({children}: WorldContextProviderProps) {
     const mousePosition= useRef<Vector2>(Vector2.zero);
-    const [scale, setScale] = useState<number>(1);
-    const [offset, setOffset] = useState<Vector2>(Vector2.zero);
+    const backgroundColor = useRef<string>();
+
+    const canvas = useRef<HTMLCanvasElement>();
+    const canvasContext = useCanvasContext(canvas);
+
+    const [panState, setPanState] = useState<Vector2>();
+    const scale = useRef<number>(0);
+    const offset = useRef<Vector2>(Vector2.zero);
 
     const worldContextObject: WorldContextObject = {
+        canvas,
+        canvasContext,
         mousePosition,
         scale,
-        setScale,
         offset,
-        setOffset
+        backgroundColor,
+        panState,
+        setPanState,
     }
 
     return (

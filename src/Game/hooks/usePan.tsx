@@ -1,13 +1,12 @@
-import { MouseEvent as SyntheticMouseEvent, useCallback, useRef, useState } from 'react';
+import { Dispatch, MouseEvent as SyntheticMouseEvent, SetStateAction, useCallback, useRef } from 'react';
 
 import { Vector2 } from '../../Utils/vector2';
 
 const MIDDLE_MOUSE_BUTTON = 1;
 
-const ORIGIN = Object.freeze({x: 0, y: 0})
-export default function usePan() {
-    const [panState, setPanState] = useState<Vector2>(ORIGIN)
-  
+const ORIGIN = Object.freeze({x: 0, y: 0});
+
+export default function usePan(setPanState: Dispatch<SetStateAction<Vector2>>,) {
     const lastPointRef = useRef(ORIGIN)
   
     const pan = useCallback((event: MouseEvent) => {
@@ -15,7 +14,7 @@ export default function usePan() {
         const point = {x: event.pageX, y: event.pageY}
         lastPointRef.current = point
   
-        setPanState(panState => {
+        setPanState((panState: Vector2) => {
             const delta = {
                 x: lastPoint.x - point.x,
                 y: lastPoint.y - point.y
@@ -27,7 +26,7 @@ export default function usePan() {
   
             return offset;
         });
-    }, []);
+    }, [setPanState]);
   
     const endPan = useCallback((event: SyntheticMouseEvent) => {
         if (event.button) {
@@ -44,5 +43,5 @@ export default function usePan() {
         }
     }, [pan, endPan]);
   
-    return [panState, startPan] as const;
+    return startPan;
 }

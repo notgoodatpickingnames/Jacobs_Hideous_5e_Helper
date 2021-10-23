@@ -1,15 +1,18 @@
-export class Grid {
+import { GameObject } from '../Utils/engine/gameObject';
+import { Vector2 } from '../Utils/vector2';
+
+export class Grid extends GameObject {
     public squareCountX: number;
     public squareCountY: number;
 
     public squareSizeInPixels: number;
 
-    private canvas: HTMLCanvasElement;
-    private canvasContext: CanvasRenderingContext2D;
-
-    constructor(canvasRef: HTMLCanvasElement, width: number, height: number, squareSize: number) {
-        this.canvas = canvasRef;
-        this.canvasContext = this.canvas.getContext('2d');
+    constructor(width: number, height: number, squareSize: number) {
+        super({
+            transform: new Vector2(0, 0),
+            width,
+            height
+        });
 
         this.squareCountX = width;
         this.squareCountY = height;
@@ -25,22 +28,22 @@ export class Grid {
         return this.squareCountY * this.squareSizeInPixels;
     }
 
-    public render(): void {
-        this.canvasContext.lineWidth = .2;
+    public render(canvasContext: CanvasRenderingContext2D): void {
+        canvasContext.lineWidth = .2;
 
-        this.canvasContext.beginPath();
+        canvasContext.beginPath();
 
-        for (let x = 0; x <= this.canvas.width / this.squareSizeInPixels; x++) {
-            this.canvasContext.moveTo(x * this.squareSizeInPixels, 0);
-            this.canvasContext.lineTo(x * this.squareSizeInPixels, this.canvas.height);
+        for (let x = 0; x <= this.width / this.squareSizeInPixels; x++) {
+            canvasContext.moveTo(this.transform.x + (x * this.squareSizeInPixels), this.transform.y - this.height / 2);
+            canvasContext.lineTo((this.transform.x + x * this.squareSizeInPixels), this.transform.y + this.height);
         }
 
-        for (let y = 0; y <= this.canvas.height / this.squareSizeInPixels; y++) {
-            this.canvasContext.moveTo(0, y * this.squareSizeInPixels);
-            this.canvasContext.lineTo(this.canvas.width, y * this.squareSizeInPixels);
+        for (let y = 0; y <= this.height / this.squareSizeInPixels; y++) {
+            canvasContext.moveTo(this.transform.x - (this.width / 2), this.transform.y + (y * this.squareSizeInPixels));
+            canvasContext.lineTo(this.transform.x + this.width, this.transform.y + (y * this.squareSizeInPixels));
         }
 
-        this.canvasContext.strokeStyle = "white";
-        this.canvasContext.stroke();
+        canvasContext.strokeStyle = "white";
+        canvasContext.stroke();
     }
 }

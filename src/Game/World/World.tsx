@@ -1,11 +1,8 @@
 import { makeStyles } from '@mui/styles';
-import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect } from 'react';
 
 import Canvas from '../../Canvas';
-import { useGrid } from '../../Grid/useGrid';
-import { useLast } from '../../Utils/hooks/useLast';
-import { useWorldContextWithSideEffects } from '../context/world.context';
-import { useCanvasContext } from '../hooks/useCanvasContext';
+import { useWorldContext } from '../context/world.context';
 import { useCanvasDraw } from '../hooks/useCanvasDraw';
 import { useMousePositionInWorld } from '../hooks/useMousePositionInWorld';
 import usePan from '../hooks/usePan';
@@ -32,50 +29,49 @@ const useStyles = makeStyles(({
 
 export function World() {
     const classes = useStyles();
-    const [canvasRef, setCanvasRef] = useState<MutableRefObject<HTMLCanvasElement>>();
-    const canvasContext = useCanvasContext(canvasRef);
 
-    const [grid] = useGrid(canvasRef?.current, 20, 20, 10); // Replace with custom map sizes after map creation is finished.
     
-    const [_offset, startPan] = usePan();
-    const _scale = useScale(canvasRef);
-    const lastScale = useLast(_scale);
-    const mousePos = useMousePositionInWorld(_offset, _scale, canvasRef);
-    useCanvasDraw(mousePos, canvasRef, canvasContext);
 
-    const {scale, offset} = useWorldContextWithSideEffects({mousePosition: mousePos.current, scale: _scale, offset: _offset});
+    const {scale, offset, backgroundColor, canvas, canvasContext, setPanState, mousePosition} = useWorldContext();
+
+    const startPan = usePan(setPanState);
+    useScale(canvas);
+    useMousePositionInWorld(mousePosition, offset, scale, canvas);
+    
+    useCanvasDraw(mousePosition, canvas, canvasContext);
 
     function onCanvasRedraw(): void {
-        if (Boolean(canvasRef) && Boolean(canvasContext) && Boolean(canvasContext.current)) {
-            const canvas = canvasRef.current;
+        if (Boolean(canvas.current) && Boolean(canvasContext.current)) {
+            const _canvas = canvas.current;
             const context = canvasContext.current;
-            context.clearRect(0, 0, canvas.width, canvas.height);
-    
-            context.fillStyle = 'grey'
-            context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 
-            context.fillStyle = 'black';
-            context.fillRect(0, 0, 50, 50);
-            context.fillRect(950, 950, 50, 50);
+            // Clear Screen;
+            context.clearRect(0, 0, _canvas.width, _canvas.height);
     
-            grid?.current?.render();
+            // Render Background;
+            context.fillStyle = backgroundColor.current;
+            context.fillRect(0, 0, _canvas.width, _canvas.height);
         }
     }
 
-    useEffect(() => {
-        if (Boolean(canvasRef) && Boolean(canvasContext)) {
-            canvasContext.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    function setCanvasRef(_canvas: MutableRefObject<HTMLCanvasElement>): void {
+        canvas.current = _canvas.current;
+    }
 
-            let panX = offset.x * -1;
-            let panY = offset.y * -1;
+    useEffect(() => {
+        if (Boolean(canvas.current) && Boolean(canvasContext.current)) {
+            canvasContext.current.clearRect(0, 0, canvas.current.width, canvas.current.height);
+
+            let panX = offset.current.x * -1;
+            let panY = offset.current.y * -1;
 
             canvasContext.current.translate(panX, panY);
-            canvasContext.current.scale(scale, scale);
+            canvasContext.current.scale(scale.current, scale.current);
 
             onCanvasRedraw();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset, scale, canvasContext, canvasRef]);
+    }, [offset, scale, canvasContext, canvas]);
 
     return (
         <div className={classes.worldContainer}>
