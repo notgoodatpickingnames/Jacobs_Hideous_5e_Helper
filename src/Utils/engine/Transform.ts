@@ -13,4 +13,8 @@ export class Transform {
     public get position(): Vector2 {
         return this.positionInWorld.add(WorldPosition);
     }
+
+    public set position(pos: Vector2) {
+        this.positionInWorld = this.positionInWorld.subtract(WorldPosition);
+    }
 }

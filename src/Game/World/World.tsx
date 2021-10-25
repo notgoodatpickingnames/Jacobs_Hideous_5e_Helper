@@ -77,7 +77,7 @@ export function World() {
             }
 
             if (!panStateOnLastRender.current.equals(panState.current)) {
-                const difference = panStateOnLastRender.current.difference(panState.current);
+                const difference = panStateOnLastRender.current.subtract(panState.current);
                 let panX = difference.x / scale.current;
                 let panY = difference.y  / scale.current;
 

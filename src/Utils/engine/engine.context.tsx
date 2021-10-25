@@ -32,11 +32,20 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
     useMainLoop(onFrame);
 
     function onFrame(time: number, deltaTime: number): void {
+        update();
         render();
     }
 
     function addFunctionOnRender(functionOnRender: () => void): void {
         functionsOnRender.current.push(functionOnRender);
+    }
+
+    function update(): void {
+        gameObjectsByLayer.current.forEach((layer) => {
+            layer.forEach((gameObject) => {
+                gameObject.update();
+            });
+        });
     }
 
     function render(): void {

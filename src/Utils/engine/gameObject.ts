@@ -64,7 +64,7 @@ export class GameObject {
         return isWithinXBounds && isWithinYBounds;
     }
 
-    public update(worldPanState: Vector2): void {
+    public update(): void {
         
     }
 

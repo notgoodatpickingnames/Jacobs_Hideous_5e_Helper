@@ -16,7 +16,7 @@ export function Game() {
         backgroundColor.current = 'grey';
     }, [backgroundColor]);
 
-    const [grid] = useGrid(2000, 2000, 10); // Replace with custom map sizes after map creation is finished.
+    const [grid] = useGrid(20, 20, 10); // Replace with custom map sizes after map creation is finished.
 
     useEffect(() => {
         addGameObject(grid.current);
