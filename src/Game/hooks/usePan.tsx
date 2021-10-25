@@ -1,6 +1,6 @@
 import { MouseEvent as SyntheticMouseEvent, MutableRefObject, useCallback, useRef } from 'react';
 
-import { Vector2 } from '../../Utils/vector2';
+import { Vector2 } from '../../Utils/engine/Vector2';
 
 const MIDDLE_MOUSE_BUTTON = 1;
 
@@ -26,7 +26,6 @@ export default function usePan(panState: MutableRefObject<Vector2>) {
     }, [panState]);
   
     const endPan = useCallback((event: SyntheticMouseEvent) => {
-        console.log('Ending Pan');
         if (event.button) {
             document.removeEventListener('mousemove', pan);
             document.removeEventListener('mouseup', (event: any) => endPan(event as SyntheticMouseEvent));
@@ -35,7 +34,6 @@ export default function usePan(panState: MutableRefObject<Vector2>) {
   
     const startPan = useCallback((event: SyntheticMouseEvent) => {
         if (event.button === MIDDLE_MOUSE_BUTTON) {
-            console.log('Starting Pan');
             document.addEventListener('mousemove', pan);
             document.addEventListener('mouseup', (event: any) => endPan(event as SyntheticMouseEvent));
             lastPointRef.current = {x: event.pageX, y: event.pageY};

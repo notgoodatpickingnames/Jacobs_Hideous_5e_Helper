@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import { GameObject } from './gameObject';
+import { GameObject } from './GameObject';
 
 export function useGameObjects() {
     const gameObjects = useRef<Map<string, GameObject>>(new Map([]));

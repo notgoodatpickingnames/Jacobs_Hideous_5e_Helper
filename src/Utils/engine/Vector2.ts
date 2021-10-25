@@ -18,4 +18,13 @@ export class Vector2 {
     public difference(other: Vector2): Vector2 {
         return new Vector2(this.x - other.x, this.y - other.y);
     }
+
+    public add(other: Vector2): Vector2 {
+        return new Vector2(this.x + other.x, this.y + other.y);
+    }
+
+    public set(x: number, y: number): void {
+        this.x = x;
+        this.y = y;
+    }
 }

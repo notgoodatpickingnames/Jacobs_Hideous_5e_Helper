@@ -1,4 +1,4 @@
-import { Vector2 } from '../vector2';
+import { Vector2 } from '../engine/Vector2';
 
 export function sum(pointA: Vector2, pointB: Vector2): Vector2 {
     const sumX = pointA.x + pointB.x;

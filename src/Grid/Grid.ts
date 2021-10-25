@@ -1,5 +1,5 @@
-import { GameObject } from '../Utils/engine/gameObject';
-import { Vector2 } from '../Utils/vector2';
+import { GameObject, WorldPosition } from '../Utils/engine';
+import { Vector2 } from '../Utils/engine/Vector2';
 
 export class Grid extends GameObject {
     public squareCountX: number;
@@ -9,7 +9,7 @@ export class Grid extends GameObject {
 
     constructor(width: number, height: number, squareSize: number) {
         super({
-            transform: new Vector2(0, 0),
+            position: new Vector2(0, 0),
             width,
             height
         });
@@ -34,13 +34,17 @@ export class Grid extends GameObject {
         canvasContext.beginPath();
 
         for (let x = 0; x <= this.width / this.squareSizeInPixels; x++) {
-            canvasContext.moveTo(x * this.squareSizeInPixels, 0);
-            canvasContext.lineTo(x * this.squareSizeInPixels, this.height);
+            const xOffset = x * this.squareSizeInPixels;
+
+            canvasContext.moveTo(this.position.x + xOffset, this.position.y);
+            canvasContext.lineTo(this.position.x + xOffset, this.position.y + this.height);
         }
 
         for (let y = 0; y <= this.height / this.squareSizeInPixels; y++) {
-            canvasContext.moveTo(0, y * this.squareSizeInPixels);
-            canvasContext.lineTo(this.width, y * this.squareSizeInPixels);
+            const yOffset = y * this.squareSizeInPixels;
+
+            canvasContext.moveTo(this.position.x, this.position.y + yOffset);
+            canvasContext.lineTo(this.position.x + this.width, this.position.y + yOffset);
         }
 
         canvasContext.strokeStyle = "white";

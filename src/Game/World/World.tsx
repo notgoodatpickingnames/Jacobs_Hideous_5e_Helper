@@ -2,8 +2,8 @@ import { makeStyles } from '@mui/styles';
 import React, { MutableRefObject, useEffect, useReducer, useRef } from 'react';
 
 import Canvas from '../../Canvas';
-import { useEngineContext } from '../../Utils/engine';
-import { Vector2 } from '../../Utils/vector2';
+import { useEngineContext, WorldPosition } from '../../Utils/engine';
+import { Vector2 } from '../../Utils/engine/Vector2';
 import { useWorldContext } from '../context/world.context';
 import { useCanvasDraw } from '../hooks/useCanvasDraw';
 import { useMousePositionInWorld } from '../hooks/useMousePositionInWorld';
@@ -63,7 +63,6 @@ export function World() {
     }
 
     useEffect(() => {
-        console.log('Adding the on render function');
         addFunctionOnRender(onRender);
     }, [addFunctionOnRender]);
 
@@ -71,27 +70,23 @@ export function World() {
         if (Boolean(canvas.current) && Boolean(canvasContext.current)) {
             canvasContext.current.clearRect(0, 0, canvas.current.width, canvas.current.height);
 
+            if (scaleOnLastRender.current !== scale.current || !panStateOnLastRender.current.equals(panState.current)) {
+                canvasContext.current.setTransform(scale.current, 0, 0, scale.current, 0, 0);
+
+                scaleOnLastRender.current = scale.current;
+            }
+
             if (!panStateOnLastRender.current.equals(panState.current)) {
                 const difference = panStateOnLastRender.current.difference(panState.current);
                 let panX = difference.x / scale.current;
-                let panY = difference.y / scale.current;
+                let panY = difference.y  / scale.current;
 
-                // console.log('Pan X', panX);
-    
-                // canvasContext.current.translate(panX, panY);
+                const newWorldPos = WorldPosition.add(new Vector2(panX, panY));
+                WorldPosition.set(newWorldPos.x, newWorldPos.y);
 
                 panStateOnLastRender.current = panState.current;
             }
 
-            if (scaleOnLastRender.current !== scale.current) {
-                const difference = scaleOnLastRender.current - scale.current;
-                console.log('Scaling', scaleOnLastRender.current, scale.current, difference);
-
-                canvasContext.current.scale(scale.current, scale.current);
-
-                scaleOnLastRender.current = scale.current;
-            }
-            
             onCanvasRedraw();
         }
     }

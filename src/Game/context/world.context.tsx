@@ -1,6 +1,6 @@
 import React, { createContext, MutableRefObject, ReactNode, useContext, useRef } from 'react';
 
-import { Vector2 } from '../../Utils/vector2';
+import { Vector2 } from '../../Utils/engine/Vector2';
 import { useCanvasContext } from '../hooks/useCanvasContext';
 
 interface WorldContextObject {

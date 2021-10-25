@@ -1,10 +1,9 @@
 import React, { createContext, MutableRefObject, ReactNode, useContext, useRef } from 'react';
 
 import { useWorldContext } from '../../Game/context/world.context';
-import { GameObject } from './gameObject';
+import { GameObject } from './GameObject';
 import { useGameObjects } from './useGameObjects';
 import { useMainLoop } from './useMainLoop';
-
 
 interface EngineContextObject {
     gameObjects: MutableRefObject<Map<string, GameObject>>;
@@ -57,7 +56,7 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
     function renderGameObjects(): void {
         gameObjectsByLayer.current.forEach((layer) => {
             layer.forEach((gameObject) => {
-                gameObject.render(canvasContext.current, panState.current, scale.current);
+                gameObject.render(canvasContext.current);
             });
         });
     }

@@ -13,7 +13,7 @@ const MAX_SCALE = 10;
 export default function useScale(canvas: RefObject<HTMLCanvasElement>, scale: MutableRefObject<number>) {
     const updateScale = ({direction, interval}: ScaleOpts) => {
         if (direction === 'down' && scale.current + interval < MAX_SCALE) {
-            scale.current = scale.current + interval
+            scale.current = scale.current + interval;
         } else if (direction === 'down') {
             scale.current = MAX_SCALE;
         } else if (direction === 'up' && scale.current - interval > MIN_SCALE) {

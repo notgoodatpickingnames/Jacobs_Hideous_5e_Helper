@@ -1,10 +1,11 @@
 import { v4 as uuid } from 'uuid';
 
 import { Rect } from '../../Game/models/rect';
-import { Vector2 } from '../vector2';
+import { Transform } from './Transform';
+import { Vector2 } from './Vector2';
 
 interface IGameObject {
-    transform: Vector2,
+    position: Vector2,
     width: number,
     height: number,
     color?: string,
@@ -15,7 +16,7 @@ interface IGameObject {
 export class GameObject {
     public gameObjectId: string;
     
-    public transform: Vector2;
+    public transform: Transform = new Transform();
 
     public color: string;
     public imgSource: string;
@@ -33,7 +34,7 @@ export class GameObject {
     constructor(gameObject: IGameObject) {
         this.gameObjectId = uuid();
 
-        this.transform = gameObject.transform;
+        this.transform.positionInWorld = gameObject.position;
         this.width = gameObject.width;
         this.height = gameObject.height;
         this.color = gameObject.color;
@@ -42,14 +43,18 @@ export class GameObject {
         this.halfWidth = this.width / 2;
         this.halfHeight = this.height / 2;
 
-        const left = this.transform.x - this.halfWidth;
-        const right = this.transform.x + this.halfWidth;
-        const bottom = this.transform.y - this.halfHeight;
-        const top = this.transform.y + this.halfHeight;
+        const left = this.transform.position.x - this.halfWidth;
+        const right = this.transform.position.x + this.halfWidth;
+        const bottom = this.transform.position.y - this.halfHeight;
+        const top = this.transform.position.y + this.halfHeight;
 
         this.boundingRect = new Rect(left, right, top, bottom);
         
         this.layer = gameObject.layer;
+    }
+
+    public get position(): Vector2 {
+        return this.transform.position;
     }
 
     public doesPointCollide(point: Vector2): boolean {
@@ -59,11 +64,10 @@ export class GameObject {
         return isWithinXBounds && isWithinYBounds;
     }
 
-    public update(): void {
+    public update(worldPanState: Vector2): void {
         
     }
 
-    public render(canvasContext: CanvasRenderingContext2D, panState: Vector2, offset: number): void {
-        console.log('Lowest Level Render Called In Game Object');
+    public render(canvasContext: CanvasRenderingContext2D): void {
     }
 }
