@@ -34,13 +34,13 @@ export class Grid extends GameObject {
         canvasContext.beginPath();
 
         for (let x = 0; x <= this.width / this.squareSizeInPixels; x++) {
-            canvasContext.moveTo(this.transform.x + (x * this.squareSizeInPixels), this.transform.y - this.height / 2);
-            canvasContext.lineTo((this.transform.x + x * this.squareSizeInPixels), this.transform.y + this.height);
+            canvasContext.moveTo(x * this.squareSizeInPixels, 0);
+            canvasContext.lineTo(x * this.squareSizeInPixels, this.height);
         }
 
         for (let y = 0; y <= this.height / this.squareSizeInPixels; y++) {
-            canvasContext.moveTo(this.transform.x - (this.width / 2), this.transform.y + (y * this.squareSizeInPixels));
-            canvasContext.lineTo(this.transform.x + this.width, this.transform.y + (y * this.squareSizeInPixels));
+            canvasContext.moveTo(0, y * this.squareSizeInPixels);
+            canvasContext.lineTo(this.width, y * this.squareSizeInPixels);
         }
 
         canvasContext.strokeStyle = "white";

@@ -28,7 +28,7 @@ function useEventListener<T extends HTMLElement = HTMLDivElement>(
             }
         }
 
-    targetElement.addEventListener(eventName, eventListener, {passive: true});
+    targetElement.addEventListener(eventName, eventListener);
 
     // Remove event listener on cleanup
     return () => {

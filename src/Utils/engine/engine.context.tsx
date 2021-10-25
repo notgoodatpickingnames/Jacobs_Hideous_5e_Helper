@@ -12,6 +12,7 @@ interface EngineContextObject {
     addGameObject: (gameObject: GameObject) => void;
     getGameObject: (gameObjectId: string) => GameObject;
     removeGameObject: (gameObject: GameObject) => void;
+    addFunctionOnRender: (functionOnRender: () => void) => void;
 }
 
 export const EngineContext = createContext<EngineContextObject>({} as EngineContextObject);
@@ -26,17 +27,37 @@ interface EngineContextProviderProps {
 
 export function EngineContextProvider({children}: EngineContextProviderProps) {
     const [gameObjects, gameObjectsByLayer, addGameObject, getGameObject, removeGameObject] = useGameObjects();
-    const {canvasContext} = useWorldContext();
+    const functionsOnRender = useRef<(() => void)[]>([]);
+    const {canvas, canvasContext, panState, scale} = useWorldContext();
+
     useMainLoop(onFrame);
 
     function onFrame(time: number, deltaTime: number): void {
+        render();
+    }
+
+    function addFunctionOnRender(functionOnRender: () => void): void {
+        functionsOnRender.current.push(functionOnRender);
+    }
+
+    function render(): void {
+        clearScreen();
+        callFunctionsOnRender();
         renderGameObjects();
+    }
+
+    function clearScreen(): void {
+        canvasContext.current.clearRect(0, 0, canvas.current.width, canvas.current.height);
+    }
+
+    function callFunctionsOnRender(): void {
+        functionsOnRender.current.forEach((functionOnRender) => functionOnRender());
     }
 
     function renderGameObjects(): void {
         gameObjectsByLayer.current.forEach((layer) => {
             layer.forEach((gameObject) => {
-                gameObject.render(canvasContext.current);
+                gameObject.render(canvasContext.current, panState.current, scale.current);
             });
         });
     }
@@ -47,6 +68,7 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
         addGameObject,
         getGameObject,
         removeGameObject,
+        addFunctionOnRender
     }
 
     return (

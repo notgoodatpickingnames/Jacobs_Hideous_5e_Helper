@@ -59,7 +59,11 @@ export class GameObject {
         return isWithinXBounds && isWithinYBounds;
     }
 
-    public render(canvasContext: CanvasRenderingContext2D, ...params: any[]): void {
+    public update(): void {
+        
+    }
+
+    public render(canvasContext: CanvasRenderingContext2D, panState: Vector2, offset: number): void {
         console.log('Lowest Level Render Called In Game Object');
     }
 }

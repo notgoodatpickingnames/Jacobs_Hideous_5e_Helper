@@ -1,4 +1,4 @@
-import { RefObject, useState } from 'react';
+import { MutableRefObject, RefObject, useState } from 'react';
 
 import useEventListener from '../../Utils/hooks/useEventListener';
 
@@ -10,27 +10,17 @@ type ScaleOpts = {
 const MIN_SCALE = 1;
 const MAX_SCALE = 10;
 
-export default function useScale(canvas: RefObject<HTMLCanvasElement>) {
-    const [scale, setScale] = useState(1);
-
+export default function useScale(canvas: RefObject<HTMLCanvasElement>, scale: MutableRefObject<number>) {
     const updateScale = ({direction, interval}: ScaleOpts) => {
-        setScale(currentScale => {
-            let scale: number
-
-            if (direction === 'down' && currentScale + interval < MAX_SCALE) {
-                scale = currentScale + interval
-            } else if (direction === 'down') {
-                scale = MAX_SCALE;
-            } else if (direction === 'up' && currentScale - interval > MIN_SCALE) {
-                scale = currentScale - interval;
-            } else if (direction === 'up') {
-                scale = MIN_SCALE;
-            } else {
-                scale = currentScale;
-            }
-
-            return scale;
-        });
+        if (direction === 'down' && scale.current + interval < MAX_SCALE) {
+            scale.current = scale.current + interval
+        } else if (direction === 'down') {
+            scale.current = MAX_SCALE;
+        } else if (direction === 'up' && scale.current - interval > MIN_SCALE) {
+            scale.current = scale.current - interval;
+        } else if (direction === 'up') {
+            scale.current = MIN_SCALE;
+        }
     }
 
     function onWheel(event: any): void {

@@ -1,7 +1,9 @@
 import { makeStyles } from '@mui/styles';
-import React, { MutableRefObject, useEffect } from 'react';
+import React, { MutableRefObject, useEffect, useReducer, useRef } from 'react';
 
 import Canvas from '../../Canvas';
+import { useEngineContext } from '../../Utils/engine';
+import { Vector2 } from '../../Utils/vector2';
 import { useWorldContext } from '../context/world.context';
 import { useCanvasDraw } from '../hooks/useCanvasDraw';
 import { useMousePositionInWorld } from '../hooks/useMousePositionInWorld';
@@ -30,13 +32,15 @@ const useStyles = makeStyles(({
 export function World() {
     const classes = useStyles();
 
-    
+    const panStateOnLastRender = useRef<Vector2>(Vector2.zero);
+    const scaleOnLastRender = useRef<number>(1);
 
-    const {scale, offset, backgroundColor, canvas, canvasContext, setPanState, mousePosition} = useWorldContext();
+    const {scale, panState, backgroundColor, canvas, canvasContext, mousePosition} = useWorldContext();
+    const {addFunctionOnRender} = useEngineContext();
 
-    const startPan = usePan(setPanState);
-    useScale(canvas);
-    useMousePositionInWorld(mousePosition, offset, scale, canvas);
+    const startPan = usePan(panState);
+    useScale(canvas, scale);
+    useMousePositionInWorld(mousePosition, panState, scale, canvas);
     
     useCanvasDraw(mousePosition, canvas, canvasContext);
 
@@ -59,19 +63,38 @@ export function World() {
     }
 
     useEffect(() => {
+        console.log('Adding the on render function');
+        addFunctionOnRender(onRender);
+    }, [addFunctionOnRender]);
+
+    function onRender(): void {
         if (Boolean(canvas.current) && Boolean(canvasContext.current)) {
             canvasContext.current.clearRect(0, 0, canvas.current.width, canvas.current.height);
 
-            let panX = offset.current.x * -1;
-            let panY = offset.current.y * -1;
+            if (!panStateOnLastRender.current.equals(panState.current)) {
+                const difference = panStateOnLastRender.current.difference(panState.current);
+                let panX = difference.x / scale.current;
+                let panY = difference.y / scale.current;
 
-            canvasContext.current.translate(panX, panY);
-            canvasContext.current.scale(scale.current, scale.current);
+                // console.log('Pan X', panX);
+    
+                // canvasContext.current.translate(panX, panY);
 
+                panStateOnLastRender.current = panState.current;
+            }
+
+            if (scaleOnLastRender.current !== scale.current) {
+                const difference = scaleOnLastRender.current - scale.current;
+                console.log('Scaling', scaleOnLastRender.current, scale.current, difference);
+
+                canvasContext.current.scale(scale.current, scale.current);
+
+                scaleOnLastRender.current = scale.current;
+            }
+            
             onCanvasRedraw();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset, scale, canvasContext, canvas]);
+    }
 
     return (
         <div className={classes.worldContainer}>
