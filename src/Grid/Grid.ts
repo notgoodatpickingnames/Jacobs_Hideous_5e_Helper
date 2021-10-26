@@ -57,7 +57,7 @@ export class Grid extends GameObject {
         this.renderVerticalLines(canvasContext);
         this.renderHorizontalLines(canvasContext);
 
-        canvasContext.strokeStyle = 'blue';
+        canvasContext.strokeStyle = 'white';
         canvasContext.stroke();
     }
 
