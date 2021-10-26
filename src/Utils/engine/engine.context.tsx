@@ -27,7 +27,7 @@ interface EngineContextProviderProps {
 export function EngineContextProvider({children}: EngineContextProviderProps) {
     const [gameObjects, gameObjectsByLayer, addGameObject, getGameObject, removeGameObject] = useGameObjects();
     const functionsOnRender = useRef<(() => void)[]>([]);
-    const {canvas, canvasContext, panState, scale} = useWorldContext();
+    const {canvas, canvasContext} = useWorldContext();
 
     useMainLoop(onFrame);
 

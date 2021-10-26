@@ -2,8 +2,10 @@ import { makeStyles } from '@mui/styles';
 import React, { MutableRefObject, useEffect, useReducer, useRef } from 'react';
 
 import Canvas from '../../Canvas';
+import { Grid } from '../../Grid';
 import { useEngineContext, WorldPosition } from '../../Utils/engine';
 import { Vector2 } from '../../Utils/engine/Vector2';
+import useElementSize from '../../Utils/hooks/useElementSize';
 import { useWorldContext } from '../context/world.context';
 import { useCanvasDraw } from '../hooks/useCanvasDraw';
 import { useMousePositionInWorld } from '../hooks/useMousePositionInWorld';
@@ -22,10 +24,8 @@ const useStyles = makeStyles(({
     },
 
     mapContainer: {
-        width: '2000px', // Replace with custom map sizes after map creation is finished.
-        height: '2000px', // Replace with custom map sizes after map creation is finished.
-        maxHeight: '2000px',
-        minHeight: '2000px',
+        width: '100vw', // Replace with custom map sizes after map creation is finished.
+        height: '100vh', // Replace with custom map sizes after map creation is finished.
     }
 }));
 
@@ -36,13 +36,21 @@ export function World() {
     const scaleOnLastRender = useRef<number>(1);
 
     const {scale, panState, backgroundColor, canvas, canvasContext, mousePosition} = useWorldContext();
-    const {addFunctionOnRender} = useEngineContext();
+    const {addFunctionOnRender, addGameObject} = useEngineContext();
+
+    const mapContainer = useRef<HTMLDivElement>();
+    const {width, height} = useElementSize(mapContainer);
 
     const startPan = usePan(panState);
     useScale(canvas, scale);
     useMousePositionInWorld(mousePosition, panState, scale, canvas);
     
     useCanvasDraw(mousePosition, canvas, canvasContext);
+
+    useEffect(() => {
+        const grid = new Grid(width, height, 10);
+        addGameObject(grid);
+    }, [addGameObject, width, height]);
 
     function onCanvasRedraw(): void {
         if (Boolean(canvas.current) && Boolean(canvasContext.current)) {
@@ -93,7 +101,7 @@ export function World() {
 
     return (
         <div className={classes.worldContainer}>
-            <div className={classes.mapContainer}>
+            <div ref={mapContainer} className={classes.mapContainer}>
                 <Canvas onCanvasRedraw={onCanvasRedraw} onCanvasRefCreated={setCanvasRef} onMouseDown={startPan}/>
             </div>
         </div>
