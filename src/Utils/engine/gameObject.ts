@@ -9,7 +9,7 @@ interface IGameObject {
     width: number,
     height: number,
     color?: string,
-    imgSource?: string,
+    imageSource?: string,
     layer?: number
 }
 
@@ -19,7 +19,8 @@ export class GameObject {
     public transform: Transform = new Transform();
 
     public color: string;
-    public imgSource: string;
+    public imageSource: string;
+    public image = new Image();
 
     public width: number;
     public height: number;
@@ -34,11 +35,12 @@ export class GameObject {
     constructor(gameObject: IGameObject) {
         this.gameObjectId = uuid();
 
-        this.transform.positionInWorld = gameObject.position;
+        this.transform.setPositionInWorld(gameObject.position);
         this.width = gameObject.width;
         this.height = gameObject.height;
         this.color = gameObject.color;
-        this.imgSource = gameObject.imgSource;
+        this.imageSource = gameObject.imageSource;
+        this.image.src = this.imageSource;
 
         this.halfWidth = this.width / 2;
         this.halfHeight = this.height / 2;
@@ -50,7 +52,7 @@ export class GameObject {
 
         this.boundingRect = new Rect(left, right, top, bottom);
         
-        this.layer = gameObject.layer;
+        this.layer = gameObject.layer || 0;
     }
 
     public get position(): Vector2 {

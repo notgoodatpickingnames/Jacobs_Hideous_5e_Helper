@@ -2,9 +2,6 @@ import { GameObject } from '../Utils/engine';
 import { Vector2 } from '../Utils/engine/Vector2';
 
 export class Grid extends GameObject {
-    public squareCountX: number;
-    public squareCountY: number;
-
     public squareSizeInPixels: number;
 
     private originalPos: Vector2;
@@ -13,24 +10,13 @@ export class Grid extends GameObject {
         super({
             position: new Vector2(width / 2, height / 2),
             width,
-            height
+            height,
+            layer: 10,
         });
 
         this.originalPos = this.position;
 
-        this.squareCountX = width;
-        this.squareCountY = height;
-
         this.squareSizeInPixels = squareSize;
-        // this.bufferOffset = this.buffer * this.squareSizeInPixels;
-    }
-
-    public get pixelWidth(): number {
-        return this.squareCountX * this.squareSizeInPixels;
-    }
-
-    public get pixelHeight(): number {
-        return this.squareCountY * this.squareSizeInPixels;
     }
 
     public update(): void {
