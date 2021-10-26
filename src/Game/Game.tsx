@@ -18,8 +18,8 @@ export function Game() {
 
     useEffect(() => {
         for (let x = 0; x < 200; x++) {
-            for (let y = 0; y < 200; y++) {
-                const Juniper = new Token(new Vector2(x * 100, y * 100), 100, 100, './images/Juni.png');
+            for (let y = 0; y < 100; y++) {
+                const Juniper = new Token(new Vector2(x * 40, y * 40), 40, 40, './images/Juni.png');
                 addGameObject(Juniper);
             }
         }
@@ -33,9 +33,9 @@ export function Game() {
                 <BuildControls />
             </ControlBar>
 
-            <div style={{position: 'absolute', backgroundColor: 'White', top: 0, left: 0, width: '300px', height: '100px'}}>
+            {/* <div style={{position: 'absolute', backgroundColor: 'White', top: 0, left: 0, width: '300px', height: '100px'}}>
                 <img height='100' width='100' src={'./images/Juni.png'}/>
-            </div>
+            </div> */}
         </>
     )
 }

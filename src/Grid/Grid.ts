@@ -6,6 +6,9 @@ export class Grid extends GameObject {
 
     private originalPos: Vector2;
 
+    private buffer: number = 2;
+    private bufferTimes2: number = this.buffer * 2;
+
     constructor(width: number, height: number, squareSize: number) {
         super({
             position: new Vector2(width / 2, height / 2),
@@ -48,9 +51,9 @@ export class Grid extends GameObject {
     }
 
     private renderVerticalLines(canvasContext: CanvasRenderingContext2D): void {
-        const adjustedXPosition = this.position.x - (40 * this.squareSizeInPixels) - (this.width / 2);
+        const adjustedXPosition = this.position.x - (this.buffer * this.squareSizeInPixels) - (this.width / 2);
 
-        for (let x = 0; x <= (this.width / this.squareSizeInPixels) + 80; x++) {
+        for (let x = 0; x <= (this.width / this.squareSizeInPixels) + this.bufferTimes2; x++) {
             const xOffset = x * this.squareSizeInPixels;
 
             canvasContext.moveTo(adjustedXPosition + xOffset, 0);
@@ -59,9 +62,9 @@ export class Grid extends GameObject {
     }
 
     private renderHorizontalLines(canvasContext: CanvasRenderingContext2D): void {
-        const adjustedYPosition = this.position.y - (40 * this.squareSizeInPixels) - (this.height / 2);
+        const adjustedYPosition = this.position.y - (this.buffer * this.squareSizeInPixels) - (this.height / 2);
 
-        for (let y = 0; y <= (this.height / this.squareSizeInPixels) + 80; y++) {
+        for (let y = 0; y <= (this.height / this.squareSizeInPixels) + this.bufferTimes2; y++) {
             const yOffset = y * this.squareSizeInPixels;
 
             canvasContext.moveTo(0, adjustedYPosition + yOffset);

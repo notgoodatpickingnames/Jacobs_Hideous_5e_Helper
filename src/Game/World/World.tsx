@@ -48,7 +48,7 @@ export function World() {
     useCanvasDraw(mousePosition, canvas, canvasContext);
 
     useEffect(() => {
-        const grid = new Grid(width, height, 10);
+        const grid = new Grid(width, height, 40);
         addGameObject(grid);
     }, [addGameObject, width, height]);
 

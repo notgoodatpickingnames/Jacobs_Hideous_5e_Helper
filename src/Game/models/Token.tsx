@@ -16,8 +16,6 @@ export class Token extends GameObject {
     }
 
     public render(canvasContext: CanvasRenderingContext2D): void {
-        if (this.image.complete && this.image.naturalHeight !== 0) {
-            canvasContext.drawImage(this.image, this.transform.position.x - this.image.width, this.transform.position.y - this.image.height, this.image.width, this.image.height);
-        }
+        canvasContext.drawImage(this.image, this.transform.position.x - this.image.width, this.transform.position.y - this.image.height, this.image.width, this.image.height);
     }
 }
