@@ -1,4 +1,4 @@
-import React, { MouseEvent as SyntheticMouseEvent, MutableRefObject } from 'react';
+import { MouseEvent as SyntheticMouseEvent, MutableRefObject } from 'react';
 
 import { Vector2 } from '../../Utils/engine/Vector2';
 import useEventListener from '../../Utils/hooks/useEventListener';

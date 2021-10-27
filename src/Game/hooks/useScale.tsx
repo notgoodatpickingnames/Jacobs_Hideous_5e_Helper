@@ -1,4 +1,4 @@
-import { MutableRefObject, RefObject, useState } from 'react';
+import { MutableRefObject, RefObject } from 'react';
 
 import useEventListener from '../../Utils/hooks/useEventListener';
 

@@ -2,12 +2,12 @@ import { GameObject } from '../../Utils/engine';
 import { Vector2 } from '../../Utils/engine/Vector2';
 
 export class Token extends GameObject {
-    constructor(position: Vector2, width: number, height: number, imageSource: string) {
+    constructor(position: Vector2, width: number, height: number, image: HTMLImageElement) {
         super({
             position,
             height,
             width,
-            imageSource,
+            image,
             layer: 100,
         });
 

@@ -20,5 +20,6 @@ export const useMainLoop = (callback: (time: number, deltaTime: number) => void)
         requestID.current = requestAnimationFrame(loop);
         
         return () => cancelAnimationFrame(requestID.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 }

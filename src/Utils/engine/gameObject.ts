@@ -9,7 +9,7 @@ interface IGameObject {
     width: number,
     height: number,
     color?: string,
-    imageSource?: string,
+    image?: HTMLImageElement,
     layer?: number
 }
 
@@ -19,7 +19,6 @@ export class GameObject {
     public transform: Transform = new Transform();
 
     public color: string;
-    public imageSource: string;
     public image = new Image();
 
     public width: number;
@@ -39,8 +38,7 @@ export class GameObject {
         this.width = gameObject.width;
         this.height = gameObject.height;
         this.color = gameObject.color;
-        this.imageSource = gameObject.imageSource;
-        this.image.src = this.imageSource;
+        this.image = gameObject.image;
 
         this.halfWidth = this.width / 2;
         this.halfHeight = this.height / 2;

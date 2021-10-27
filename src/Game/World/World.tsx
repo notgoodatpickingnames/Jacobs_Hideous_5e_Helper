@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import React, { MutableRefObject, useEffect, useReducer, useRef } from 'react';
+import React, { MutableRefObject, useEffect, useRef } from 'react';
 
 import Canvas from '../../Canvas';
 import { Grid } from '../../Grid';
@@ -8,6 +8,7 @@ import { Vector2 } from '../../Utils/engine/Vector2';
 import useElementSize from '../../Utils/hooks/useElementSize';
 import { useWorldContext } from '../context/world.context';
 import { useCanvasDraw } from '../hooks/useCanvasDraw';
+import { useFirestoreTest } from '../hooks/useFirestoreTest';
 import { useMousePositionInWorld } from '../hooks/useMousePositionInWorld';
 import usePan from '../hooks/usePan';
 import useScale from '../hooks/useScale';
@@ -72,7 +73,10 @@ export function World() {
 
     useEffect(() => {
         addFunctionOnRender(onRender);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [addFunctionOnRender]);
+
+    useFirestoreTest();
 
     function onRender(): void {
         if (Boolean(canvas.current) && Boolean(canvasContext.current)) {
