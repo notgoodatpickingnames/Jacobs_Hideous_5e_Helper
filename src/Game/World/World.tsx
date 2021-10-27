@@ -36,22 +36,23 @@ export function World() {
     const panStateOnLastRender = useRef<Vector2>(Vector2.zero);
     const scaleOnLastRender = useRef<number>(1);
 
-    const {scale, panState, backgroundColor, canvas, canvasContext, mousePosition} = useWorldContext();
+    const {scale, panState, backgroundColor, canvas, canvasContext, mousePositionInWorld} = useWorldContext();
     const {addFunctionOnRender, addGameObject} = useEngineContext();
 
     const mapContainer = useRef<HTMLDivElement>();
-    const {width, height} = useElementSize(mapContainer);
+    const mapContainerSize = useElementSize(mapContainer);
 
     const startPan = usePan(panState);
     useScale(canvas, scale);
-    useMousePositionInWorld(mousePosition, panState, scale, canvas);
     
-    useCanvasDraw(mousePosition, canvas, canvasContext);
+    useCanvasDraw(mousePositionInWorld, canvas, canvasContext);
 
     useEffect(() => {
-        const grid = new Grid(width, height, 40);
-        addGameObject(grid);
-    }, [addGameObject, width, height]);
+        if (mapContainerSize.width !== 0 && mapContainerSize.height !== 0) {
+            const grid = new Grid(mapContainerSize.width, mapContainerSize.height, 40);
+            addGameObject(grid);
+        }
+    }, [mapContainerSize]);
 
     function onCanvasRedraw(): void {
         if (Boolean(canvas.current) && Boolean(canvasContext.current)) {

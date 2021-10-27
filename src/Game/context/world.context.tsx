@@ -2,11 +2,12 @@ import React, { createContext, MutableRefObject, ReactNode, useContext, useRef }
 
 import { Vector2 } from '../../Utils/engine/Vector2';
 import { useCanvasContext } from '../hooks/useCanvasContext';
+import { useMousePositionInWorld } from '../hooks/useMousePositionInWorld';
 
 interface WorldContextObject {
     canvas: MutableRefObject<HTMLCanvasElement>;
     canvasContext: MutableRefObject<CanvasRenderingContext2D>;
-    mousePosition: MutableRefObject<Vector2>;
+    mousePositionInWorld: MutableRefObject<Vector2>;
     scale: MutableRefObject<number>,
     backgroundColor: MutableRefObject<string>;
     panState: MutableRefObject<Vector2>;
@@ -23,7 +24,6 @@ interface WorldContextProviderProps {
 }
 
 export function WorldContextProvider({children}: WorldContextProviderProps) {
-    const mousePosition= useRef<Vector2>(Vector2.zero);
     const backgroundColor = useRef<string>();
 
     const canvas = useRef<HTMLCanvasElement>();
@@ -32,10 +32,12 @@ export function WorldContextProvider({children}: WorldContextProviderProps) {
     const panState = useRef<Vector2>(Vector2.zero);
     const scale = useRef<number>(1);
 
+    const mousePositionInWorld = useMousePositionInWorld(panState, scale, canvas);
+
     const worldContextObject: WorldContextObject = {
         canvas,
         canvasContext,
-        mousePosition,
+        mousePositionInWorld,
         scale,
         panState,
         backgroundColor,

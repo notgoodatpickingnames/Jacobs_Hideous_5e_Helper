@@ -58,16 +58,16 @@ export class GameObject {
     }
 
     public doesPointCollide(point: Vector2): boolean {
-        const isWithinXBounds = point.x >= this.boundingRect.left && point.x <= this.boundingRect.right;
-        const isWithinYBounds = point.y >= this.boundingRect.bottom && point.y <= this.boundingRect.top;
+        console.log('Checking if point is within bounds', this, 'point', point, 'pos', this.transform.positionInWorld);
+        const isWithinXBounds = point.x >= this.transform.positionInWorld.x - this.boundingRect.left && this.transform.positionInWorld.x + point.x <= this.boundingRect.right;
+        const isWithinYBounds = point.y >= this.transform.positionInWorld.y - this.boundingRect.bottom && this.transform.positionInWorld.y + point.y <= this.boundingRect.top;
 
         return isWithinXBounds && isWithinYBounds;
     }
 
-    public update(): void {
-        
-    }
+    public update(): void {}
 
-    public render(canvasContext: CanvasRenderingContext2D): void {
-    }
+    public render(canvasContext: CanvasRenderingContext2D): void {}
+
+    public onClick(): void {}
 }

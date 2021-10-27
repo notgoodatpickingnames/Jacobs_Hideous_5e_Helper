@@ -1,7 +1,17 @@
-import React, { createContext, MutableRefObject, ReactNode, useContext, useRef } from 'react';
+import React, {
+    createContext,
+    MouseEvent as SyntheticMouseEvent,
+    MutableRefObject,
+    ReactNode,
+    SyntheticEvent,
+    useContext,
+    useRef,
+} from 'react';
 
 import { useWorldContext } from '../../Game/context/world.context';
+import useEventListener from '../hooks/useEventListener';
 import { GameObject } from './GameObject';
+import { useClickableGameObjects } from './useClickableGameObjects';
 import { useGameObjects } from './useGameObjects';
 import { useMainLoop } from './useMainLoop';
 
@@ -28,6 +38,7 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
     const [gameObjects, gameObjectsByLayer, addGameObject, getGameObject, removeGameObject] = useGameObjects();
     const functionsOnRender = useRef<(() => void)[]>([]);
     const {canvas, canvasContext} = useWorldContext();
+    useClickableGameObjects(gameObjectsByLayer);
 
     useMainLoop(onFrame);
 
@@ -57,6 +68,7 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
             });
         });
     }
+
 
     const engineContextObject: EngineContextObject = {
         gameObjects,
