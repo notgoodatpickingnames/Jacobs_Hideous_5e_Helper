@@ -3,6 +3,8 @@ import { Button as ButtonBase } from '@mui/material';
 import { makeStyles, withStyles } from '@mui/styles';
 import { useState } from 'react';
 
+import { TokensMenu } from './Tokens/TokensMenu';
+
 const buttonStyles = () => ({
     root: {
         color: 'black',
@@ -46,29 +48,33 @@ function BuildControls() {
     }
 
     return (
-        <div className={classes.container}>
-            <Button onClick={onRootClick}>
-                <MapIcon className={classes.icon} />
-            </Button>
+        <>
+            <div className={classes.container}>
+                <Button onClick={onRootClick}>
+                    <MapIcon className={classes.icon} />
+                </Button>
 
-            <div hidden={!open} className={classes.popUp}>
-                <div className={classes.menuItem}>
-                    Test 1
-                </div>
-                
-                <div>
-                    Test 2
-                </div>
+                <div hidden={!open} className={classes.popUp}>
+                    <div className={classes.menuItem}>
+                        Tokens
+                    </div>
+                    
+                    <div>
+                        Test 2
+                    </div>
 
-                <div>
-                    Test 3
-                </div>
-                
-                <div>
-                    Test 4
+                    <div>
+                        Test 3
+                    </div>
+                    
+                    <div>
+                        Test 4
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <TokensMenu />
+        </>
     )
 }
 

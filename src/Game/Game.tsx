@@ -19,9 +19,9 @@ export function Game() {
     useEffect(() => {
         const image = new Image();
         image.src = './images/Juni.png';
-        for (let x = 0; x < 200; x++) {
-            for (let y = 0; y < 100; y++) {
-                const Juniper = new Token(new Vector2(x * 40, y * 40), 40, 40, image);
+        for (let x = 0; x < 1; x++) {
+            for (let y = 0; y < 1; y++) {
+                const Juniper = new Token(new Vector2(x, y), 40, 40, image);
                 addGameObject(Juniper);
             }
         }
