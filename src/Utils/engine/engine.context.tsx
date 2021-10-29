@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 
 import { useWorldContext } from '../../Game/context/world.context';
-import { GameObject } from './GameObject2';
+import { GameObject } from './GameObject';
 import { useClickableGameObjects } from './useClickableGameObjects';
 import { useGameObjects } from './useGameObjects';
 import { useMainLoop } from './useMainLoop';
