@@ -11,10 +11,9 @@ export function useClickableGameObjects(gameObjectsByLayer: MutableRefObject<Map
 
     function onMouseDown(mouseEvent: SyntheticMouseEvent): void {
         if (mouseEvent.button === LEFT_MOUSE_BUTTON) {
-            const layerKeys = Array.from(gameObjectsByLayer.current.keys());
+            const layerKeys = Array.from(gameObjectsByLayer.current.keys()).sort((a, b) => b-a);
 
-            // Reverse search through all gameobjects by layer so we can get whatever the top one is.
-            for(let x = layerKeys.length - 1; x >= 0; x--) {
+            for(let x = 0; x < layerKeys.length; x++) {
                 const layerKey = layerKeys[x];
                 const gameObjectKeys = Array.from(gameObjectsByLayer.current.get(layerKey).keys());
 
@@ -22,7 +21,6 @@ export function useClickableGameObjects(gameObjectsByLayer: MutableRefObject<Map
                     const gameObjectKey = gameObjectKeys[y];
                     const gameObject = gameObjectsByLayer.current.get(layerKey).get(gameObjectKey);
                     if (gameObject.doesPointCollide(mousePositionInWorld.current)) {
-                        console.log('Found Top Level GameObject', gameObject);
                         gameObject.onClick();
 
                         return;

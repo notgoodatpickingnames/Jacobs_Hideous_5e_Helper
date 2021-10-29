@@ -20,6 +20,8 @@ export class Grid extends GameObject {
         this.originalPos = this.position;
 
         this.squareSizeInPixels = squareSize;
+
+        this.name = 'Grid';
     }
 
     public update(): void {

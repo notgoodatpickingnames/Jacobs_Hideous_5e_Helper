@@ -16,15 +16,10 @@ export function useMousePositionInWorld(offset: MutableRefObject<Vector2>, scale
     }
 
     function getMousePositionOverCanvas(mousePositionOnPage: Vector2): Vector2 {
-        const xPos = mousePositionOnPage.x - WorldPosition.x;
-        const yPos = mousePositionOnPage.y - WorldPosition.y;
+        const xPos = (mousePositionOnPage.x / scale.current) - WorldPosition.x;
+        const yPos = (mousePositionOnPage.y / scale.current) - WorldPosition.y;
 
-        const scaledXPos = xPos / scale.current;
-        const scaledYPos = yPos / scale.current;
-
-        const positionOverCanvas = new Vector2(scaledXPos, scaledYPos);
-
-        return positionOverCanvas;
+        return new Vector2(xPos, yPos);
     }
     
     useEventListener('mousemove', (event: Event) => onMouseMove(event as MouseEvent), canvas);

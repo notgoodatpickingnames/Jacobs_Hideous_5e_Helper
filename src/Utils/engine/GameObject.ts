@@ -15,6 +15,7 @@ interface IGameObject {
 
 export class GameObject {
     public gameObjectId: string;
+    public name: string = '';
     
     public transform: Transform = new Transform();
 
@@ -29,8 +30,6 @@ export class GameObject {
     private halfWidth: number;
     private halfHeight: number;
 
-    private boundingRect: Rect;
-
     constructor(gameObject: IGameObject) {
         this.gameObjectId = uuid();
 
@@ -43,12 +42,7 @@ export class GameObject {
         this.halfWidth = this.width / 2;
         this.halfHeight = this.height / 2;
 
-        const left = this.transform.position.x - this.halfWidth;
-        const right = this.transform.position.x + this.halfWidth;
-        const bottom = this.transform.position.y - this.halfHeight;
-        const top = this.transform.position.y + this.halfHeight;
-
-        this.boundingRect = new Rect(left, right, top, bottom);
+        
         
         this.layer = gameObject.layer || 0;
     }
@@ -57,12 +51,18 @@ export class GameObject {
         return this.transform.position;
     }
 
+    public get boundingRect(): Rect {
+        const left = this.transform.positionInWorld.x - this.halfWidth;
+        const right = this.transform.positionInWorld.x + this.halfWidth;
+        const bottom = this.transform.positionInWorld.y - this.halfHeight;
+        const top = this.transform.positionInWorld.y + this.halfHeight;
+
+        return new Rect(left, right, top, bottom);
+    }
+
     public doesPointCollide(point: Vector2): boolean {
-        if (this.transform.positionInWorld.equals(Vector2.zero)) {
-            console.log('Checking if point is within bounds 2', 'point', point, 'pos', this.transform.positionInWorld);
-        }
-        const isWithinXBounds = point.x >= this.transform.positionInWorld.x - this.boundingRect.left && this.transform.positionInWorld.x + point.x <= this.boundingRect.right;
-        const isWithinYBounds = point.y >= this.transform.positionInWorld.y - this.boundingRect.bottom && this.transform.positionInWorld.y + point.y <= this.boundingRect.top;
+        const isWithinXBounds = point.x >=  this.boundingRect.left && point.x <= this.boundingRect.right;
+        const isWithinYBounds = point.y <= this.boundingRect.top && point.y >= this.boundingRect.bottom;
 
         return isWithinXBounds && isWithinYBounds;
     }
