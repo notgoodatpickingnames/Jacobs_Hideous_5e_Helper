@@ -51,6 +51,15 @@ export class GameObject {
         return this.transform.position;
     }
 
+    public get boundingRectInWorld(): Rect {
+        const left = this.transform.positionInWorld.x - this.halfWidth;
+        const right = this.transform.positionInWorld.x + this.halfWidth;
+        const bottom = this.transform.positionInWorld.y - this.halfHeight;
+        const top = this.transform.positionInWorld.y + this.halfHeight;
+
+        return new Rect(left, right, top, bottom);
+    }
+
     public get boundingRect(): Rect {
         const left = this.transform.positionInWorld.x - this.halfWidth;
         const right = this.transform.positionInWorld.x + this.halfWidth;
@@ -61,8 +70,8 @@ export class GameObject {
     }
 
     public doesPointCollide(point: Vector2): boolean {
-        const isWithinXBounds = point.x >=  this.boundingRect.left && point.x <= this.boundingRect.right;
-        const isWithinYBounds = point.y <= this.boundingRect.top && point.y >= this.boundingRect.bottom;
+        const isWithinXBounds = point.x >=  this.boundingRectInWorld.left && point.x <= this.boundingRectInWorld.right;
+        const isWithinYBounds = point.y <= this.boundingRectInWorld.top && point.y >= this.boundingRectInWorld.bottom;
 
         return isWithinXBounds && isWithinYBounds;
     }
