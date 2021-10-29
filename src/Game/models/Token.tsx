@@ -28,7 +28,7 @@ export class Token extends GameObject {
         if (this.clicked) {
             canvasContext.beginPath();
 
-            canvasContext.lineWidth = 1;
+            canvasContext.lineWidth = 10;
 
             // Top Line
             canvasContext.moveTo(this.position.x - 1, this.position.y - 1);

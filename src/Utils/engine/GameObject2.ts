@@ -58,7 +58,9 @@ export class GameObject {
     }
 
     public doesPointCollide(point: Vector2): boolean {
-        console.log('Checking if point is within bounds', this, 'point', point, 'pos', this.transform.positionInWorld);
+        if (this.transform.positionInWorld.equals(Vector2.zero)) {
+            console.log('Checking if point is within bounds 2', 'point', point, 'pos', this.transform.positionInWorld);
+        }
         const isWithinXBounds = point.x >= this.transform.positionInWorld.x - this.boundingRect.left && this.transform.positionInWorld.x + point.x <= this.boundingRect.right;
         const isWithinYBounds = point.y >= this.transform.positionInWorld.y - this.boundingRect.bottom && this.transform.positionInWorld.y + point.y <= this.boundingRect.top;
 

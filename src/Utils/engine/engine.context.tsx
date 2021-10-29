@@ -9,8 +9,7 @@ import React, {
 } from 'react';
 
 import { useWorldContext } from '../../Game/context/world.context';
-import useEventListener from '../hooks/useEventListener';
-import { GameObject } from './GameObject';
+import { GameObject } from './GameObject2';
 import { useClickableGameObjects } from './useClickableGameObjects';
 import { useGameObjects } from './useGameObjects';
 import { useMainLoop } from './useMainLoop';

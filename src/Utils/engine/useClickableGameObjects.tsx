@@ -1,9 +1,8 @@
 import { MouseEvent as SyntheticMouseEvent, MutableRefObject } from 'react';
 
 import { useWorldContext } from '../../Game/context/world.context';
-import { useMousePositionInWorld } from '../../Game/hooks/useMousePositionInWorld';
 import useEventListener from '../hooks/useEventListener';
-import { GameObject } from './GameObject';
+import { GameObject } from './GameObject2';
 
 const LEFT_MOUSE_BUTTON = 0;
 
