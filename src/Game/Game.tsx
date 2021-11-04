@@ -32,6 +32,7 @@ export function Game() {
 
     return (
         <>
+
             <World />
 
             <ControlBar>
