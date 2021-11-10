@@ -32,7 +32,7 @@ export function WorldContextProvider({children}: WorldContextProviderProps) {
     const panState = useRef<Vector2>(Vector2.zero);
     const scale = useRef<number>(1);
 
-    const mousePositionInWorld = useMousePositionInWorld(panState, scale, canvas);
+    const mousePositionInWorld = useMousePositionInWorld(scale, canvas);
 
     const worldContextObject: WorldContextObject = {
         canvas,

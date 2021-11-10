@@ -1,10 +1,10 @@
-import { MutableRefObject, useReducer, useRef } from 'react';
+import { MutableRefObject, useRef } from 'react';
 
 import { WorldPosition } from '../../Utils/engine';
 import { Vector2 } from '../../Utils/engine/Vector2';
 import useEventListener from '../../Utils/hooks/useEventListener';
 
-export function useMousePositionInWorld(offset: MutableRefObject<Vector2>, scale: MutableRefObject<number>, canvas: MutableRefObject<HTMLCanvasElement>) {
+export function useMousePositionInWorld(scale: MutableRefObject<number>, canvas: MutableRefObject<HTMLCanvasElement>) {
     const mousePositionInWorld = useRef<Vector2>(Vector2.zero);
     
     function onMouseMove(event: MouseEvent): void {
@@ -22,7 +22,7 @@ export function useMousePositionInWorld(offset: MutableRefObject<Vector2>, scale
         return new Vector2(xPos, yPos);
     }
     
-    useEventListener('mousemove', (event: Event) => onMouseMove(event as MouseEvent), canvas);
+    useEventListener('mousemove', (event: Event) => onMouseMove(event as MouseEvent));
 
     return mousePositionInWorld;
 }

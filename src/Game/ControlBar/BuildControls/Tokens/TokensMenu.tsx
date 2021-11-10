@@ -1,8 +1,12 @@
 import { makeStyles } from '@mui/styles';
-import { DragEvent, MouseEvent as SyntheticMouseEvent } from 'react';
+import React from 'react';
 
+import { MouseFollowImage } from '../../../../MouseFollowImage/MouseFollowImage';
+import { useMouseFollowImage } from '../../../../MouseFollowImage/useMouseFollowImage';
+import { useEngineContext } from '../../../../Utils/engine';
 import { Vector2 } from '../../../../Utils/engine/Vector2';
-import { Token } from '../../../models/Token';
+import { useWorldContext } from '../../../context/world.context';
+import { ImageObject } from '../../../models/ImageObject';
 
 const useStyles = makeStyles(() => ({
     tokensMenuContainer: {
@@ -26,31 +30,40 @@ const juniperImage = new Image();
 juniperImage.src = juniperIconPath;
 
 const tokens = [
-    new Token(Vector2.zero, 40, 40, juniperImage, 'Juniper'),
+    new ImageObject(Vector2.zero, 40, 40, juniperImage, 'Juniper'),
 ]
 
 export function TokensMenu() {
     const classes = useStyles();
+    
+    const {addGameObject} = useEngineContext();
+    const {mousePositionInWorld, scale} = useWorldContext();
+    const {tokenBeingDragged, onDragStart} = useMouseFollowImage(onDragEnd);
 
-    function onDragStart(event: DragEvent) {
-        console.log('DRAG ENTER', event.target);
-        var rect: DOMRect = (event.target as any).getBoundingClientRect();
-        const relativeX = event.clientX - rect.left;
-        const relativeY = event.clientY - rect.top;
+    function onDragEnd(event: MouseEvent, token: ImageObject) {
+        if (Boolean(tokenBeingDragged)) {
 
-        const mousePositionInImage = new Vector2(relativeX, relativeY);
+            const gameObject = token.clone(mousePositionInWorld.current);
+            addGameObject(gameObject);
+        }
     }
 
     return (
-        <div className={classes.tokensMenuContainer}>
+        <>
+            <div className={classes.tokensMenuContainer}>
+                {
+                    tokens.map((token, index) => 
+                        <div className={classes.tokenContainer} key={`token_${index}`}>
+                            <img height={80} width={80} draggable='true' onDragStart={(event) => onDragStart(event, token)} alt='token' src={token.image.src}/>
+                            <span>{token.name}</span>
+                        </div>
+                    )
+                }
+            </div>
+
             {
-                tokens.map((token, index) => 
-                    <div className={classes.tokenContainer} key={`token_${index}`}>
-                        <img height={80} width={80} draggable='true' onDragStart={onDragStart} alt='token' src={token.image.src} />
-                        <span>{token.name}</span>
-                    </div>
-                )
+                Boolean(tokenBeingDragged) && <MouseFollowImage source={tokenBeingDragged.image.src} width={tokenBeingDragged.width * scale.current} height={tokenBeingDragged.height * scale.current} />
             }
-        </div>
+        </>
     );
 }
