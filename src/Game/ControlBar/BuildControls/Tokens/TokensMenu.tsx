@@ -5,6 +5,7 @@ import { MouseFollowImage } from '../../../../MouseFollowImage/MouseFollowImage'
 import { useMouseFollowImage } from '../../../../MouseFollowImage/useMouseFollowImage';
 import { useEngineContext } from '../../../../Utils/engine';
 import { Vector2 } from '../../../../Utils/engine/Vector2';
+import { useButtonBeingHeld } from '../../../../Utils/hooks/useButtonBeingHeld';
 import { useWorldContext } from '../../../context/world.context';
 import { ImageObject } from '../../../models/ImageObject';
 
@@ -37,13 +38,14 @@ export function TokensMenu() {
     const classes = useStyles();
     
     const {addGameObject} = useEngineContext();
-    const {mousePositionInWorld, scale} = useWorldContext();
+    const {gridPositionMouseIsOver, scale} = useWorldContext();
     const {tokenBeingDragged, onDragStart} = useMouseFollowImage(onDragEnd);
+
+    useButtonBeingHeld('');
 
     function onDragEnd(event: MouseEvent, token: ImageObject) {
         if (Boolean(tokenBeingDragged)) {
-
-            const gameObject = token.clone(mousePositionInWorld.current);
+            const gameObject = token.clone(gridPositionMouseIsOver.current);
             addGameObject(gameObject);
         }
     }
@@ -62,7 +64,7 @@ export function TokensMenu() {
             </div>
 
             {
-                Boolean(tokenBeingDragged) && <MouseFollowImage source={tokenBeingDragged.image.src} width={tokenBeingDragged.width * scale.current} height={tokenBeingDragged.height * scale.current} />
+                Boolean(tokenBeingDragged) && <MouseFollowImage source={tokenBeingDragged.image.src} width={tokenBeingDragged.width * scale.current} height={tokenBeingDragged.height * scale.current} snapToGrid={true}/>
             }
         </>
     );

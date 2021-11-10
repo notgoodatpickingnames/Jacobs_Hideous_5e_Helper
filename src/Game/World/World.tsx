@@ -9,7 +9,6 @@ import useElementSize from '../../Utils/hooks/useElementSize';
 import { useWorldContext } from '../context/world.context';
 import { useCanvasDraw } from '../hooks/useCanvasDraw';
 import { useFirestoreTest } from '../hooks/useFirestoreTest';
-import { useMousePositionInWorld } from '../hooks/useMousePositionInWorld';
 import usePan from '../hooks/usePan';
 import useScale from '../hooks/useScale';
 
@@ -30,6 +29,8 @@ const useStyles = makeStyles(({
     }
 }));
 
+export const gridSquareSize = 40;
+
 export function World() {
     const classes = useStyles();
 
@@ -49,7 +50,7 @@ export function World() {
 
     useEffect(() => {
         if (mapContainerSize.width !== 0 && mapContainerSize.height !== 0) {
-            const grid = new Grid(mapContainerSize.width, mapContainerSize.height, 40);
+            const grid = new Grid(mapContainerSize.width, mapContainerSize.height, gridSquareSize);
             addGameObject(grid);
         }
     }, [mapContainerSize]);

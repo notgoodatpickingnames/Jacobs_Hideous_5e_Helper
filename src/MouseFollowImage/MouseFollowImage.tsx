@@ -1,6 +1,7 @@
 import { makeStyles } from '@mui/styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { useWorldContext } from '../Game/context/world.context';
 import { Vector2 } from '../Utils/engine/Vector2';
 import useEventListener from '../Utils/hooks/useEventListener';
 
@@ -22,15 +23,34 @@ interface MouseFollowImageProps {
     source: string;
     width: number;
     height: number;
+    snapToGrid?: boolean;
 }
 
-export function MouseFollowImage({source, width, height}: MouseFollowImageProps) {
+export function MouseFollowImage({source, width, height, snapToGrid = false}: MouseFollowImageProps) {
     const classes = useStyles();
+
+    const {gridPositionMouseIsOver, getPositionInScreenSpace} = useWorldContext();
 
     const [position, setPosition] = useState<Vector2>(Vector2.zero);
 
     function onMouseMove(event: MouseEvent): void {
-        const {clientX: x, clientY: y} = event;
+        let x = 0;
+        let y = 0;
+
+        if (snapToGrid) {
+            const mousePosInGrid = gridPositionMouseIsOver.current;
+            const positionOnGridInScreenSpace = getPositionInScreenSpace(mousePosInGrid);
+
+            x = positionOnGridInScreenSpace.x;
+            y = positionOnGridInScreenSpace.y;
+        } else {
+            const {clientX, clientY} = event;
+
+            x = clientX;
+            y = clientY;
+        }
+
+
         setPosition(new Vector2(x - (width / 2), y - (height / 2)));
     }
 
