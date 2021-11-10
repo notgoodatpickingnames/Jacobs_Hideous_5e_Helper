@@ -1,4 +1,4 @@
-import { DragEvent, MutableRefObject, useState } from 'react';
+import { DragEvent, useState } from 'react';
 
 import { ImageObject } from '../Game/models/ImageObject';
 import useEventListener from '../Utils/hooks/useEventListener';
