@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Vector2 } from '../Utils/engine/Vector2';
 import { useWorldContext } from '../Utils/engine/world.context';

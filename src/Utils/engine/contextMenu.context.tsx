@@ -1,4 +1,4 @@
-import React, { createContext, MutableRefObject, ReactNode, useContext, useRef, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 import { GameObject } from '.';
 

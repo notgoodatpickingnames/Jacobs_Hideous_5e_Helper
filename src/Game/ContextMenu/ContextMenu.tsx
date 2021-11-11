@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useEngineContext } from '../../Utils/engine';
 import { useContextMenuContext } from '../../Utils/engine/contextMenu.context';
@@ -21,6 +21,7 @@ const useStyles = makeStyles(() => ({
         padding: '20px',
         backgroundColor: 'black',
         color: 'white',
+        pointerEvents: 'all',
     }
 }));
 
@@ -51,7 +52,7 @@ export function ContextMenu() {
             {
                 isOpen && 
                     <div className={classes.contextMenuContainer}>
-                        <div className={classes.contextMenu} style={{top: position?.y, left: position?.x}}>
+                        <div className={classes.contextMenu} style={{top: position?.y, left: position?.x}} onClick={() => console.log('Clicked Context menu')}>
                             TEST TEST
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react';
+import { useLayoutEffect } from 'react';
 
 import { useWorldContext } from '../Utils/engine/world.context';
 import { ContextMenu } from './ContextMenu';

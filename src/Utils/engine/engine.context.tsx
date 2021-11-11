@@ -1,12 +1,4 @@
-import React, {
-    createContext,
-    MouseEvent as SyntheticMouseEvent,
-    MutableRefObject,
-    ReactNode,
-    SyntheticEvent,
-    useContext,
-    useRef,
-} from 'react';
+import React, { createContext, MutableRefObject, ReactNode, useContext, useRef } from 'react';
 
 import { GameObject } from './GameObject';
 import { useClickableGameObjects } from './useClickableGameObjects';

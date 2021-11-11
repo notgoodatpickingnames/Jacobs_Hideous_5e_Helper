@@ -3,7 +3,7 @@ import { RefObject, useCallback, useEffect, useState } from 'react';
 import useEventListener from './useEventListener';
 
 // See: https://usehooks-typescript.com/react-hook/use-event-listener
-interface Size {
+export interface Size {
     width: number
     height: number
 }
