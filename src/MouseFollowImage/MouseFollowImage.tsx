@@ -50,7 +50,6 @@ export function MouseFollowImage({source, width, height, snapToGrid = false}: Mo
             y = clientY;
         }
 
-
         setPosition(new Vector2(x - (width / 2), y - (height / 2)));
     }
 
