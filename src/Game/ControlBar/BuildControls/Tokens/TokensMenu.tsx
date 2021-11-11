@@ -37,12 +37,19 @@ export function TokensMenu() {
     const classes = useStyles();
     
     const {addGameObject} = useEngineContext();
-    const {gridPositionMouseIsOver, scale} = useWorldContext();
+    const {gridPositionMouseIsOver, mousePositionInWorld, scale} = useWorldContext();
     const {tokenBeingDragged, onDragStart} = useMouseFollowImage(onDragEnd);
 
     function onDragEnd(event: MouseEvent, token: ImageObject) {
         if (Boolean(tokenBeingDragged)) {
-            const gameObject = token.clone(gridPositionMouseIsOver.current);
+            let gameObject;
+            
+            if (event.shiftKey) {
+                gameObject = token.clone(gridPositionMouseIsOver.current);
+            } else {
+                gameObject = token.clone(mousePositionInWorld.current);
+            }
+            
             addGameObject(gameObject);
         }
     }
