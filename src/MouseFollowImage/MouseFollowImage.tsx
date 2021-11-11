@@ -23,10 +23,9 @@ interface MouseFollowImageProps {
     source: string;
     width: number;
     height: number;
-    snapToGrid?: boolean;
 }
 
-export function MouseFollowImage({source, width, height, snapToGrid = false}: MouseFollowImageProps) {
+export function MouseFollowImage({source, width, height}: MouseFollowImageProps) {
     const classes = useStyles();
 
     const {gridPositionMouseIsOver, getPositionInScreenSpace} = useWorldContext();
@@ -37,7 +36,7 @@ export function MouseFollowImage({source, width, height, snapToGrid = false}: Mo
         let x = 0;
         let y = 0;
 
-        if (snapToGrid) {
+        if (event.shiftKey) {
             const mousePosInGrid = gridPositionMouseIsOver.current;
             const positionOnGridInScreenSpace = getPositionInScreenSpace(mousePosInGrid);
 
