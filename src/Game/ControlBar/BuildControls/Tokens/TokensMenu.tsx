@@ -5,7 +5,7 @@ import { MouseFollowImage } from '../../../../MouseFollowImage/MouseFollowImage'
 import { useMouseFollowImage } from '../../../../MouseFollowImage/useMouseFollowImage';
 import { useEngineContext } from '../../../../Utils/engine';
 import { Vector2 } from '../../../../Utils/engine/Vector2';
-import { useWorldContext } from '../../../context/world.context';
+import { useWorldContext } from '../../../../Utils/engine/world.context';
 import { ImageObject } from '../../../models/ImageObject';
 
 const useStyles = makeStyles(() => ({

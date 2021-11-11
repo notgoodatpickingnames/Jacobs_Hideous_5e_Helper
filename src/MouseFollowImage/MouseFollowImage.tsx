@@ -1,8 +1,8 @@
 import { makeStyles } from '@mui/styles';
 import { useEffect, useState } from 'react';
 
-import { useWorldContext } from '../Game/context/world.context';
 import { Vector2 } from '../Utils/engine/Vector2';
+import { useWorldContext } from '../Utils/engine/world.context';
 import useEventListener from '../Utils/hooks/useEventListener';
 
 const useStyles = makeStyles(() => ({

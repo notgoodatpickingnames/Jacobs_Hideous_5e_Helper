@@ -1,4 +1,5 @@
 import { GameObject } from '../../Utils/engine';
+import { Engine } from '../../Utils/engine/Engine';
 import { Vector2 } from '../../Utils/engine/Vector2';
 
 export class ImageObject extends GameObject {
@@ -19,8 +20,8 @@ export class ImageObject extends GameObject {
         this.name = name;;
     }
 
-    public onClick(): void {
-        this.clicked = true;
+    public onClick(engine: Engine): void {
+        engine.contextMenuContext.openContextMenu(this);
     }
 
     public render(canvasContext: CanvasRenderingContext2D): void {

@@ -1,10 +1,10 @@
 import React, { createContext, MutableRefObject, ReactNode, useContext, useRef } from 'react';
 
-import { Vector2 } from '../../Utils/engine/Vector2';
-import { useCanvasContext } from '../hooks/useCanvasContext';
-import { useMousePositionInWorld } from '../hooks/useMousePositionInWorld';
+import { useCanvasContext } from '../../Game/hooks/useCanvasContext';
+import { useMousePositionInWorld } from '../../Game/hooks/useMousePositionInWorld';
+import { Vector2 } from './Vector2';
 
-interface WorldContextObject {
+export interface WorldContextObject {
     canvas: MutableRefObject<HTMLCanvasElement>;
     canvasContext: MutableRefObject<CanvasRenderingContext2D>;
     mousePositionInWorld: MutableRefObject<Vector2>;
@@ -22,7 +22,7 @@ export function useWorldContext(): WorldContextObject {
 }
 
 interface WorldContextProviderProps {
-    children: ReactNode[];
+    children: ReactNode | ReactNode[];
 }
 
 export function WorldContextProvider({children}: WorldContextProviderProps) {

@@ -8,13 +8,13 @@ import React, {
     useRef,
 } from 'react';
 
-import { useWorldContext } from '../../Game/context/world.context';
 import { GameObject } from './GameObject';
 import { useClickableGameObjects } from './useClickableGameObjects';
 import { useGameObjects } from './useGameObjects';
 import { useMainLoop } from './useMainLoop';
+import { useWorldContext } from './world.context';
 
-interface EngineContextObject {
+export interface EngineContextObject {
     gameObjects: MutableRefObject<Map<string, GameObject>>;
     gameObjectsByLayer: MutableRefObject<Map<number, Map<string, GameObject>>>;
     addGameObject: (gameObject: GameObject) => void;
@@ -30,14 +30,13 @@ export function useEngineContext(): EngineContextObject {
 }
 
 interface EngineContextProviderProps {
-    children: ReactNode[];
+    children: ReactNode | ReactNode[];
 }
 
 export function EngineContextProvider({children}: EngineContextProviderProps) {
     const [gameObjects, gameObjectsByLayer, addGameObject, getGameObject, removeGameObject] = useGameObjects();
     const functionsOnRender = useRef<(() => void)[]>([]);
     const {canvas, canvasContext} = useWorldContext();
-    useClickableGameObjects(gameObjectsByLayer);
 
     useMainLoop(onFrame);
 
@@ -68,15 +67,16 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
         });
     }
 
-
     const engineContextObject: EngineContextObject = {
         gameObjects,
         gameObjectsByLayer,
         addGameObject,
         getGameObject,
         removeGameObject,
-        addFunctionOnRender
+        addFunctionOnRender,
     }
+    
+    useClickableGameObjects(gameObjectsByLayer, engineContextObject);
 
     return (
         <EngineContext.Provider value={engineContextObject}>
