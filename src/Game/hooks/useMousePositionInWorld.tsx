@@ -33,8 +33,8 @@ export function useMousePositionInWorld(scale: MutableRefObject<number>, canvas:
     }
 
     function getPositionInScreenSpace(position: Vector2): Vector2 {
-        const xPos = (position.x * scale.current) - WorldPosition.x;
-        const yPos = (position.y * scale.current) - WorldPosition.y;
+        const xPos = (position.x * scale.current) + (WorldPosition.x * scale.current);
+        const yPos = (position.y * scale.current) + (WorldPosition.y * scale.current);
 
         return new Vector2(xPos, yPos);
     }
