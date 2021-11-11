@@ -46,10 +46,6 @@ export function ContextMenu() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [addFunctionOnRender]);
 
-    useEffect(() => {
-        console.log('The context menu is open', isOpen);
-    }, [isOpen]);
-
     return (
         <>
             {
