@@ -1,10 +1,11 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 import { GameObject } from '..';
+import { Engine } from '../Engine';
 
 export interface MenuItem {
     label: string,
-    onClick: () => void;
+    onClick: (engine: Engine) => void;
 }
 
 export interface ContextMenuContextObject {

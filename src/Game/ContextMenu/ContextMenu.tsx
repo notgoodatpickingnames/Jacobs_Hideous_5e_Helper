@@ -1,10 +1,8 @@
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 
-import { useEngineContext } from '../../Utils/engine';
-import { useContextMenuContext } from '../../Utils/engine/contextMenu/contextMenu.context';
+import { useEngine } from '../../Utils/engine/Engine';
 import { Vector2 } from '../../Utils/engine/models/Vector2';
-import { useWorldContext } from '../../Utils/engine/world/world.context';
 import { MenuItem } from './MenuItem';
 
 const useStyles = makeStyles(() => ({
@@ -29,9 +27,11 @@ const useStyles = makeStyles(() => ({
 export function ContextMenu() {
     const classes = useStyles();
     const [position, setPosition] = useState<Vector2>();
-    const {addFunctionOnRender} = useEngineContext();
-    const {getPositionInScreenSpace} = useWorldContext();
-    const {isOpen, gameObject, menuItems} = useContextMenuContext();
+
+    const engine = useEngine();
+    const {addFunctionOnRender} = engine.engineContext;
+    const {getPositionInScreenSpace} = engine.worldContext;
+    const {isOpen, gameObject, menuItems} = engine.contextMenuContext;
 
     function onRender(): void {
         if (Boolean(gameObject)) {
@@ -53,10 +53,10 @@ export function ContextMenu() {
             {
                 isOpen && 
                     <div className={classes.contextMenuContainer}>
-                        <div className={classes.contextMenu} style={{top: position?.y, left: position?.x}} onClick={() => console.log('Clicked Context menu')}>
+                        <div className={classes.contextMenu} style={{top: position?.y, left: position?.x}} >
                             {
                                 menuItems.map((menuItem, index) => 
-                                    <MenuItem label={menuItem.label} onClick={menuItem.onClick}/>
+                                    <MenuItem key={`Menu_Item_${menuItem.label}_${index}`} label={menuItem.label} onClick={() => menuItem.onClick(engine)} />
                                 )       
                             }
                         </div>
