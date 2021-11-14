@@ -1,4 +1,5 @@
 import { GameObject } from '../Utils/engine';
+import { Engine } from '../Utils/engine/Engine';
 import { Vector2 } from '../Utils/engine/Vector2';
 
 export class Grid extends GameObject {
@@ -40,7 +41,9 @@ export class Grid extends GameObject {
         }
     }
 
-    public render(canvasContext: CanvasRenderingContext2D): void {
+    public render(engine: Engine): void {
+        const canvasContext = engine.worldContext.canvasContext.current;
+        
         canvasContext.lineWidth = 1;
 
         canvasContext.beginPath();

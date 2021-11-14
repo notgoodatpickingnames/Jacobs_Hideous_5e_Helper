@@ -1,5 +1,6 @@
 import React, { createContext, MutableRefObject, ReactNode, useContext, useRef } from 'react';
 
+import { useEngine } from './Engine';
 import { GameObject } from './GameObject';
 import { useClickableGameObjects } from './useClickableGameObjects';
 import { useGameObjects } from './useGameObjects';
@@ -32,14 +33,26 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
 
     useMainLoop(onFrame);
 
+    function addFunctionOnRender(functionOnRender: () => void): void {
+        functionsOnRender.current.push(functionOnRender);
+    }
+
+    const engineContextObject: EngineContextObject = {
+        gameObjects,
+        gameObjectsByLayer,
+        addGameObject,
+        getGameObject,
+        removeGameObject,
+        addFunctionOnRender,
+    }
+
+    const engine = useEngine();
+    engine.engineContext = engineContextObject;
+
     function onFrame(time: number, deltaTime: number): void {
         clearScreen();
         callFunctionsOnRender();
         updateAndRenderGameObjects();
-    }
-
-    function addFunctionOnRender(functionOnRender: () => void): void {
-        functionsOnRender.current.push(functionOnRender);
     }
 
     function clearScreen(): void {
@@ -54,21 +67,12 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
         gameObjectsByLayer.current.forEach((layer) => {
             layer.forEach((gameObject) => {
                 gameObject.update();
-                gameObject.render(canvasContext.current);
+                gameObject.render(engine);
             });
         });
     }
 
-    const engineContextObject: EngineContextObject = {
-        gameObjects,
-        gameObjectsByLayer,
-        addGameObject,
-        getGameObject,
-        removeGameObject,
-        addFunctionOnRender,
-    }
-    
-    useClickableGameObjects(gameObjectsByLayer, engineContextObject);
+    useClickableGameObjects(gameObjectsByLayer, engine);
 
     return (
         <EngineContext.Provider value={engineContextObject}>

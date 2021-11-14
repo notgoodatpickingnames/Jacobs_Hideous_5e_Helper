@@ -5,6 +5,7 @@ import { useEngineContext } from '../../Utils/engine';
 import { useContextMenuContext } from '../../Utils/engine/contextMenu.context';
 import { Vector2 } from '../../Utils/engine/Vector2';
 import { useWorldContext } from '../../Utils/engine/world.context';
+import { MenuItem } from './MenuItem';
 
 const useStyles = makeStyles(() => ({
     contextMenuContainer: {
@@ -30,7 +31,7 @@ export function ContextMenu() {
     const [position, setPosition] = useState<Vector2>();
     const {addFunctionOnRender} = useEngineContext();
     const {getPositionInScreenSpace} = useWorldContext();
-    const {isOpen, gameObject} = useContextMenuContext();
+    const {isOpen, gameObject, menuItems} = useContextMenuContext();
 
     function onRender(): void {
         if (Boolean(gameObject)) {
@@ -53,7 +54,11 @@ export function ContextMenu() {
                 isOpen && 
                     <div className={classes.contextMenuContainer}>
                         <div className={classes.contextMenu} style={{top: position?.y, left: position?.x}} onClick={() => console.log('Clicked Context menu')}>
-                            TEST TEST
+                            {
+                                menuItems.map((menuItem, index) => 
+                                    <MenuItem label={menuItem.label} onClick={menuItem.onClick}/>
+                                )       
+                            }
                         </div>
                     </div>
             }

@@ -79,7 +79,7 @@ export class GameObject {
 
     public update(): void {}
 
-    public render(canvasContext: CanvasRenderingContext2D): void {}
+    public render(engine: Engine): void {}
 
     public onClick(engine: Engine): void {}
 }

@@ -2,10 +2,16 @@ import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 import { GameObject } from '.';
 
+export interface MenuItem {
+    label: string,
+    onClick: () => void;
+}
+
 export interface ContextMenuContextObject {
     gameObject: GameObject;
     isOpen: boolean;
-    openContextMenu: (gameObject: GameObject) => void;
+    menuItems: MenuItem[];
+    openContextMenu: (gameObject: GameObject, menuItems: MenuItem[]) => void;
     closeContextMenu: () => void;
 }
 
@@ -21,23 +27,27 @@ interface ContextMenuContextProviderProps {
 
 export function ContextMenuContextProvider({children}: ContextMenuContextProviderProps) {
     const [gameObject, setGameObject] = useState<GameObject>();
+    const [menuItems, setMenuContents] = useState<MenuItem[]>();
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    function openContextMenu(gameObject: GameObject): void {
+    function openContextMenu(gameObject: GameObject, menuContents: MenuItem[]): void {
         console.log('Called open');
         setGameObject(gameObject);
+        setMenuContents(menuContents);
         setIsOpen(true);
     }
 
     function closeContextMenu(): void {
         console.log('Called closed');
         setIsOpen(false);
+        setMenuContents(undefined);
         setGameObject(undefined);
     }
 
     const contextMenuContextObject: ContextMenuContextObject = {
         gameObject,
         isOpen,
+        menuItems,
         openContextMenu,
         closeContextMenu,
     }
