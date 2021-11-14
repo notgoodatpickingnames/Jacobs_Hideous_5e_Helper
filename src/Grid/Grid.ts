@@ -1,6 +1,6 @@
 import { GameObject } from '../Utils/engine';
 import { Engine } from '../Utils/engine/Engine';
-import { Vector2 } from '../Utils/engine/Vector2';
+import { Vector2 } from '../Utils/engine/models/Vector2';
 
 export class Grid extends GameObject {
     public squareSizeInPixels: number;

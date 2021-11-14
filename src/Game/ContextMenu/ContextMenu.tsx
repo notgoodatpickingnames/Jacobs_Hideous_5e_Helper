@@ -2,9 +2,9 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 
 import { useEngineContext } from '../../Utils/engine';
-import { useContextMenuContext } from '../../Utils/engine/contextMenu.context';
-import { Vector2 } from '../../Utils/engine/Vector2';
-import { useWorldContext } from '../../Utils/engine/world.context';
+import { useContextMenuContext } from '../../Utils/engine/contextMenu/contextMenu.context';
+import { Vector2 } from '../../Utils/engine/models/Vector2';
+import { useWorldContext } from '../../Utils/engine/world/world.context';
 import { MenuItem } from './MenuItem';
 
 const useStyles = makeStyles(() => ({

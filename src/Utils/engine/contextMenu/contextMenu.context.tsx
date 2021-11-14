@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-import { GameObject } from '.';
+import { GameObject } from '..';
 
 export interface MenuItem {
     label: string,

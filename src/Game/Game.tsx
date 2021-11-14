@@ -1,6 +1,6 @@
 import { useLayoutEffect } from 'react';
 
-import { useWorldContext } from '../Utils/engine/world.context';
+import { useWorldContext } from '../Utils/engine/world/world.context';
 import { ContextMenu } from './ContextMenu';
 import ControlBar from './ControlBar';
 import BuildControls from './ControlBar/BuildControls';

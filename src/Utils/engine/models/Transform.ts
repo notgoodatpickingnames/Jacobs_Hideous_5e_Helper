@@ -1,4 +1,4 @@
-import { WorldPosition } from './globalValues';
+import { WorldPosition } from '../globalValues';
 import { Vector2 } from './Vector2';
 
 export class Transform {
@@ -24,6 +24,6 @@ export class Transform {
     }
 
     public set position(pos: Vector2) {
-        this._positionInWorld = this._positionInWorld.subtract(WorldPosition);
+        this._positionInWorld = this._positionInWorld.set(pos.x, pos.y).subtract(WorldPosition);
     }
 }

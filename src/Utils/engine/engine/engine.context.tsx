@@ -1,11 +1,11 @@
 import React, { createContext, MutableRefObject, ReactNode, useContext, useRef } from 'react';
 
-import { useEngine } from './Engine';
-import { GameObject } from './GameObject';
+import { useEngine } from '../Engine';
+import { GameObject } from '../models/GameObject';
+import { useWorldContext } from '../world/world.context';
 import { useClickableGameObjects } from './useClickableGameObjects';
 import { useGameObjects } from './useGameObjects';
 import { useMainLoop } from './useMainLoop';
-import { useWorldContext } from './world.context';
 
 export interface EngineContextObject {
     gameObjects: MutableRefObject<Map<string, GameObject>>;
@@ -66,7 +66,7 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
     function updateAndRenderGameObjects(): void {
         gameObjectsByLayer.current.forEach((layer) => {
             layer.forEach((gameObject) => {
-                gameObject.update();
+                gameObject.update(engine);
                 gameObject.render(engine);
             });
         });

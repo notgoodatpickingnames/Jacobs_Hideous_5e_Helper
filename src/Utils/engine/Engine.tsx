@@ -1,8 +1,12 @@
 import { ReactNode } from 'react';
 
-import { ContextMenuContextObject, ContextMenuContextProvider, useContextMenuContext } from './contextMenu.context';
-import { EngineContextObject, EngineContextProvider, useEngineContext } from './engine.context';
-import { useWorldContext, WorldContextObject, WorldContextProvider } from './world.context';
+import {
+    ContextMenuContextObject,
+    ContextMenuContextProvider,
+    useContextMenuContext,
+} from './contextMenu/contextMenu.context';
+import { EngineContextObject, EngineContextProvider, useEngineContext } from './engine/engine.context';
+import { useWorldContext, WorldContextObject, WorldContextProvider } from './world/world.context';
 
 interface EngineProviderProps {
     children: ReactNode | ReactNode[];

@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 
-import { Rect } from '../../Game/models/rect';
-import { Engine } from './Engine';
+import { Engine } from '../Engine';
+import { Rect } from './rect';
 import { Transform } from './Transform';
 import { Vector2 } from './Vector2';
 
@@ -77,7 +77,7 @@ export class GameObject {
         return isWithinXBounds && isWithinYBounds;
     }
 
-    public update(): void {}
+    public update(engine: Engine): void {}
 
     public render(engine: Engine): void {}
 

@@ -1,6 +1,6 @@
 import { MouseEvent as SyntheticMouseEvent, MutableRefObject, useCallback, useRef } from 'react';
 
-import { Vector2 } from '../../Utils/engine/Vector2';
+import { Vector2 } from '../../Utils/engine/models/Vector2';
 
 const MIDDLE_MOUSE_BUTTON = 1;
 

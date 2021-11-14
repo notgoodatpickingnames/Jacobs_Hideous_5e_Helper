@@ -1,4 +1,4 @@
-import { Vector2 } from '../engine/Vector2';
+import { Vector2 } from '../engine/models/Vector2';
 
 export function scale(point: Vector2, scale: number): Vector2 {
     const scaledX = point.x / scale;

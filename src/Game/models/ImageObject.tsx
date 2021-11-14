@@ -1,14 +1,14 @@
 import { GameObject } from '../../Utils/engine';
-import { MenuItem } from '../../Utils/engine/contextMenu.context';
+import { MenuItem } from '../../Utils/engine/contextMenu/contextMenu.context';
 import { Engine } from '../../Utils/engine/Engine';
-import { Vector2 } from '../../Utils/engine/Vector2';
+import { Vector2 } from '../../Utils/engine/models/Vector2';
 
 export class ImageObject extends GameObject {
     private clicked = false;
     private pickedUp = false;
 
     private contextMenuOptions: MenuItem[] = [
-        {label: 'Pick Up', onClick: this.onPickUp}
+        {label: 'Pick Up', onClick: () => this.onPickUp()}
     ]
 
     constructor(position: Vector2, width: number, height: number, image: HTMLImageElement, name: string) {
@@ -30,12 +30,18 @@ export class ImageObject extends GameObject {
         engine.contextMenuContext.openContextMenu(this, this.contextMenuOptions);
     }
 
+    public update(engine: Engine): void {
+
+    }
+
     public render(engine: Engine): void {
         const canvasContext = engine.worldContext.canvasContext.current;
 
+        console.log('PICKED UP', this.pickedUp, this.transform.position, engine.worldContext.mousePositionInWorld.current);
+
         if (this.pickedUp) {
             const mousePositionInWorldSpace = engine.worldContext.mousePositionInWorld.current;
-            this.transform.position.set(mousePositionInWorldSpace.x, mousePositionInWorldSpace.y);
+            this.transform.position = mousePositionInWorldSpace;
         }
 
         canvasContext.drawImage(this.image, this.transform.position.x - (this.image.width / 2), this.transform.position.y - (this.image.height / 2), this.image.width, this.image.height);
@@ -46,6 +52,8 @@ export class ImageObject extends GameObject {
     }
 
     private onPickUp(): void {
+        console.log('THIS GUY', this, 'test');
+        // engine.contextMenuContext.closeContextMenu();
         this.pickedUp = true;
     }
 }

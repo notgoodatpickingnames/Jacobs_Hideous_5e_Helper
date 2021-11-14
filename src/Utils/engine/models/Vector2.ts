@@ -23,8 +23,10 @@ export class Vector2 {
         return new Vector2(this.x + other.x, this.y + other.y);
     }
 
-    public set(x: number, y: number): void {
+    public set(x: number, y: number): Vector2 {
         this.x = x;
         this.y = y;
+
+        return this;
     }
 }
