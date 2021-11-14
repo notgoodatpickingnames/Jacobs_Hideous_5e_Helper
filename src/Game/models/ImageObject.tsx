@@ -8,7 +8,7 @@ export class ImageObject extends GameObject {
     private pickedUp = false;
 
     private contextMenuOptions: MenuItem[] = [
-        {label: 'Pick Up', onClick: (engine: Engine) => this.onPickUp(engine)}
+        {label: 'Pick Up', onClick: (engine: Engine) => this.onPickUp()}
     ]
 
     constructor(position: Vector2, width: number, height: number, image: HTMLImageElement, name: string) {
@@ -26,23 +26,23 @@ export class ImageObject extends GameObject {
         this.name = name;
     }
 
-    public onClick(engine: Engine): void {
+    public onClick(): void {
         if (!this.pickedUp) {
-            engine.contextMenuContext.openContextMenu(this, this.contextMenuOptions);
+            this.engine.contextMenuContext.openContextMenu(this, this.contextMenuOptions);
         } else {
             this.pickedUp = false;
         }
     }
 
-    public update(engine: Engine): void {
+    public update(): void {
 
     }
 
-    public render(engine: Engine): void {
-        const canvasContext = engine.worldContext.canvasContext.current;
+    public render(): void {
+        const canvasContext = this.engine.worldContext.canvasContext.current;
 
         if (this.pickedUp) {
-            const mousePositionInWorldSpace = engine.worldContext.mousePositionInWorld.current;
+            const mousePositionInWorldSpace = this.engine.worldContext.mousePositionInWorld.current;
             this.transform.position = mousePositionInWorldSpace;
         }
 
@@ -53,9 +53,9 @@ export class ImageObject extends GameObject {
         return new ImageObject(position, this.width, this.height, this.image, this.name);
     }
 
-    private onPickUp(engine: Engine): void {
+    private onPickUp(): void {
         console.log('THIS GUY', this, 'test');
-        engine.contextMenuContext.closeContextMenu();
+        this.engine.contextMenuContext.closeContextMenu();
         this.pickedUp = true;
     }
 }

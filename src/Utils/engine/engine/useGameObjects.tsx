@@ -1,12 +1,24 @@
 import { useRef } from 'react';
 
+import { Engine } from '../Engine';
 import { GameObject } from '../models/GameObject';
 
 export function useGameObjects() {
     const gameObjects = useRef<Map<string, GameObject>>(new Map([]));
     const gameObjectsByLayer = useRef<Map<number, Map<string, GameObject>>>(new Map([]));
 
+    const engine = useRef<Engine>();
+
+    function onEngineCreated(_engine: Engine): void {
+        if (!Boolean(engine.current)) {
+            console.log('ADDING')
+            engine.current = _engine;
+            gameObjects.current.forEach((gameObject) => gameObject.addEngine(engine.current));
+        }
+    }
+
     function addGameObject(gameObject: GameObject): void {
+        gameObject.addEngine(engine.current);
         gameObjects.current.set(gameObject.gameObjectId, gameObject);
 
         let layer = gameObjectsByLayer.current.get(gameObject.layer);
@@ -30,5 +42,5 @@ export function useGameObjects() {
         layer.delete(gameObject.gameObjectId);
     }
 
-    return [gameObjects, gameObjectsByLayer, addGameObject, getGameObject, removeGameObject] as const;
+    return [gameObjects, gameObjectsByLayer, addGameObject, getGameObject, removeGameObject, onEngineCreated] as const;
 }

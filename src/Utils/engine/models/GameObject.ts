@@ -31,6 +31,8 @@ export class GameObject {
     private halfWidth: number;
     private halfHeight: number;
 
+    protected engine: Engine;
+
     constructor(gameObject: IGameObject) {
         this.gameObjectId = uuid();
 
@@ -77,9 +79,14 @@ export class GameObject {
         return isWithinXBounds && isWithinYBounds;
     }
 
-    public update(engine: Engine): void {}
+    public addEngine(engine: Engine): void {
+        console.log('ADDING THE ENGINE TO GAMEOBJECT', engine);
+        this.engine = engine;
+    }
 
-    public render(engine: Engine): void {}
+    public update(): void {}
 
-    public onClick(engine: Engine): void {}
+    public render(): void {}
+
+    public onClick(): void {}
 }

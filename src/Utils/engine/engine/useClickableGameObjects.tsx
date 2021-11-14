@@ -22,7 +22,7 @@ export function useClickableGameObjects(gameObjectsByLayer: MutableRefObject<Map
                     const gameObjectKey = gameObjectKeys[y];
                     const gameObject = gameObjectsByLayer.current.get(layerKey).get(gameObjectKey);
                     if (gameObject.doesPointCollide(mousePositionInWorld.current)) {
-                        gameObject.onClick(engine);
+                        gameObject.onClick();
 
                         return;
                     }

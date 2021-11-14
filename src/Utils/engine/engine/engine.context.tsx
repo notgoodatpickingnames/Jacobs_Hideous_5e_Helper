@@ -1,4 +1,4 @@
-import React, { createContext, MutableRefObject, ReactNode, useContext, useRef } from 'react';
+import React, { createContext, MutableRefObject, ReactNode, useContext, useEffect, useRef } from 'react';
 
 import { useEngine } from '../Engine';
 import { GameObject } from '../models/GameObject';
@@ -27,7 +27,7 @@ interface EngineContextProviderProps {
 }
 
 export function EngineContextProvider({children}: EngineContextProviderProps) {
-    const [gameObjects, gameObjectsByLayer, addGameObject, getGameObject, removeGameObject] = useGameObjects();
+    const [gameObjects, gameObjectsByLayer, addGameObject, getGameObject, removeGameObject, onEngineCreated] = useGameObjects();
     const functionsOnRender = useRef<(() => void)[]>([]);
     const {canvas, canvasContext} = useWorldContext();
 
@@ -49,6 +49,12 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
     const engine = useEngine();
     engine.engineContext = engineContextObject;
 
+    useEffect(() => {
+        if (Boolean(engine)) {
+            onEngineCreated(engine);
+        }
+    }, [engine]);
+
     function onFrame(time: number, deltaTime: number): void {
         clearScreen();
         callFunctionsOnRender();
@@ -66,8 +72,8 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
     function updateAndRenderGameObjects(): void {
         gameObjectsByLayer.current.forEach((layer) => {
             layer.forEach((gameObject) => {
-                gameObject.update(engine);
-                gameObject.render(engine);
+                gameObject.update();
+                gameObject.render();
             });
         });
     }
