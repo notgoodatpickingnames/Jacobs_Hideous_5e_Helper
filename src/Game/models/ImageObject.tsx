@@ -35,16 +35,14 @@ export class ImageObject extends GameObject {
     }
 
     public update(): void {
-
-    }
-
-    public render(): void {
-        const canvasContext = this.engine.worldContext.canvasContext.current;
-
         if (this.pickedUp) {
             const mousePositionInWorldSpace = this.engine.worldContext.mousePositionInWorld.current;
             this.transform.position = mousePositionInWorldSpace;
         }
+    }
+
+    public render(): void {
+        const canvasContext = this.engine.worldContext.canvasContext.current;
 
         canvasContext.drawImage(this.image, this.transform.position.x - (this.image.width / 2), this.transform.position.y - (this.image.height / 2), this.image.width, this.image.height);
     }

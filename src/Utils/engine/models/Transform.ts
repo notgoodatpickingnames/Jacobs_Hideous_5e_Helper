@@ -24,6 +24,6 @@ export class Transform {
     }
 
     public set position(pos: Vector2) {
-        this._positionInWorld = this._positionInWorld.set(pos.x, pos.y).subtract(WorldPosition);
+        this._positionInWorld = this._positionInWorld.set(pos.x, pos.y);
     }
 }
