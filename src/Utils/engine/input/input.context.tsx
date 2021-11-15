@@ -1,4 +1,6 @@
-import React, { createContext, MutableRefObject, ReactNode, useContext, useRef } from 'react';
+import React, { createContext, KeyboardEvent, MutableRefObject, ReactNode, useContext, useRef } from 'react';
+
+import useEventListener from '../../hooks/useEventListener';
 
 export interface InputContextObject {
 }
@@ -14,6 +16,17 @@ interface InputContextProviderProps {
 }
 
 export function InputContextProvider({children}: InputContextProviderProps) {
+
+    function onKeyUp(event: KeyboardEvent): void {
+        console.log('EVENT', event, event.key);
+    }
+
+    function onKeyDown(event: KeyboardEvent): void {
+        console.log('EVENT', event, event.key);
+    }
+
+    useEventListener('keydown', (event: any) => onKeyDown(event as KeyboardEvent));
+    useEventListener('keyup', (event: any) => onKeyUp(event as KeyboardEvent));
 
     const inputContextObject: InputContextObject = {
     }

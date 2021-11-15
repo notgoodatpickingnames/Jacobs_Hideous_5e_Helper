@@ -52,7 +52,6 @@ export class ImageObject extends GameObject {
     }
 
     private onPickUp(): void {
-        console.log('THIS GUY', this, 'test');
         this.engine.contextMenuContext.closeContextMenu();
         this.pickedUp = true;
     }
