@@ -7,7 +7,7 @@ import { useEngineContext } from '../../../../Utils/engine';
 import { useInputContext } from '../../../../Utils/engine/input/input.context';
 import { Vector2 } from '../../../../Utils/engine/models/Vector2';
 import { useWorldContext } from '../../../../Utils/engine/world/world.context';
-import { ImageObject } from '../../../models/ImageObject';
+import { ImageObject } from '../../../gameObjectTypes/ImageObject';
 
 const useStyles = makeStyles(() => ({
     tokensMenuContainer: {

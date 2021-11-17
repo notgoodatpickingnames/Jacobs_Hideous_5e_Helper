@@ -1,6 +1,6 @@
 import { DragEvent, useState } from 'react';
 
-import { ImageObject } from '../Game/models/ImageObject';
+import { ImageObject } from '../Game/gameObjectTypes/ImageObject';
 import useEventListener from '../Utils/hooks/useEventListener';
 
 export function useMouseFollowImage(onDragEnd: (event: MouseEvent, objectBeingDragged: ImageObject) => void) {
