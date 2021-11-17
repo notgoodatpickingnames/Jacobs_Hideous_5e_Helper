@@ -2,13 +2,15 @@ import { MouseEvent as SyntheticMouseEvent, MutableRefObject } from 'react';
 
 import useEventListener from '../../hooks/useEventListener';
 import { Engine } from '../Engine';
+import { useInputContext } from '../input/input.context';
 import { GameObject } from '../models/GameObject';
 import { useWorldContext } from '../world/world.context';
 
 const LEFT_MOUSE_BUTTON = 0;
 
 export function useClickableGameObjects(gameObjectsByLayer: MutableRefObject<Map<number, Map<string, GameObject>>>, engine: Engine) {
-    const {canvas, mousePositionInWorld} = useWorldContext();
+    const {canvas} = useWorldContext();
+    const {mousePositionInWorld} = useInputContext();
 
     function onMouseDown(mouseEvent: SyntheticMouseEvent): void {
         if (mouseEvent.button === LEFT_MOUSE_BUTTON) {

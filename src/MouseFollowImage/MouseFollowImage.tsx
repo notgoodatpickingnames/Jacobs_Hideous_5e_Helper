@@ -1,8 +1,8 @@
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 
+import { useInputContext } from '../Utils/engine/input/input.context';
 import { Vector2 } from '../Utils/engine/models/Vector2';
-import { useWorldContext } from '../Utils/engine/world/world.context';
 import useEventListener from '../Utils/hooks/useEventListener';
 
 const useStyles = makeStyles(() => ({
@@ -28,7 +28,7 @@ interface MouseFollowImageProps {
 export function MouseFollowImage({source, width, height}: MouseFollowImageProps) {
     const classes = useStyles();
 
-    const {gridPositionMouseIsOver, getPositionInScreenSpace} = useWorldContext();
+    const {gridPositionMouseIsOver, getPositionInScreenSpace} = useInputContext();
 
     const [position, setPosition] = useState<Vector2>(Vector2.zero);
 

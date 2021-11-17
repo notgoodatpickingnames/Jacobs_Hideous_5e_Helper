@@ -30,7 +30,7 @@ export function ContextMenu() {
 
     const engine = useEngine();
     const {addFunctionOnRender} = engine.engineContext;
-    const {getPositionInScreenSpace} = engine.worldContext;
+    const {getPositionInScreenSpace} = engine.inputContext;
     const {isOpen, gameObject, menuItems} = engine.contextMenuContext;
 
     function onRender(): void {

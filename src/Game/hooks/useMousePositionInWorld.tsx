@@ -4,7 +4,7 @@ import { WorldPosition } from '../../Utils/engine';
 import { Vector2 } from '../../Utils/engine/models/Vector2';
 import useEventListener from '../../Utils/hooks/useEventListener';
 
-export function useMousePositionInWorld(scale: MutableRefObject<number>, canvas: MutableRefObject<HTMLCanvasElement>) {
+export function useMousePositionInWorld(scale: MutableRefObject<number>) {
     const mousePositionInWorld = useRef<Vector2>(Vector2.zero);
     const gridPositionMouseIsOver = useRef<Vector2>(Vector2.zero);
     

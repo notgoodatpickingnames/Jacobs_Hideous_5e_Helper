@@ -4,6 +4,7 @@ import React from 'react';
 import { MouseFollowImage } from '../../../../MouseFollowImage/MouseFollowImage';
 import { useMouseFollowImage } from '../../../../MouseFollowImage/useMouseFollowImage';
 import { useEngineContext } from '../../../../Utils/engine';
+import { useInputContext } from '../../../../Utils/engine/input/input.context';
 import { Vector2 } from '../../../../Utils/engine/models/Vector2';
 import { useWorldContext } from '../../../../Utils/engine/world/world.context';
 import { ImageObject } from '../../../models/ImageObject';
@@ -37,7 +38,8 @@ export function TokensMenu() {
     const classes = useStyles();
     
     const {addGameObject} = useEngineContext();
-    const {gridPositionMouseIsOver, mousePositionInWorld, scale} = useWorldContext();
+    const {scale} = useWorldContext();
+    const {gridPositionMouseIsOver, mousePositionInWorld} = useInputContext();
     const {tokenBeingDragged, onDragStart} = useMouseFollowImage(onDragEnd);
 
     function onDragEnd(event: MouseEvent, token: ImageObject) {

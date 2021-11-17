@@ -4,6 +4,7 @@ import React, { MutableRefObject, useEffect, useRef } from 'react';
 import Canvas from '../../Canvas';
 import { Grid } from '../../Grid';
 import { useEngineContext, WorldPosition } from '../../Utils/engine';
+import { useInputContext } from '../../Utils/engine/input/input.context';
 import { Vector2 } from '../../Utils/engine/models/Vector2';
 import { useWorldContext } from '../../Utils/engine/world/world.context';
 import useElementSize from '../../Utils/hooks/useElementSize';
@@ -38,7 +39,8 @@ export function World() {
     const panStateOnLastRender = useRef<Vector2>(Vector2.zero);
     const scaleOnLastRender = useRef<number>(1);
 
-    const {scale, panState, backgroundColor, canvas, canvasContext, mousePositionInWorld} = useWorldContext();
+    const {scale, panState, backgroundColor, canvas, canvasContext} = useWorldContext();
+    const {mousePositionInWorld} = useInputContext();
     const {addFunctionOnRender, addGameObject} = useEngineContext();
 
     const mapContainer = useRef<HTMLDivElement>();
