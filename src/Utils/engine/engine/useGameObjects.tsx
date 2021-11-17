@@ -11,7 +11,6 @@ export function useGameObjects() {
 
     function onEngineCreated(_engine: Engine): void {
         if (!Boolean(engine.current)) {
-            console.log('ADDING')
             engine.current = _engine;
             gameObjects.current.forEach((gameObject) => gameObject.addEngine(engine.current));
         }

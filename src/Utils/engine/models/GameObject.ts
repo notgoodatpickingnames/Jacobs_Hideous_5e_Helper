@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
 
 import { Engine } from '../Engine';
+import { Input } from '../input/input';
 import { Rect } from './rect';
 import { Transform } from './Transform';
 import { Vector2 } from './Vector2';
@@ -80,8 +81,11 @@ export class GameObject {
     }
 
     public addEngine(engine: Engine): void {
-        console.log('ADDING THE ENGINE TO GAMEOBJECT', engine);
         this.engine = engine;
+    }
+
+    public get inputs(): Input {
+        return this.engine.inputContext.inputs.current;
     }
 
     public update(): void {}

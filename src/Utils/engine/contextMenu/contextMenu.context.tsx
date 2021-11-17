@@ -32,14 +32,12 @@ export function ContextMenuContextProvider({children}: ContextMenuContextProvide
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     function openContextMenu(gameObject: GameObject, menuContents: MenuItem[]): void {
-        console.log('Called open');
         setGameObject(gameObject);
         setMenuContents(menuContents);
         setIsOpen(true);
     }
 
     function closeContextMenu(): void {
-        console.log('Called closed');
         setIsOpen(false);
         setMenuContents(undefined);
         setGameObject(undefined);

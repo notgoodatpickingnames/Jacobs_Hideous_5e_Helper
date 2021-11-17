@@ -7,7 +7,6 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { firebaseConfig } from './Utils/firebaseConfig';
 
-console.log('Initing firebase app');
 initializeApp(firebaseConfig);
 
 ReactDOM.render(

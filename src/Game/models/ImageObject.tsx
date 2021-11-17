@@ -36,8 +36,13 @@ export class ImageObject extends GameObject {
 
     public update(): void {
         if (this.pickedUp) {
-            const mousePositionInWorldSpace = this.engine.worldContext.mousePositionInWorld.current;
-            this.transform.position = mousePositionInWorldSpace;
+            if (this.inputs.getKeyHeld('shift')) {
+                const mousePositionInWorldSpace = this.engine.worldContext.gridPositionMouseIsOver.current;
+                this.transform.position = mousePositionInWorldSpace;
+            } else {
+                const mousePositionInWorldSpace = this.engine.worldContext.mousePositionInWorld.current;
+                this.transform.position = mousePositionInWorldSpace;
+            }
         }
     }
 
