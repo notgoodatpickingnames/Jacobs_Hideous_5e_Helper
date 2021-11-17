@@ -56,9 +56,21 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
     }, [engine]);
 
     function onFrame(time: number, deltaTime: number): void {
-        clearScreen();
+        onFrameStart();
+        
         callFunctionsOnRender();
         updateAndRenderGameObjects();
+
+        onFrameEnd();
+    }
+
+    function onFrameStart(): void {
+        clearScreen();
+        engine.inputContext.onFrameStart();
+    }
+
+    function onFrameEnd(): void {
+        engine.inputContext.onFrameEnd();
     }
 
     function clearScreen(): void {
