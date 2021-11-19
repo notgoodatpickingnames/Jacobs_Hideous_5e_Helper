@@ -1,6 +1,6 @@
 import { MutableRefObject, RefObject } from 'react';
 
-import useEventListener from '../../Utils/hooks/useEventListener';
+import { useEventListener } from '../../Utils/hooks/useEventListener';
 
 type ScaleOpts = {
   direction: 'up' | 'down'

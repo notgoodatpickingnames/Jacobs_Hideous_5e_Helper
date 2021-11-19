@@ -1,6 +1,6 @@
 import { MouseEvent as SyntheticMouseEvent, MutableRefObject } from 'react';
 
-import useEventListener from '../../hooks/useEventListener';
+import { useEventListener } from '../../hooks/useEventListener';
 import { Engine } from '../Engine';
 import { useInputContext } from '../input/input.context';
 import { GameObject } from '../models/GameObject';

@@ -2,7 +2,7 @@ import { MutableRefObject, useRef } from 'react';
 
 import { WorldPosition } from '../../Utils/engine';
 import { Vector2 } from '../../Utils/engine/models/Vector2';
-import useEventListener from '../../Utils/hooks/useEventListener';
+import { useEventListener } from '../../Utils/hooks/useEventListener';
 
 export function useMousePositionInWorld(scale: MutableRefObject<number>) {
     const mousePositionInWorld = useRef<Vector2>(Vector2.zero);

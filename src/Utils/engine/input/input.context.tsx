@@ -1,7 +1,7 @@
 import React, { createContext, KeyboardEvent, MutableRefObject, ReactNode, useContext, useRef } from 'react';
 
 import { useMousePositionInWorld } from '../../../Game/hooks/useMousePositionInWorld';
-import useEventListener from '../../hooks/useEventListener';
+import { useEventListener } from '../../hooks/useEventListener';
 import { Vector2 } from '../models/Vector2';
 import { useWorldContext } from '../world/world.context';
 import { Input } from './input';

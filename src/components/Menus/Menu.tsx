@@ -1,12 +1,31 @@
 import { makeStyles } from '@mui/styles';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
-import useElementSize from '../../Utils/hooks/useElementSize';
+import { useElementSize } from '../../Utils/hooks/size';
+import { Size } from '../../Utils/hooks/size/size';
 import { theme } from '../../Utils/theme/theme';
 
 const openAnimationTime = 2000;
+const opacityTime = 50;
+const waitToOpenTime = 1000;
 
 const useStyles = makeStyles(() => ({
+    '@keyframes flicker': {
+        from: {
+          opacity: 1,
+        },
+        to: {
+          opacity: 0.7,
+        },
+      },
+      flicker: {
+        animationName: '$flicker',
+        animationDuration: '1000ms',
+        animationIterationCount: '10',
+        animationDirection: 'alternate',
+        animationTimingFunction: 'ease-in-out',
+      },
+
     container: {
         height: '0px',
         width: '0px',
@@ -14,6 +33,7 @@ const useStyles = makeStyles(() => ({
         backgroundColor: 'yellow',
         position: 'relative',
         transition: `all ${openAnimationTime}ms`,
+        transitionTimingFunction: 'ease',
 
         padding: '20px 50px 20px 50px',
 
@@ -41,12 +61,12 @@ const useStyles = makeStyles(() => ({
     },
 
     open: {
-
+        opacity: '1 !important',
     },
 
     contents: {
         opacity: 0,
-        transition: `all ${openAnimationTime}ms`,
+        transition: `all ${opacityTime}ms`,
     },
 
     border: {
@@ -68,29 +88,28 @@ export function Menu({children}: MenuProps) {
     const contentsContainerRef = useRef<HTMLDivElement>();
     const contentsContainerSize = useElementSize(contentsContainerRef);
 
-    const [_children, setChildren] = useState<ReactNode | ReactNode[]>();
+    const [containerSize, setContainerSize] = useState<Size>({width: 0, height: 0});
 
-    useEffect(() => {
-        setTimeout(() => {
-            setChildren(children);
-        }, 10);
-    }, [children]);
 
     useEffect(() => {
         setTimeout(() => {
             setIsLoaded(true);
-        }, openAnimationTime);
-    }, [_children]);
+        }, openAnimationTime + waitToOpenTime);
+    }, [children]);
 
     useEffect(() => {
-        console.log('The Size Changed', contentsContainerSize);
+        setTimeout(() => {
+            setContainerSize(contentsContainerSize);
+        }, waitToOpenTime);
     }, [contentsContainerSize]);
 
     return (
         <>
-            <div className={classes.container}>
-                <div className={classes.contents}>
-                    {children}
+            <div className={classes.container} style={{height: `${containerSize.height}px`, width: `${containerSize.width}px`}}>
+                <div className={`${classes.contents} ${isLoaded && classes.open}`}>
+                    {
+                        isLoaded && <> {children} </>
+                    }
                 </div>
             </div>
 
