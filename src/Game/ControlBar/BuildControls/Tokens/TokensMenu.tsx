@@ -1,13 +1,13 @@
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 
-import { MouseFollowImage } from '../../../../MouseFollowImage/MouseFollowImage';
-import { useMouseFollowImage } from '../../../../MouseFollowImage/useMouseFollowImage';
 import { useEngineContext } from '../../../../Utils/engine';
 import { useInputContext } from '../../../../Utils/engine/input/input.context';
 import { Vector2 } from '../../../../Utils/engine/models/Vector2';
 import { useWorldContext } from '../../../../Utils/engine/world/world.context';
 import { ImageObject } from '../../../gameObjectTypes/ImageObject';
+import { MouseFollowImage } from '../../../MouseFollowImage/MouseFollowImage';
+import { useMouseFollowImage } from '../../../MouseFollowImage/useMouseFollowImage';
 
 const useStyles = makeStyles(() => ({
     tokensMenuContainer: {

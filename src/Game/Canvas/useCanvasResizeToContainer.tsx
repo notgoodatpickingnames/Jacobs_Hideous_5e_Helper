@@ -1,6 +1,6 @@
 import { MutableRefObject, useEffect, useRef } from 'react';
 
-import useElementSize, { Size } from '../Utils/hooks/useElementSize';
+import useElementSize, { Size } from '../../Utils/hooks/useElementSize';
 
 export function useCanvasResizeToContainer(canvasRef: MutableRefObject<HTMLCanvasElement>, containerRef: MutableRefObject<HTMLDivElement>, onCanvasResize: () => void) {
     const canvasContainerSize = useElementSize(containerRef);

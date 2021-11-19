@@ -1,13 +1,10 @@
 import './App.css';
 
-import { Game } from './Game';
-import { EngineProvider } from './Utils/engine/Engine';
+import { AppRouter } from './routing/AppRouter';
 
 function App() {
     return (
-        <EngineProvider>
-            <Game />
-        </EngineProvider>
+        <AppRouter />
     );
 }
 
