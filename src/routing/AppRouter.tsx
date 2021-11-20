@@ -1,17 +1,23 @@
 import React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 
+import { Login } from '../components/Login/Login';
+import { useAuth } from '../Utils/auth/auth.context';
 import { routes as appRoutes } from './routes';
 
 export function AppRouter() {
+    const { user } = useAuth();
 
     return (
         <Router>
             <>
                 <Routes>
                     {
-                        appRoutes.map(({path, component}, index) => 
-                            <Route path={path} key={`route_${index}`} element={component} />
+                        appRoutes.map((route, index) => 
+                            <Route
+                                path={route.path} key={`route_${index}`}
+                                element={Boolean(user) ? route.component :<Login />}
+                            />
                         )
                     }
 

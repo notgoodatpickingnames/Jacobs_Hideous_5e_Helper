@@ -1,27 +1,47 @@
-import { User } from 'firebase/auth';
-import React from 'react';
+import { getAuth, GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
+import React, { createContext, ReactNode, useContext } from 'react';
 import { useEffect, useState } from 'react';
 
-export const AuthContext = React.createContext<User | null>(null);
-
-export function useAuth() {
-    return React.useContext(AuthContext);
+interface AuthContextObject {
+    user: User;
+    signInWithGoogle: () => void;
 }
 
-// export const AuthProvider: React.FC = ({ children }) => {
-//     // const [user, setUser] = useState<User | null>(null);
+export const AuthContext = createContext<AuthContextObject>({} as AuthContextObject);
 
-//     // useEffect(() => {
-//     //     const unsubscribe = auth.onAuthStateChanged((firebaseUser: User) => {
-//     //         setUser(firebaseUser);
-//     //     });
+export function useAuth() {
+    return useContext(AuthContext);
+}
 
-//     //     return unsubscribe;
-//     // }, []);
+interface AuthProviderProps {
+    children: ReactNode | ReactNode[];
+}
 
-//     // return (
-//     //     <AuthContext.Provider value={user}>
-//     //         {children}
-//     //     </AuthContext.Provider>
-//     // );
-// };
+export function AuthProvider({ children }: AuthProviderProps) {
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const unsubscribe = getAuth().onAuthStateChanged((firebaseUser: User) => {
+            setUser(firebaseUser);
+        });
+
+        return unsubscribe;
+    }, []);
+
+    function signInWithGoogle(): void {
+        console.log('Signing in with google');
+        const googleProvider = new GoogleAuthProvider();
+        signInWithPopup(getAuth(), googleProvider);
+    }
+
+    const authContextObject: AuthContextObject = {
+        user,
+        signInWithGoogle,
+    }
+
+    return (
+        <AuthContext.Provider value={authContextObject}>
+            {children}
+        </AuthContext.Provider>
+    );
+};

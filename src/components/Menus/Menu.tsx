@@ -3,9 +3,10 @@ import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
 import { useElementSize } from '../../Utils/hooks/size';
 import { Size } from '../../Utils/hooks/size/size';
+import { useIsMounted } from '../../Utils/hooks/useIsMounted';
 import { theme } from '../../Utils/theme/theme';
 
-const openAnimationTime = 2000;
+const openAnimationTime = 1000;
 const opacityTime = 50;
 const waitToOpenTime = 1000;
 
@@ -23,7 +24,7 @@ const useStyles = makeStyles(() => ({
         animationDuration: '1000ms',
         animationIterationCount: '10',
         animationDirection: 'alternate',
-        animationTimingFunction: 'ease-in-out',
+        animationTimingFunction: 'ease-in',
       },
 
     container: {
@@ -33,9 +34,9 @@ const useStyles = makeStyles(() => ({
         backgroundColor: 'yellow',
         position: 'relative',
         transition: `all ${openAnimationTime}ms`,
-        transitionTimingFunction: 'ease',
+        transitionTimingFunction: 'ease-in',
 
-        padding: '20px 50px 20px 50px',
+        padding: '10px',
 
         '&:before': {
             display: 'block',
@@ -43,7 +44,7 @@ const useStyles = makeStyles(() => ({
             position: 'absolute',
             top: '0',
             right: '0',
-            borderTop: `20px solid ${theme.background}`,
+            borderTop: `10px solid ${theme.background}`,
             borderLeft: `50px solid yellow`,
             width: '0px',
         },
@@ -54,7 +55,7 @@ const useStyles = makeStyles(() => ({
             position: 'absolute',
             bottom: '0',
             left: '0',
-            borderTop: `20px solid yellow`,
+            borderTop: `10px solid yellow`,
             borderLeft: `50px solid ${theme.background}`,
             width: '0px',
         }
@@ -70,7 +71,36 @@ const useStyles = makeStyles(() => ({
     },
 
     border: {
+        width: 'calc(100% - 20px)',
+        height: 'calc(100% - 20px)',
+        backgroundColor: theme.background,
+        position: 'relative',
+        transition: `all ${openAnimationTime}ms`,
+        transitionTimingFunction: 'ease-in',
 
+        padding: '10px',
+
+        '&:before': {
+            display: 'block',
+            content: "' '",
+            position: 'absolute',
+            top: '0',
+            right: '0',
+            borderTop: `10px solid yellow`,
+            borderLeft: `50px solid transparent`,
+            width: '0px',
+        },
+
+        '&:after': {
+            display: 'block',
+            content: "' '",
+            position: 'absolute',
+            bottom: '0',
+            left: '0',
+            borderTop: `10px solid transparent`,
+            borderLeft: `50px solid yellow`,
+            width: '0px',
+        }
     },
 }));
 
@@ -83,6 +113,8 @@ interface MenuProps {
 export function Menu({children}: MenuProps) {
     const classes = useStyles();
 
+    const isMounted = useIsMounted();
+
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
     const contentsContainerRef = useRef<HTMLDivElement>();
@@ -93,23 +125,31 @@ export function Menu({children}: MenuProps) {
 
     useEffect(() => {
         setTimeout(() => {
-            setIsLoaded(true);
+            if (isMounted.current) {
+                setIsLoaded(true);
+            }
         }, openAnimationTime + waitToOpenTime);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [children]);
 
     useEffect(() => {
         setTimeout(() => {
-            setContainerSize(contentsContainerSize);
+            if (isMounted.current) {
+                setContainerSize(contentsContainerSize);
+            }
         }, waitToOpenTime);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contentsContainerSize]);
 
     return (
         <>
-            <div className={classes.container} style={{height: `${containerSize.height}px`, width: `${containerSize.width}px`}}>
-                <div className={`${classes.contents} ${isLoaded && classes.open}`}>
-                    {
-                        isLoaded && <> {children} </>
-                    }
+            <div className={classes.container} style={{height: `${containerSize.height + 20}px`, width: `${containerSize.width + 20}px`}}>
+                <div className={classes.border}>
+                    <div className={`${classes.contents} ${isLoaded && classes.open}`}>
+                        {
+                            isLoaded && <> {children} </>
+                        }
+                    </div>
                 </div>
             </div>
 
