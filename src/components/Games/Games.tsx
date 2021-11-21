@@ -6,7 +6,11 @@ const useStyles = makeStyles(() => ({
     container: {
         width: 'calc(100vw - 200px)',
         height: '200px'
-    }
+    },
+
+    game: {
+        
+    },
 }));
 
 export function Games() {
@@ -20,11 +24,15 @@ export function Games() {
             <div>
                 {
                     games.map((game) =>
-                        <div>
+                        <div className={classes.game}>
                             {game.name}
                         </div>
                     )
                 }
+
+                <div>
+
+                </div>
             </div>
         </div>
     );

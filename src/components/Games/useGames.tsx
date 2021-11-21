@@ -3,8 +3,8 @@ import { where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 import { useAuth } from '../../Utils/auth/auth.context';
-import { Game } from './game';
-import { IGame } from './IGame';
+import { Game } from './models/game';
+import { IGame } from './models/IGame';
 
 
 export function useGames() {
@@ -14,7 +14,7 @@ export function useGames() {
 
     useEffect(() => {
         const db = getFirestore();
-        const q = query(collection(db, 'Games'), where('OwnerId', '==', user.uid));
+        const q = query(collection(db, 'Games'), where('players', 'in', [[user.uid]]));
         
         const unsub = onSnapshot(q, ({docs}) => {
             const games: IGame[] = docs.map((g) => g.data() as IGame);
