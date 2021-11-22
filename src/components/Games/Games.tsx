@@ -1,5 +1,6 @@
 import { makeStyles } from '@mui/styles';
 
+import { Game } from './Game';
 import { useGames } from './useGames';
 
 const useStyles = makeStyles(() => ({
@@ -8,8 +9,8 @@ const useStyles = makeStyles(() => ({
         height: '200px'
     },
 
-    game: {
-        
+    games: {
+        height: 'calc(100% - 17px)',
     },
 }));
 
@@ -21,12 +22,10 @@ export function Games() {
         <div className={classes.container}>
             Games
 
-            <div>
+            <div className={classes.games}>
                 {
                     games.map((game) =>
-                        <div className={classes.game}>
-                            {game.name}
-                        </div>
+                        <Game game={game}/>
                     )
                 }
 
