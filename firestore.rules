@@ -19,8 +19,6 @@ service cloud.firestore {
     // ---------------- Games ----------------------
     function valid_games_read() {
     	let userIsPlayer = request.auth.uid in resource.data.players;
-    	// let isPlayerInPlayerList = resource.data.ownerId == request.auth.uid;
-      //resource.data.players.include(request.auth.userId);
       
       return isUser() && userIsPlayer; //isPlayerInPlayerList;
     }
