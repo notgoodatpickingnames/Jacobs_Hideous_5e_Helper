@@ -11,42 +11,37 @@ service cloud.firestore {
     // }
     
   	function isUser() {
+    	let isAuthorized = request.auth != null;
     	let doesUserExist = exists(/databases/$(database)/documents/profiles/$(request.auth.uid));
       
-      return doesUserExist;
+      return isAuthorized && doesUserExist;
     }
     
     // ---------------- Games ----------------------
     function valid_games_read() {
     	let userIsPlayer = request.auth.uid in resource.data.players;
-      let userIsOwner = request.auth.uid in resource.data.ownerId;
       
-      return isUser() && userIsPlayer && userIsOwner;
+      return userIsPlayer;
     }
     
     function valid_games_create() {
     	let isCreatorInPlayerList = request.auth.uid in request.resource.data.players;
+      let creatorIsOwner = request.auth.uid in resource.data.ownerId;
       
-      return isUser() && isCreatorInPlayerList;
+      return isCreatorInPlayerList && creatorIsOwner;
     }
     
     match /games/{gameId} {
-    	allow read : if request.auth != null && valid_games_read();
-      allow update: if request.auth != null;
-      allow create : if request.auth != null && valid_games_create();
+    	allow read : if isUser() && valid_games_read();
+      allow update: if isUser();
+      allow create : if isUser() && valid_games_create();
     }
     
     // ---------------- Profile ----------------------
-    function valid_profile_update(userId, requestUserId) {
-      //let isUserTheOneRequestingUpdate = userId == requestUserId;
-      //let role = get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
-      // let doesRequestUpdateProtectedFields = resource.data.diff(request.resource.data).affectedKeys().hasAny(['role'].toSet());
-      //let doesRequestChangeUserRole = request.resource.data['role'] != role;
-
-      //let canUpdate = isUserTheOneRequestingUpdate && !doesRequestChangeUserRole;
+    function valid_profile_update() {
+      let isUserRequestingUpdate = request.auth.uid == request.resource.id;
       
-      //return canUpdate;
-      return true;
+      return isUserRequestingUpdate;
     }
     
     function valid_profile_create(userId, requestUserId) {
@@ -60,8 +55,8 @@ service cloud.firestore {
     }
     
     match /Profiles/{userId} {
-    	allow read : if request.auth != null;
-      allow update: if true;// valid_profile_update(userId, request.auth.uid) || isAdmin();
+    	allow read : if isUser();
+      allow update: if isUser() && valid_profile_update();
       allow create: if valid_profile_create(userId, request.auth.uid);
     }
   }
