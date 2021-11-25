@@ -7,7 +7,10 @@ import { Game as GameModel } from './models/game';
 const useStyles = makeStyles(() => ({
     gameContainer: {
         border: `solid 2px ${theme.blue}`,
-        height: `100%`,
+        height: '100%',
+        width: '200px',
+        marginRight: '12px',
+        padding: '12px',
     }
 }));
 
@@ -20,7 +23,7 @@ export function Game({game}: GameProps) {
 
     return (
         <div className={classes.gameContainer}>
-            {game.name};
+            {game.name}
         </div>
     );
 }

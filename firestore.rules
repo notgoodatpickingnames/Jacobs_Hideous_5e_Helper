@@ -1,8 +1,63 @@
 rules_version = '2';
 service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
+  match /databases/{database}/documents { 
+  	
+    // --------------- Role Checks --------------
+  	//function isAdmin() {
+    //  let role = get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.role;
+    //  let isAdmin = role == 'Administrator';
+      
+		// return isAdmin;
+    // }
+    
+  	function isUser() {
+    	let doesUserExist = exists(/databases/$(database)/documents/profiles/$(request.auth.uid));
+      
+      return doesUserExist;
+    }
+    
+    // ---------------- Games ----------------------
+    function valid_games_read() {
+    	let userIsPlayer = request.auth.uid in resource.data.players;
+    	// let isPlayerInPlayerList = resource.data.ownerId == request.auth.uid;
+      //resource.data.players.include(request.auth.userId);
+      
+      return isUser() && userIsPlayer; //isPlayerInPlayerList;
+    }
+    
+    match /games/{gameId} {
+    	allow read : if request.auth != null && valid_games_read();
+      allow update: if request.auth != null;
+      allow create : if request.auth != null;
+    }
+    
+    // ---------------- Profile ----------------------
+    function valid_profile_update(userId, requestUserId) {
+      //let isUserTheOneRequestingUpdate = userId == requestUserId;
+      //let role = get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+      // let doesRequestUpdateProtectedFields = resource.data.diff(request.resource.data).affectedKeys().hasAny(['role'].toSet());
+      //let doesRequestChangeUserRole = request.resource.data['role'] != role;
+
+      //let canUpdate = isUserTheOneRequestingUpdate && !doesRequestChangeUserRole;
+      
+      //return canUpdate;
+      return true;
+    }
+    
+    function valid_profile_create(userId, requestUserId) {
+    	let doesUserNotExist = !exists(/databases/$(database)/documents/Profiles/$(userId));
+      let isUserSameAsUserBeingCreated = userId == requestUserId;
+      // let doesRequestSetUserIdToRequestsUserId = request.resource.data['userId'] == userId;
+      // let doesRequestSetRoleAsGuest = request.resource.data['role'] == 'Guest';
+      
+      return true;
+      // return doesUserNotExist && isUserSameAsUserBeingCreated;
+    }
+    
+    match /Profiles/{userId} {
+    	allow read : if request.auth != null;
+      allow update: if true;// valid_profile_update(userId, request.auth.uid) || isAdmin();
+      allow create: if valid_profile_create(userId, request.auth.uid);
     }
   }
 }

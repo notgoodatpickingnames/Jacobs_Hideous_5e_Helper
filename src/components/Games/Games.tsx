@@ -10,7 +10,9 @@ const useStyles = makeStyles(() => ({
     },
 
     games: {
-        height: 'calc(100% - 17px)',
+        display: 'flex',
+        height: 'calc(100% - 64px)',
+        paddingTop: '12px',
     },
 }));
 
@@ -24,8 +26,10 @@ export function Games() {
 
             <div className={classes.games}>
                 {
-                    games.map((game) =>
-                        <Game game={game}/>
+                    games.map((game, index) =>
+                        <div key={`game_${index}`}>
+                            <Game game={game}/>
+                        </div>
                     )
                 }
 

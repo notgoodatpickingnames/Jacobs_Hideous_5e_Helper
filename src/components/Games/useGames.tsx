@@ -14,7 +14,7 @@ export function useGames() {
 
     useEffect(() => {
         const db = getFirestore();
-        const q = query(collection(db, 'Games'), where('players', 'in', [[user.uid]]));
+        const q = query(collection(db, 'games'), where('players', 'array-contains', user.uid));
         
         const unsub = onSnapshot(q, ({docs}) => {
             const games: IGame[] = docs.map((g) => g.data() as IGame);
