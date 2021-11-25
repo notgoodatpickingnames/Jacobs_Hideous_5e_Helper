@@ -19,14 +19,21 @@ service cloud.firestore {
     // ---------------- Games ----------------------
     function valid_games_read() {
     	let userIsPlayer = request.auth.uid in resource.data.players;
+      let userIsOwner = request.auth.uid in resource.data.ownerId;
       
-      return isUser() && userIsPlayer; //isPlayerInPlayerList;
+      return isUser() && userIsPlayer && userIsOwner;
+    }
+    
+    function valid_games_create() {
+    	let isCreatorInPlayerList = request.auth.uid in request.resource.data.players;
+      
+      return isUser() && isCreatorInPlayerList;
     }
     
     match /games/{gameId} {
     	allow read : if request.auth != null && valid_games_read();
       allow update: if request.auth != null;
-      allow create : if request.auth != null;
+      allow create : if request.auth != null && valid_games_create();
     }
     
     // ---------------- Profile ----------------------
@@ -43,7 +50,7 @@ service cloud.firestore {
     }
     
     function valid_profile_create(userId, requestUserId) {
-    	let doesUserNotExist = !exists(/databases/$(database)/documents/Profiles/$(userId));
+    	let doesUserNotExist = !exists(/databases/$(database)/documents/profiles/$(userId));
       let isUserSameAsUserBeingCreated = userId == requestUserId;
       // let doesRequestSetUserIdToRequestsUserId = request.resource.data['userId'] == userId;
       // let doesRequestSetRoleAsGuest = request.resource.data['role'] == 'Guest';
