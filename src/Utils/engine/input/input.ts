@@ -1,6 +1,3 @@
-import { LastPageOutlined } from '@mui/icons-material';
-import { keys } from '@mui/system';
-
 enum KeyState {
     Up = 'Up',
     Down = 'Down',

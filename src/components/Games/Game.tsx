@@ -1,15 +1,12 @@
 import { makeStyles } from '@mui/styles';
-import { height } from '@mui/system';
 
-import { theme } from '../../Utils/theme/theme';
+import { Card } from '../Card';
 import { Game as GameModel } from './models/game';
 
 const useStyles = makeStyles(() => ({
     gameContainer: {
-        border: `solid 2px ${theme.blue}`,
-        height: '100%',
-        width: '200px',
-        marginRight: '12px',
+        height: '160px',
+        width: '150px',
         padding: '12px',
     }
 }));
@@ -22,8 +19,10 @@ export function Game({game}: GameProps) {
     const classes = useStyles();
 
     return (
-        <div className={classes.gameContainer}>
-            {game.name}
-        </div>
+        <Card>
+            <div className={classes.gameContainer}>
+                {game.name}
+            </div>
+        </Card>
     );
 }

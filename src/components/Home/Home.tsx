@@ -1,7 +1,6 @@
 import { makeStyles } from '@mui/styles';
 
 import { Games } from '../Games/Games';
-import { Menu } from '../Menus';
 
 const useStyles = makeStyles(() => ({
     home: {
@@ -24,9 +23,7 @@ export function Home() {
     return (
         <div className={classes.home}>
             <div>
-                <Menu>
-                    <Games />
-                </Menu>
+                <Games />
             </div>
         </div>
     )

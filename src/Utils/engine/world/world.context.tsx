@@ -1,7 +1,6 @@
 import React, { createContext, MutableRefObject, ReactNode, useContext, useRef } from 'react';
 
 import { useCanvasContext } from '../../../Game/hooks/useCanvasContext';
-import { useMousePositionInWorld } from '../../../Game/hooks/useMousePositionInWorld';
 import { Vector2 } from '../models/Vector2';
 
 export interface WorldContextObject {

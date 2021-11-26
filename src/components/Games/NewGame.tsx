@@ -1,28 +1,26 @@
 import { makeStyles } from '@mui/styles';
-import { height } from '@mui/system';
 
-import { theme } from '../../Utils/theme/theme';
-import { Game as GameModel } from './models/game';
+import { Card } from '../Card';
 
 const useStyles = makeStyles(() => ({
     gameContainer: {
-        border: `solid 2px ${theme.blue}`,
-        height: '100%',
-        width: '200px',
+        height: '160px',
+        width: '150px',
         marginRight: '12px',
         padding: '12px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-
-    plus: {
-        position: 'relative',
+        
         cursor: 'pointer',
 
         '& :hover': {
             backgroundColor: 'grey',
         },
+    },
+
+    plus: {
+        position: 'relative',
 
         '&:before': {
             content: "' '",
@@ -46,10 +44,12 @@ export function NewGame() {
     const classes = useStyles();
 
     return (
-        <div className={classes.gameContainer}>
-            <div className={classes.plus}>
+        <Card>
+            <div className={classes.gameContainer}>
+                <div className={classes.plus}>
 
+                </div>
             </div>
-        </div>
+        </Card>
     );
 }

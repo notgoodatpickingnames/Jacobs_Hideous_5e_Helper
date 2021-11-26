@@ -53,6 +53,7 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
         if (Boolean(engine)) {
             onEngineCreated(engine);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [engine]);
 
     function onFrame(time: number, deltaTime: number): void {

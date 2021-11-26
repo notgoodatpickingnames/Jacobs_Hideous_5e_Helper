@@ -2,6 +2,10 @@ body {
     margin: 0;
     height: 100vh;
     width: 100vw;
-    background-color: #0b1d27;
     overflow: hidden;
+
+    background-image: radial-gradient(#284554 20%, transparent 20%);
+    background-color: #0b1d27;
+    background-position: 0 0, 50px 50px;
+    background-size: 5px 5px;
 }

@@ -1,161 +1,56 @@
 import { makeStyles } from '@mui/styles';
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
-
-import { useElementSize } from '../../Utils/hooks/size';
-import { Size } from '../../Utils/hooks/size/size';
-import { useIsMounted } from '../../Utils/hooks/useIsMounted';
-import { theme } from '../../Utils/theme/theme';
-
-const openAnimationTime = 1000;
-const opacityTime = 50;
-const waitToOpenTime = 1000;
+import React, { ReactNode } from 'react';
 
 const useStyles = makeStyles(() => ({
-    '@keyframes flicker': {
-        from: {
-          opacity: 1,
-        },
-        to: {
-          opacity: 0.7,
-        },
-      },
-      flicker: {
-        animationName: '$flicker',
-        animationDuration: '1000ms',
-        animationIterationCount: '10',
-        animationDirection: 'alternate',
-        animationTimingFunction: 'ease-in',
-      },
-
     container: {
-        height: '0px',
-        width: '0px',
-        
-        backgroundColor: 'yellow',
-        position: 'relative',
-        transition: `all ${openAnimationTime}ms`,
-        transitionTimingFunction: 'ease-in',
+        display: 'flex',
+        flexDirection: 'row',
+    },
 
-        padding: '10px',
+    menu: {
+        background: 'linear-gradient(0deg, rgba(245, 213, 70, 0.1) 0%, rgba(17, 17, 17, 0) 100%)',
+        border: '1px #f5d546 solid',
+        borderRadius: '5px',
+        padding: '24px',
+        boxSizing: 'border-box',
+    },
 
-        '&:before': {
-            display: 'block',
-            content: "' '",
-            position: 'absolute',
-            top: '0',
-            right: '0',
-            borderTop: `10px solid ${theme.background}`,
-            borderLeft: `50px solid yellow`,
-            width: '0px',
+    title: {
+        display: 'flex',
+        alignItems: 'center',
+        borderRadius: '5px',
+        marginRight: '4px',
+        width: '64px',
+
+        '& span': {
+            transform: 'rotate(-90deg)',
+            height: 'min-content',
+            color: 'white',
+            letterSpacing: '6px',
+            fontSize: '24px'
         },
-
-        '&:after': {
-            display: 'block',
-            content: "' '",
-            position: 'absolute',
-            bottom: '0',
-            left: '0',
-            borderTop: `10px solid yellow`,
-            borderLeft: `50px solid ${theme.background}`,
-            width: '0px',
-        }
-    },
-
-    open: {
-        opacity: '1 !important',
-    },
-
-    contents: {
-        opacity: 0,
-        transition: `all ${opacityTime}ms`,
-    },
-
-    border: {
-        width: 'calc(100% - 20px)',
-        height: 'calc(100% - 20px)',
-        backgroundColor: theme.background,
-        position: 'relative',
-        transition: `all ${openAnimationTime}ms`,
-        transitionTimingFunction: 'ease-in',
-
-        padding: '10px',
-
-        '&:before': {
-            display: 'block',
-            content: "' '",
-            position: 'absolute',
-            top: '0',
-            right: '0',
-            borderTop: `10px solid yellow`,
-            borderLeft: `50px solid transparent`,
-            width: '0px',
-        },
-
-        '&:after': {
-            display: 'block',
-            content: "' '",
-            position: 'absolute',
-            bottom: '0',
-            left: '0',
-            borderTop: `10px solid transparent`,
-            borderLeft: `50px solid yellow`,
-            width: '0px',
-        }
     },
 }));
 
 interface MenuProps {
     children?: ReactNode | ReactNode[];
-    // width: number;
-    // height: number;
+    title?: string;
 }
 
-export function Menu({children}: MenuProps) {
+export function Menu({children, title}: MenuProps) {
     const classes = useStyles();
 
-    const isMounted = useIsMounted();
-
-    const [isLoaded, setIsLoaded] = useState<boolean>(false);
-
-    const contentsContainerRef = useRef<HTMLDivElement>();
-    const contentsContainerSize = useElementSize(contentsContainerRef);
-
-    const [containerSize, setContainerSize] = useState<Size>({width: 0, height: 0});
-
-
-    useEffect(() => {
-        setTimeout(() => {
-            if (isMounted.current) {
-                setIsLoaded(true);
-            }
-        }, openAnimationTime + waitToOpenTime);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [children]);
-
-    useEffect(() => {
-        setTimeout(() => {
-            if (isMounted.current) {
-                setContainerSize(contentsContainerSize);
-            }
-        }, waitToOpenTime);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [contentsContainerSize]);
-
     return (
-        <>
-            <div className={classes.container} style={{height: `${containerSize.height + 20}px`, width: `${containerSize.width + 20}px`}}>
-                <div className={classes.border}>
-                    <div className={`${classes.contents} ${isLoaded && classes.open}`}>
-                        {
-                            isLoaded && <> {children} </>
-                        }
-                    </div>
-                </div>
+        <div className={classes.container}>
+            <div className={classes.title}>
+                <span>
+                    {title}
+                </span>
             </div>
 
-            <div style={{opacity: 0, position: 'absolute'}} ref={contentsContainerRef}>
+            <div className={`${classes.menu}`}>
                 {children}
             </div>
-        </>
+        </div>
     );
 }
