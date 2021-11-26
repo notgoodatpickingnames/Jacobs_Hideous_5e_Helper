@@ -29,8 +29,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     useEffect(() => {
         const unsubscribe = getAuth().onAuthStateChanged(async (firebaseUser: User) => {
             setUser(firebaseUser);
-            const userProfile = await getUserProfile(firebaseUser.uid);
-            setUserProfile(userProfile);
+
+            if (Boolean(firebaseUser)) {
+                const userProfile = await getUserProfile(firebaseUser.uid);
+                setUserProfile(userProfile);
+            }
         });
 
         listenForRedirectResult();        

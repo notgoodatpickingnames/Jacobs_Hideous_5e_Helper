@@ -26,7 +26,7 @@ service cloud.firestore {
     
     function valid_games_create() {
     	let isCreatorInPlayerList = request.auth.uid in request.resource.data.players;
-      let creatorIsOwner = request.auth.uid in resource.data.ownerId;
+      let creatorIsOwner = request.auth.uid == request.resource.data.ownerId;
       
       return isCreatorInPlayerList && creatorIsOwner;
     }
@@ -44,20 +44,17 @@ service cloud.firestore {
       return isUserRequestingUpdate;
     }
     
-    function valid_profile_create(userId, requestUserId) {
-    	let doesUserNotExist = !exists(/databases/$(database)/documents/profiles/$(userId));
-      let isUserSameAsUserBeingCreated = userId == requestUserId;
-      // let doesRequestSetUserIdToRequestsUserId = request.resource.data['userId'] == userId;
-      // let doesRequestSetRoleAsGuest = request.resource.data['role'] == 'Guest';
+    function valid_profile_create(userId) {
+    	let doesUserNotExist = !exists(/databases/$(database)/documents/profiles/$(request.auth.uid));
+      let isUserSameAsUserBeingCreated = userId == request.auth.uid;
       
-      return true;
-      // return doesUserNotExist && isUserSameAsUserBeingCreated;
+      return doesUserNotExist && isUserSameAsUserBeingCreated;
     }
     
-    match /Profiles/{userId} {
-    	allow read : if isUser();
+    match /profiles/{userId} {
+    	allow read : if request.auth != null;
       allow update: if isUser() && valid_profile_update();
-      allow create: if valid_profile_create(userId, request.auth.uid);
+      allow create: if request.auth != null && valid_profile_create(userId);
     }
   }
 }
