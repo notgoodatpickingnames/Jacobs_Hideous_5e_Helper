@@ -1,6 +1,5 @@
 import { makeStyles } from '@mui/styles';
 
-import { WithFlicker } from '../../Utils/effects';
 import { Game } from './Game';
 import { NewGame } from './NewGame';
 import { useGames } from './useGames';
@@ -37,9 +36,7 @@ export function Games() {
                     {
                         games.map((game, index) =>
                             <div key={`game_${index}`} className={classes.game}>
-                                <WithFlicker delay={index * 300} length={1000}>
-                                    <Game game={game}/>
-                                </WithFlicker>
+                                <Game game={game} index={index} />
                             </div>
                         )
                     }

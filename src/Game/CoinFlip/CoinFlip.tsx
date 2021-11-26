@@ -2,6 +2,7 @@ import { Button, CircularProgress } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 
+import { useIsMounted } from '../../Utils/hooks/useIsMounted';
 import { CoinState } from './coin.states';
 
 const useStyles = makeStyles(() => ({
@@ -28,6 +29,7 @@ export function CoinFlip() {
     const [coinState, setCoinState] = useState<CoinState>(CoinState.Heads);
     const [coinImageSrc, setCoinImageSrc] = useState<string>(headsImageSrc);
     const [isFlipping, setIsFlipping] = useState<boolean>(false);
+    const isMounted = useIsMounted();
 
     function flipCoin(): void {
         setIsFlipping(true);
@@ -52,7 +54,9 @@ export function CoinFlip() {
         }
 
         setTimeout(() => {
-            setIsFlipping(false);
+            if (isMounted.current) {
+                setIsFlipping(false);
+            }
         }, 10000);
     }
 

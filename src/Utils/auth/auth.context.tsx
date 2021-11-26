@@ -1,4 +1,4 @@
-import { getAuth, GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithRedirect, User } from 'firebase/auth';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import React, { createContext, ReactNode, useContext } from 'react';
 import { useEffect, useState } from 'react';
@@ -32,7 +32,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     function signInWithGoogle(): void {
         console.log('Signing in with google');
         const googleProvider = new GoogleAuthProvider();
-        signInWithPopup(getAuth(), googleProvider).then((userCredentials) => createUserAccount(userCredentials.user.uid));
+        signInWithRedirect(getAuth(), googleProvider).then();
     }
 
     function createUserAccount(userId: string): void {

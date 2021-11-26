@@ -61,27 +61,35 @@ function StyledWithFlicker({children, delay, length, classes, randomFlicker = fa
     const { flicker, withAnimation, flickerDone } = useStyles({ flickering });
 
     useEffect(() => {
-        if (randomFlickerFiring) {
-            setTimeout(() => {
-                setFlickering(false);
-                setRandomFlickerFiring(false);
-            }, (Math.floor(Math.random() * 10) + 1) * 50);
-        } else {
-            setTimeout(() => {
-                setFlickering(true);
-                setRandomFlickerFiring(true);
-            }, Math.floor(Math.random() * 10000) + 2000);
+        if (randomFlicker) {
+            if (randomFlickerFiring) {
+                setTimeout(() => {
+                    if (isMounted.current) {
+                        setFlickering(false);
+                        setRandomFlickerFiring(false);
+                    }
+                }, (Math.floor(Math.random() * 10) + 1) * 50);
+            } else {
+                setTimeout(() => {
+                    if (isMounted.current) {
+                        setFlickering(true);
+                        setRandomFlickerFiring(true);
+                    }
+                }, Math.floor(Math.random() * 10000) + 2000);
+            }
         }
-    }, [randomFlickerFiring]);
+    }, [randomFlickerFiring, randomFlicker, isMounted]);
 
     useEffect(() => {
         if (loadFlickerDone && randomFlicker) {
             setTimeout(() => {
-                setFlickering(true);
-                setRandomFlickerFiring(true);
+                if (isMounted.current) {
+                    setFlickering(true);
+                    setRandomFlickerFiring(true);
+                }
             }, Math.floor(Math.random() * 10000) + 2000);
         }
-    }, [loadFlickerDone, randomFlicker]);
+    }, [loadFlickerDone, randomFlicker, isMounted]);
 
     useEffect(() => {
         setTimeout(() => {
