@@ -18,6 +18,7 @@ const useStyles = makeStyles(() => ({
     existingGames: {
         display: 'flex',
         maxWidth: 'calc(100vw - 200px - 160px)',
+        transition: 'all .5s ease',
     },
 
     game: {
@@ -42,7 +43,7 @@ export function Games() {
                     }
                 </div>
 
-                <div style={{transition: 'all .5s'}}>
+                <div>
                     <NewGame />
                 </div>
             </div>

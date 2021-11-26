@@ -1,5 +1,6 @@
 import { makeStyles } from '@mui/styles';
 
+import { Account } from '../Account/Account';
 import { Games } from '../Games/Games';
 
 const useStyles = makeStyles(() => ({
@@ -12,8 +13,10 @@ const useStyles = makeStyles(() => ({
         color: 'white',
     },
 
-    gamesContainer: {
-
+    accountContainer: {
+        position: 'absolute',
+        top: '12px',
+        left: '12px',
     }
 }));
 
@@ -22,8 +25,10 @@ export function Home() {
 
     return (
         <div className={classes.home}>
-            <div>
-                <Games />
+            <Games />
+
+            <div className={classes.accountContainer}>
+                <Account />
             </div>
         </div>
     )
