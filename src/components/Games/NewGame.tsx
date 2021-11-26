@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { useAuth } from '../../Utils/auth/auth.context';
 import { Card } from '../Card';
+import { Input } from '../Controls';
 import { Game } from './models/game';
 import { useGames } from './useGames';
 
@@ -67,13 +68,11 @@ export function NewGame() {
                     !enteringGameData ?
                         <div className={classes.plus}></div> :
                         <div>
-                            <TextField
-                                inputProps={{
-                                    style: {color: 'white'}
-                                }}
+                            <Input
                                 label={'Name'} value={newGameName}
-                                onChange={(event) => setNewGameName(event.target.value)}>
-                            </TextField>
+                                onChange={(event) => setNewGameName(event.target.value)} 
+                                variant={'standard'}
+                            />
 
                             <Button onClick={onCreate}>Create</Button>
                         </div>
