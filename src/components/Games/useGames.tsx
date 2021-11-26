@@ -1,4 +1,4 @@
-import { collection, doc, getFirestore, onSnapshot, query, setDoc } from '@firebase/firestore';
+import { addDoc, collection, doc, getFirestore, onSnapshot, query, setDoc } from '@firebase/firestore';
 import { where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
@@ -19,16 +19,21 @@ export function useGames() {
         
         const unsub = onSnapshot(q, ({docs}) => {
             const games: IGame[] = docs.map((g) => g.data() as IGame);
-            setGames(games.map((game) => new Game(game)));
+            setGames(games.map((game) => new Game(game)).sort((game1, game2) => game1.modifiedOn.getTime() - game2.modifiedOn.getTime()));
         });
 
         return () => unsub();
     }, [user]);
 
-    async function addGame(game: Game): Promise<void> {
+    async function createGame(name: string): Promise<void> {
         const db = getFirestore();
         
-        await setDoc(doc(db, gamesPath), game);
+        await addDoc(collection(db, gamesPath), {
+            ownerId: user.uid,
+            name: name,
+            players: [user.uid],
+            modifiedOn: new Date(),
+        });
     }
     
     async function updateGame(game: Game): Promise<void> {
@@ -39,5 +44,5 @@ export function useGames() {
 
     }
 
-    return {games, addGame, updateGame, deleteGame};
+    return {games, createGame, updateGame, deleteGame};
 }

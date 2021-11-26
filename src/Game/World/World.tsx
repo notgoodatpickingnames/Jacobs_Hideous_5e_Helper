@@ -9,7 +9,6 @@ import { useElementSize } from '../../Utils/hooks/size';
 import Canvas from '../Canvas';
 import { Grid } from '../Grid';
 import { useCanvasDraw } from '../hooks/useCanvasDraw';
-import { useFirestoreTest } from '../hooks/useFirestoreTest';
 import usePan from '../hooks/usePan';
 import useScale from '../hooks/useScale';
 
@@ -93,8 +92,6 @@ export function World() {
         addFunctionOnRender(onRender);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [addFunctionOnRender]);
-
-    useFirestoreTest();
 
     function onRender(): void {
         if (Boolean(canvas.current) && Boolean(canvasContext.current)) {

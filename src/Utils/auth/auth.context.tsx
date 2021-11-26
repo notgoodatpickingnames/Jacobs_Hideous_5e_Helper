@@ -7,6 +7,7 @@ import { UserProfile } from './userProfile';
 
 interface AuthContextObject {
     user: User;
+    userProfile: UserProfile;
     signInWithGoogle: () => void;
     logOut: () => void;
 }
@@ -26,8 +27,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [userProfile, setUserProfile] = useState<UserProfile>(undefined);
 
     useEffect(() => {
-        const unsubscribe = getAuth().onAuthStateChanged((firebaseUser: User) => {
+        const unsubscribe = getAuth().onAuthStateChanged(async (firebaseUser: User) => {
             setUser(firebaseUser);
+            const userProfile = await getUserProfile(firebaseUser.uid);
+            setUserProfile(userProfile);
         });
 
         listenForRedirectResult();        
@@ -39,14 +42,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     function listenForRedirectResult(): void {
         const auth = getAuth();
         getRedirectResult(auth).then(async (userCredentials) => {
-            console.log('THE USER CREDENTIALS', userCredentials);
             if (Boolean(userCredentials)) {
                 const userProfile = await getUserProfile(userCredentials.user.uid);
-
+                
                 if (Boolean(userProfile)) {
                     setUserProfile(userProfile);
                 } else {
-                    createUserAccount(userCredentials.user.uid);
+                    createUserProfile(userCredentials.user.uid);
                 }
             }
         });
@@ -54,23 +56,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     async function getUserProfile(userId: string): Promise<UserProfile> {
         const db = getFirestore();
-        return await getDoc(doc(db, 'profiles', userId)).then((doc) => doc.data)
+        const profileAsDoc = await getDoc(doc(db, 'profiles', userId));
+        
+        if (profileAsDoc.exists()) {
+            return profileAsDoc.data() as UserProfile;
+        }
+        
+        return undefined;
     }
 
     function signInWithGoogle(): void {
-        console.log('Signing in with google');
         const googleProvider = new GoogleAuthProvider();
         signInWithRedirect(getAuth(), googleProvider);
     }
 
-    function createUserAccount(userId: string): void {
-        console.log('Creating User Account', userId);
-
+    function createUserProfile(userId: string): void {
         const db = getFirestore();
-        getDoc(doc(db, 'profiles', userId)).then((userProfile) => {
-            setDoc(doc(db, 'profiles', userId), {
-                name: 't',
-            });
+        setDoc(doc(db, 'profiles', userId), {
+            name: 'test',
         });
     }
 
@@ -81,6 +84,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const authContextObject: AuthContextObject = {
         user,
+        userProfile,
         signInWithGoogle,
         logOut,
     }

@@ -1,6 +1,11 @@
+import { Button, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { useState } from 'react';
 
+import { useAuth } from '../../Utils/auth/auth.context';
 import { Card } from '../Card';
+import { Game } from './models/game';
+import { useGames } from './useGames';
 
 const useStyles = makeStyles(() => ({
     gameContainer: {
@@ -11,12 +16,10 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        
-        cursor: 'pointer',
+    },
 
-        '& :hover': {
-            backgroundColor: 'grey',
-        },
+    clickable: {
+        cursor: 'pointer',
     },
 
     plus: {
@@ -43,12 +46,38 @@ const useStyles = makeStyles(() => ({
 export function NewGame() {
     const classes = useStyles();
 
-    return (
-        <Card>
-            <div className={classes.gameContainer}>
-                <div className={classes.plus}>
+    const [enteringGameData, setEnteringGameData] = useState<boolean>(false);
+    const [newGameName, setNewGameName] = useState<string>('');
 
-                </div>
+    const {createGame} = useGames();
+
+    function onCreate(event: any): void {
+        event.stopPropagation();
+        
+        createGame(newGameName);
+        
+        setEnteringGameData(false);
+        setNewGameName('');
+    }
+
+    return (
+        <Card flickerSettings={{delay: 0, length: 0, randomFlickers: true}}>
+            <div className={`${classes.gameContainer} ${!enteringGameData && classes.clickable}`} onClick={() => setEnteringGameData(true)}>
+                {
+                    !enteringGameData ?
+                        <div className={classes.plus}></div> :
+                        <div>
+                            <TextField
+                                inputProps={{
+                                    style: {color: 'white'}
+                                }}
+                                label={'Name'} value={newGameName}
+                                onChange={(event) => setNewGameName(event.target.value)}>
+                            </TextField>
+
+                            <Button onClick={onCreate}>Create</Button>
+                        </div>
+                }
             </div>
         </Card>
     );
