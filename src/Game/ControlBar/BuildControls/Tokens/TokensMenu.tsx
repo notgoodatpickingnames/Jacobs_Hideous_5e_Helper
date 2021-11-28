@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const juniperIconPath = './images/Juni.png'
+const juniperIconPath = 'images/Juni.png'
 const juniperImage = new Image();
 juniperImage.src = juniperIconPath;
 

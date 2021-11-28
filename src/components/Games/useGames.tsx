@@ -18,7 +18,13 @@ export function useGames() {
         const q = query(collection(db, gamesPath), where('players', 'array-contains', user.uid));
         
         const unsub = onSnapshot(q, ({docs}) => {
-            const games: IGame[] = docs.map((g) => g.data() as IGame);
+            const games: IGame[] = docs.map((doc) => {
+                const game = doc.data() as IGame;
+                game.gameId = doc.id;
+
+                return game;
+            });
+
             setGames(games.map((game) => new Game(game)).sort((game1, game2) => game2.modifiedOn.getTime() - game1.modifiedOn.getTime()));
         });
 

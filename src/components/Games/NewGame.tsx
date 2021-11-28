@@ -99,37 +99,40 @@ export function NewGame() {
     }
 
     function onKeyDownOnInput(event: KeyboardEvent): void {
-        if (event.key === '"Enter"') {
+        if (event.key === 'Enter') {
             onCreate(event);
         }
     }
 
     return (
-        <Card flickerSettings={{delay: 0, length: 0, randomFlickers: true}}>
-            <div className={`${classes.gameContainer} ${!enteringGameData && classes.clickable} ${enteringGameData && classes.newGameWidth}`} onClick={() => setEnteringGameData(true)}>
-                {
-                    !enteringGameData ?
-                        <div className={classes.plusContainer}>
-                            <div className={classes.plus}></div>
-                        </div> :
-                        <div className={classes.newGame}>
-                            <Input
-                                label={'Name'} value={newGameName}
-                                onChange={(event) => onInputChange(event.target.value)} 
-                                variant={'standard'}
-                                onKeyDown={(event: any) => onKeyDownOnInput(event as KeyboardEvent)}
-                                helperText={newGameNameError && 'Please type something.. anything.'}
-                                error={newGameNameError}
-                            />
+        <div className={`${!enteringGameData && classes.clickable}`}>
+            <Card flickerSettings={{delay: 0, length: 0, randomFlickers: true}}>
+                <div className={`${classes.gameContainer} ${enteringGameData && classes.newGameWidth}`} onClick={() => setEnteringGameData(true)}>
+                    {
+                        !enteringGameData ?
+                            <div className={classes.plusContainer}>
+                                <div className={classes.plus}></div>
+                            </div> :
+                            <div className={classes.newGame}>
+                                <Input
+                                    autoFocus={true}
+                                    label={'Name'} value={newGameName}
+                                    onChange={(event) => onInputChange(event.target.value)} 
+                                    variant={'standard'}
+                                    onKeyDown={(event: any) => onKeyDownOnInput(event as KeyboardEvent)}
+                                    helperText={newGameNameError && 'Please type something.. anything.'}
+                                    error={newGameNameError}
+                                />
 
-                            <PrimaryButton
-                                onClick={onCreate}
-                            >
-                                Create
-                            </PrimaryButton>
-                        </div>
-                }
-            </div>
-        </Card>
+                                <PrimaryButton
+                                    onClick={onCreate}
+                                >
+                                    Create
+                                </PrimaryButton>
+                            </div>
+                    }
+                </div>
+            </Card>
+        </div>
     );
 }

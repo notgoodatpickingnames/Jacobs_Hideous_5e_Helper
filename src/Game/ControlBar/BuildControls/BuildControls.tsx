@@ -3,6 +3,7 @@ import { Button as ButtonBase } from '@mui/material';
 import { makeStyles, withStyles } from '@mui/styles';
 import { useState } from 'react';
 
+import { Images } from './Images';
 import { TokensMenu } from './Tokens/TokensMenu';
 
 const buttonStyles = () => ({
@@ -74,6 +75,8 @@ function BuildControls() {
             </div>
 
             <TokensMenu />
+            
+            <Images />
         </>
     )
 }

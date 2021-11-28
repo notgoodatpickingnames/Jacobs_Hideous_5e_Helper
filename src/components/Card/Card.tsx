@@ -11,6 +11,10 @@ const useStyles = makeStyles(() => ({
         flexDirection: 'row',
         position: 'relative',
         width: 'max-content',
+        
+        '&:hover': {
+            background: 'linear-gradient(0deg, rgba(0, 231, 252, 0.1) 50%, rgba(17, 17, 17, 0) 100%)',
+        },
     },
 
     card: {
@@ -21,6 +25,8 @@ const useStyles = makeStyles(() => ({
         boxSizing: 'border-box',
         clipPath: 'polygon(calc(100% - 45px) 0, 100% 45px, 100% 100%, 0 100%, 0 0)',
         minHeight: '50px',
+
+        
 
         '&:before': {
             display: 'block',

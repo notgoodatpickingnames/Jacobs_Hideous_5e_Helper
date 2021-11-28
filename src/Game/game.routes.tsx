@@ -4,7 +4,7 @@ import { Game } from './Game';
 
 export const gameRoutes: Route[] = [
     {
-        path: '/game',
+        path: '/game/:gameId',
         component:
             <EngineProvider>
                 <Game />

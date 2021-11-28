@@ -1,6 +1,5 @@
 import { Button, ButtonProps } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { ReactNode } from 'react';
 
 import { theme } from '../../../Utils/theme/theme';
 
