@@ -1,5 +1,5 @@
-import { InputClassKey, TextField as TextFieldBase, TextFieldClassKey, TextFieldProps } from '@mui/material';
-import { makeStyles, Styles, withStyles } from '@mui/styles';
+import { TextField as TextFieldBase, TextFieldProps } from '@mui/material';
+import { makeStyles, withStyles } from '@mui/styles';
 import { color } from '@mui/system';
 import React from 'react';
 
@@ -33,6 +33,11 @@ const styles = () => ({
 
         '& .MuiInputLabel-root': {
             color: 'white !important',
+            fontFamily: "'Oxanium', cursive",
+        },
+
+        '& .MuiFormHelperText-root': {
+            color: 'white ',
         }
     },
 });

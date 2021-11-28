@@ -10,15 +10,17 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexDirection: 'row',
         position: 'relative',
+        width: 'max-content',
     },
 
     card: {
+        display: 'block',
         background: 'linear-gradient(0deg, rgba(0, 231, 252, 0.1) 0%, rgba(17, 17, 17, 0) 100%)',
         border: `1px ${theme.lightBlue} solid`,
         borderRadius: '5px',
-        padding: '24px',
         boxSizing: 'border-box',
         clipPath: 'polygon(calc(100% - 45px) 0, 100% 45px, 100% 100%, 0 100%, 0 0)',
+        minHeight: '50px',
 
         '&:before': {
             display: 'block',
@@ -86,7 +88,6 @@ export function Card({children, flickerSettings}: CardProps) {
 
     return (
         <div className={classes.container}>
-            
             {
                 Boolean(flickerSettings) ?
                     <WithFlicker delay={flickerSettings.delay} length={flickerSettings.length} randomFlicker={flickerSettings.randomFlickers}>
