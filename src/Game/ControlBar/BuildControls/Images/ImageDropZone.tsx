@@ -1,4 +1,3 @@
-import { makeStyles } from '@mui/styles';
 import React, { ReactNode } from 'react';
 
 interface ImageDropZoneProps {
@@ -17,7 +16,7 @@ export function ImageDropZone({children}: ImageDropZoneProps) {
 
         if (files.length > 0) {
             event.preventDefault();
-            console.log('Gonna upload files', files);
+            console.log('Gonna upload files', files, 'test');
         }
     }
 
