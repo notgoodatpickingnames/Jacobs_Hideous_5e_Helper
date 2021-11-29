@@ -9,7 +9,7 @@ export function useCanvasResizeToContainer(canvasRef: MutableRefObject<HTMLCanva
     const lastCanvasContainerSize = useRef<Size>();
 
     useEffect(() => {
-        if (canvasRef && canvasContainerSize && canvasContainerSize.height !== lastCanvasContainerSize.current?.height && canvasContainerSize.width !== lastCanvasContainerSize.current?.width) {
+        if (canvasRef && canvasContainerSize && (canvasContainerSize.height !== lastCanvasContainerSize.current?.height || canvasContainerSize.width !== lastCanvasContainerSize.current?.width)) {
             lastCanvasContainerSize.current = canvasContainerSize;
             const canvas = canvasRef.current;
 

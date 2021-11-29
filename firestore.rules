@@ -17,6 +17,20 @@ service cloud.firestore {
       return isAuthorized && doesUserExist;
     }
     
+    function isUserOwnerOfGame(gameId) {
+    	let ownerId = get(/databases/$(database)/documents/games/$(gameId)).data.ownerId;
+      let isUserOwnerOfGame = request.auth.uid == ownerId;
+      
+      return isUserOwnerOfGame;
+    }
+    
+    function isUserPlayerInGame(gameId) {
+    	let userId = request.auth.uid;
+    	let isUserPlayerInGame = !exists(/databases/$(database)/documents/games/$(gameId)/players/$(userId));
+      
+      return isUserPlayerInGame;
+    }
+    
     // ---------------- Games ----------------------
     function valid_games_read() {
     	let userIsPlayer = request.auth.uid in resource.data.players;
@@ -35,6 +49,28 @@ service cloud.firestore {
     	allow read : if isUser() && valid_games_read();
       allow update: if isUser();
       allow create : if isUser() && valid_games_create();
+    }
+    
+    // ---------------- Game Assets ----------------------
+    function valid_game_asset_read(gameId) {
+    	// Might change this to try and tell if original creator is looking at is as well.
+      return isUserPlayerInGame(gameId);
+    }
+    
+    function valid_game_asset_update(gameId) {
+    	// Might change this to try and tell if the original creator of the asset is the one updating it.
+    	return isUserOwnerOfGame(gameId);
+    }
+    
+    function valid_game_asset_create(gameId) {
+    	// Might want to change this to just the owner... not sure.
+    	return isUserPlayerInGame(gameId);
+    }
+    
+    match /gameAssets/{gameId}/assets/{assetId} {
+    	allow read : if isUser() && valid_game_asset_read(gameId);
+      allow update: if isUser() && valid_game_asset_update(gameId);
+      allow create: if isUser() && valid_game_asset_create(gameId);
     }
     
     // ---------------- Profile ----------------------

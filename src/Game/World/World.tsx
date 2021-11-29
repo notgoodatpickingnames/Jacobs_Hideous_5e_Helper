@@ -58,18 +58,6 @@ export function World() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mapContainerSize]);
 
-    // useEffect(() => {
-    //     const juniper = new Image();
-    //     juniper.src = './images/Juni.png';
-
-    //     for (let i = 0; i < 201; i++) {
-    //         for (let y = 0; y < 201; y++) {
-    //             const gameObject = new ImageObject(new Vector2(i * 40, y * 40), 40, 40, juniper, 'JUNIPER');
-    //             addGameObject(gameObject);
-    //         }
-    //     }
-    // }, []);
-
     function onCanvasRedraw(): void {
         if (Boolean(canvas.current) && Boolean(canvasContext.current)) {
             const _canvas = canvas.current;
