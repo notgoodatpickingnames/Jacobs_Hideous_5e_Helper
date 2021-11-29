@@ -8,6 +8,7 @@ import { useWorldContext } from '../../../../Utils/engine/world/world.context';
 import { ImageObject } from '../../../gameObjectTypes/ImageObject';
 import { MouseFollowImage } from '../../../MouseFollowImage/MouseFollowImage';
 import { useMouseFollowImage } from '../../../MouseFollowImage/useMouseFollowImage';
+import { ImageDropZone } from '../Images';
 
 const useStyles = makeStyles(() => ({
     tokensMenuContainer: {
@@ -58,16 +59,18 @@ export function TokensMenu() {
 
     return (
         <>
-            <div className={classes.tokensMenuContainer}>
-                {
-                    tokens.map((token, index) => 
-                        <div className={classes.tokenContainer} key={`token_${index}`}>
-                            <img height={80} width={80} draggable='true' onDragStart={(event) => onDragStart(event, token)} alt='token' src={token.image.src}/>
-                            <span>{token.name}</span>
-                        </div>
-                    )
-                }
-            </div>
+            <ImageDropZone>
+                <div className={classes.tokensMenuContainer}>
+                    {
+                        tokens.map((token, index) => 
+                            <div className={classes.tokenContainer} key={`token_${index}`}>
+                                <img height={80} width={80} draggable='true' onDragStart={(event) => onDragStart(event, token)} alt='token' src={token.image.src}/>
+                                <span>{token.name}</span>
+                            </div>
+                        )
+                    }
+                </div>
+            </ImageDropZone>
 
             {
                 Boolean(tokenBeingDragged) && <MouseFollowImage source={tokenBeingDragged.image.src} width={tokenBeingDragged.width * scale.current} height={tokenBeingDragged.height * scale.current} />

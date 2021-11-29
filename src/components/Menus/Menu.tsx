@@ -1,6 +1,8 @@
 import { makeStyles } from '@mui/styles';
 import React, { ReactNode } from 'react';
 
+import { theme } from '../../Utils/theme/theme';
+
 const useStyles = makeStyles(() => ({
     container: {
         display: 'flex',
@@ -8,8 +10,8 @@ const useStyles = makeStyles(() => ({
     },
 
     menu: {
-        background: 'linear-gradient(0deg, rgba(245, 213, 70, 0.1) 0%, rgba(17, 17, 17, 0) 100%)',
-        border: '1px #f5d546 solid',
+        background: 'linear-gradient(0deg, rgba(0, 231, 252, 0.1) 0%, rgba(17, 17, 17, 0) 100%)',
+        border: `1px ${theme.lightBlue} solid`,
         borderRadius: '5px',
         padding: '24px',
         boxSizing: 'border-box',

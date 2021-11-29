@@ -1,29 +1,15 @@
 import { makeStyles } from '@mui/styles';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-const useStyles = makeStyles(() => ({
-    container: {
-        height: '300px',
-        width: '300px',
-        position: 'fixed',
-        top: '0',
-        right: '0',
-        backgroundColor: 'white',
-    },
-}));
+interface ImageDropZoneProps {
+    children: ReactNode | ReactNode[];
+}
 
-export function Images() {
-    const classes = useStyles();
-
+export function ImageDropZone({children}: ImageDropZoneProps) {
     function onDragOver(event: DragEvent): void {
         if (event.dataTransfer.items.length > 0) {
-            console.log('EVENT BEING STOPPED ON DRAG');
             event.preventDefault();
         }
-    }
-
-    function handleFiles(): void {
-
     }
 
     function handleOnDrop(event: DragEvent): void {
@@ -37,11 +23,10 @@ export function Images() {
 
     return (
         <div
-            className={classes.container}
             onDrop={(event: any) => handleOnDrop(event as DragEvent)}
             onDragOver={(event: any) => onDragOver(event as DragEvent)}
         >
-            
+            {children}
         </div>
     )
 }
