@@ -2,6 +2,7 @@ import { makeStyles } from '@mui/styles';
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { Card } from '../../../../components/Card';
 import { useEngineContext } from '../../../../Utils/engine';
 import { useAssetManagerContext } from '../../../../Utils/engine/assetManager/assetManager.context';
 import { useInputContext } from '../../../../Utils/engine/input/input.context';
@@ -61,16 +62,18 @@ export function TokensMenu() {
     return (
         <>
             <ImageDropZone imageStoragePath={`${gameId}`}>
-                <div className={classes.tokensMenuContainer}>
-                    {
-                        tokens.map((token, index) => 
-                            <div className={classes.tokenContainer} key={`token_${index}`}>
-                                <img height={80} width={80} draggable='true' onDragStart={(event) => onDragStart(event, token)} alt='token' src={token.image.src}/>
-                                <span>{token.name}</span>
-                            </div>
-                        )
-                    }
-                </div>
+                <Card>
+                    <div className={classes.tokensMenuContainer}>
+                        {
+                            tokens.map((token, index) => 
+                                <div className={classes.tokenContainer} key={`token_${index}`}>
+                                    <img height={80} width={80} draggable='true' onDragStart={(event) => onDragStart(event, token)} alt='token' src={token.image.src}/>
+                                    <span>{token.name}</span>
+                                </div>
+                            )
+                        }
+                    </div>
+                </Card>
             </ImageDropZone>
 
             {
