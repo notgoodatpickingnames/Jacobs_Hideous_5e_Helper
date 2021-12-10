@@ -12,14 +12,13 @@ import { IAsset } from './models/IAsset';
 export function useAssets() {
     const { user } = useAuth();
     const { gameContext } = useEngine();
-    const { game, isUserOwnerOfGame } = gameContext;
+    const { game } = gameContext;
 
     const assetsMap = useRef<Map<string, Asset>>(new Map<string, Asset>([]));
     const [assets, setAssets] = useState<Asset[]>();
 
     useEffect(() => {
-        if (Boolean(user) && Boolean(game) && isUserOwnerOfGame) {
-            console.log('The user is the owner of the game. Getting all assets', user.uid, game.gameId, isUserOwnerOfGame);
+        if (Boolean(user) && Boolean(game)) {
             const db = getFirestore();
             
             const unsub = onSnapshot(collection(db, `gameAssets/${game.gameId}/assets`), ({docs}) => {
@@ -30,10 +29,8 @@ export function useAssets() {
             });
 
             return () => {unsub()};
-        } else {
-
         }
-    }, [user, game, isUserOwnerOfGame]);
+    }, [user, game]);
 
     async function addAsset(file: File): Promise<void> {
         const assetId = uuid();

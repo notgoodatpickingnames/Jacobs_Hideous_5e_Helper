@@ -1,5 +1,4 @@
-import { addDoc, collection, getFirestore, onSnapshot, query } from '@firebase/firestore';
-import { where } from 'firebase/firestore';
+import { addDoc, collection, getFirestore, onSnapshot, query, where } from '@firebase/firestore';
 import { useEffect, useState } from 'react';
 
 import { useAuth } from '../../Utils/auth/auth.context';
@@ -28,7 +27,7 @@ export function useGames() {
             setGames(games.map((game) => new Game(game)).sort((game1, game2) => game2.modifiedOn.getTime() - game1.modifiedOn.getTime()));
         });
 
-        return () => unsub();
+        return () => {unsub()};
     }, [user]);
 
     async function createGame(name: string): Promise<void> {
