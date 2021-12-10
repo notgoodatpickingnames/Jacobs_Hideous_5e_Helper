@@ -11,11 +11,11 @@ export function useCurrentScene(userId: string, gameId: string) {
 
             const q = query(collection(db, `gameObjects/${gameId}/scenes`), where('playersInScene', 'array-contains', userId));
 
-            const unsub = onSnapshot(q, ({docs}) => {
-                docs.map((doc) => doc.data() as I)
-            });
+            // const unsub = onSnapshot(q, ({docs}) => {
+            //     // docs.map((doc) => doc.data() as I)
+            // });
 
-            return () => {unsub()};
+            // return () => {unsub()};
         }
     }, [userId, gameId]);
 }

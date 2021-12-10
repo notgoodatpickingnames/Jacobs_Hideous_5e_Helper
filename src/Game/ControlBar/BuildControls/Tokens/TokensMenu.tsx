@@ -62,18 +62,16 @@ export function TokensMenu() {
     return (
         <>
             <ImageDropZone imageStoragePath={`${gameId}`}>
-                <Card>
-                    <div className={classes.tokensMenuContainer}>
-                        {
-                            tokens.map((token, index) => 
-                                <div className={classes.tokenContainer} key={`token_${index}`}>
-                                    <img height={80} width={80} draggable='true' onDragStart={(event) => onDragStart(event, token)} alt='token' src={token.image.src}/>
-                                    <span>{token.name}</span>
-                                </div>
-                            )
-                        }
-                    </div>
-                </Card>
+                <div className={classes.tokensMenuContainer}>
+                    {
+                        tokens.map((token, index) => 
+                            <div className={classes.tokenContainer} key={`token_${index}`}>
+                                <img height={80} width={80} draggable='true' onDragStart={(event) => onDragStart(event, token)} alt='token' src={token.image.src}/>
+                                <span>{token.name}</span>
+                            </div>
+                        )
+                    }
+                </div>
             </ImageDropZone>
 
             {
