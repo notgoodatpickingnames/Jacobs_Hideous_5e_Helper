@@ -149,30 +149,37 @@ service cloud.firestore {
     }
     
     // ---------------- Games Objects In Scene ----------------------
-    function valid_game_object_in_scene_read(gameId, gameObjectId) {
+    function valid_game_object_in_scene_read(gameId) {
       let isUserOwner = isUserOwnerOfGame(gameId);
-      let isVisible = resource.data.isVisible;
+      let isUserPlayer = isUserPlayerInGame(gameId);
       
-    	return isUserOwner || isVisible;
+    	return isUserOwner || isUserPlayer;
     }
     
     function valid_game_object_in_scene_update(gameId, gameObjectId) {
   		let isUserOwner = isUserOwnerOfGame(gameId);
       
       let userId = request.auth.uid;
-      let canUserMove = exists(/databases/$(database)/documents/gameObjects/$(gameId)/gameObjects/$(gameObjectId));
+      let canMove = canUserMove(userId, gameId, gameObjectId);
       
-    	return isUserOwner || canUserMove;
+      let isTryingToChangeVisibility = resource.data.isVisible != request.resource.data.isVisible;
+      
+    	return isUserOwner || (canMove && !isTryingToChangeVisibility);
     }
     
-    function valid_game_object_in_scene_create(gameId) {
-    	return isUserOwnerOfGame(gameId);
+    function valid_game_object_in_scene_create(gameId, gameObjectId) {
+    	let isUserOwner = isUserOwnerOfGame(gameId);
+      
+      let userId = request.auth.uid;
+      let canUserCreate = canUserPlace(userId, gameId, gameObjectId);
+      
+    	return isUserOwner || canUserCreate;
     }
     
     match /gameObjectsInScene/{gameId}/scenes/{sceneId}/gameObjects/{gameObjectId} {
     	allow read : if isUser() && valid_game_object_in_scene_read(gameId);
       allow update: if isUser() && valid_game_object_in_scene_update(gameId, gameObjectId);
-      allow create : if isUser() && valid_game_object_in_scene_create(gameId);
+      allow create : if isUser() && valid_game_object_in_scene_create(gameId, gameObjectId);
     }
     
     // ---------------- Profile ----------------------
@@ -183,16 +190,16 @@ service cloud.firestore {
     }
     
     function valid_profile_create(userId) {
-        let doesUserNotExist = !exists(/databases/$(database)/documents/profiles/$(request.auth.uid));
-        let isUserSameAsUserBeingCreated = userId == request.auth.uid;
+    	let doesUserNotExist = !exists(/databases/$(database)/documents/profiles/$(request.auth.uid));
+      let isUserSameAsUserBeingCreated = userId == request.auth.uid;
       
-        return doesUserNotExist && isUserSameAsUserBeingCreated;
+      return doesUserNotExist && isUserSameAsUserBeingCreated;
     }
     
     match /profiles/{userId} {
-        allow read : if request.auth != null;
-        allow update: if isUser() && valid_profile_update();
-        allow create: if request.auth != null && valid_profile_create(userId);
+    	allow read : if request.auth != null;
+      allow update: if isUser() && valid_profile_update();
+      allow create: if request.auth != null && valid_profile_create(userId);
     }
   }
 }
