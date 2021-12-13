@@ -75,6 +75,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     function createUserProfile(userId: string): void {
         const db = getFirestore();
+        
         setDoc(doc(db, 'profiles', userId), {
             name: 'test',
         });

@@ -2,12 +2,11 @@ import { makeStyles } from '@mui/styles';
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Card } from '../../../../components/Card';
 import { useEngineContext } from '../../../../Utils/engine';
-import { useAssetManagerContext } from '../../../../Utils/engine/assetManager/assetManager.context';
 import { useInputContext } from '../../../../Utils/engine/input/input.context';
 import { Vector2 } from '../../../../Utils/engine/models/Vector2';
 import { useWorldContext } from '../../../../Utils/engine/world/world.context';
+import { useGameManagerContext } from '../../../gameManager';
 import { ImageObject } from '../../../gameObjectTypes/ImageObject';
 import { MouseFollowImage } from '../../../MouseFollowImage/MouseFollowImage';
 import { useMouseFollowImage } from '../../../MouseFollowImage/useMouseFollowImage';
@@ -38,7 +37,7 @@ export function TokensMenu() {
     const {addGameObject} = useEngineContext();
     const {scale} = useWorldContext();
     const {gridPositionMouseIsOver, mousePositionInWorld} = useInputContext();
-    const {assets} = useAssetManagerContext();
+    const {assets} = useGameManagerContext();
     const {tokenBeingDragged, onDragStart} = useMouseFollowImage(onDragEnd);
 
     const tokens = useMemo(() => {

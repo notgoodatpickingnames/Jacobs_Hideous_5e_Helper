@@ -1,6 +1,7 @@
 import { makeStyles } from '@mui/styles';
 import { useEffect, useMemo, useState } from 'react';
 
+import { useIsMounted } from '../../Utils/hooks/useIsMounted';
 import { Game } from './Game';
 import { NewGame } from './NewGame';
 import { useGames } from './useGames';
@@ -39,10 +40,14 @@ export function Games() {
     const { games } = useGames();
     const [initialLoadInDone, setInitialLoadInDone] = useState<boolean>(false);
 
+    const isMounted = useIsMounted();
+
     useEffect(() => {
         if (games.length > 0) {
             setTimeout(() => {
-                setInitialLoadInDone(true);
+                if (isMounted) {
+                    setInitialLoadInDone(true);
+                }
             }, (games.length * gameLoadingGlitchEffectOffset) + gameLoadingGlitchEffectLength);
         }
     }, [games]);

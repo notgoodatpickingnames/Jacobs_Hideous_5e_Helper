@@ -1,7 +1,7 @@
 import { doc, getFirestore, onSnapshot } from '@firebase/firestore';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useAuth } from '../../auth/auth.context';
+import { useAuth } from '../../../Utils/auth/auth.context';
 import { Game } from './models/game';
 import { IGame } from './models/IGame';
 
@@ -14,13 +14,15 @@ export function useGame(gameId: string) {
         const db = getFirestore();
 
         const unsubscribe = onSnapshot(doc(db, 'games', gameId), (doc) => {
+            console.log('Game', doc.data());
             const _game = doc.data() as IGame;
             _game.gameId = doc.id;
 
             setGame(new Game(_game));
         });
 
-        return () => {unsubscribe()};
+
+        return () => {unsubscribe();};
     }, [gameId]);
 
     useEffect(() => {

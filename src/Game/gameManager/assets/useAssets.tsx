@@ -4,24 +4,21 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { useEffect, useRef, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import { useAuth } from '../../auth/auth.context';
-import { useEngine } from '../Engine';
+import { useAuth } from '../../../Utils/auth/auth.context';
 import { Asset } from './models/asset';
 import { IAsset } from './models/IAsset';
 
-export function useAssets() {
+export function useAssets(gameId: string) {
     const { user } = useAuth();
-    const { gameContext } = useEngine();
-    const { game } = gameContext;
 
     const assetsMap = useRef<Map<string, Asset>>(new Map<string, Asset>([]));
     const [assets, setAssets] = useState<Asset[]>();
 
     useEffect(() => {
-        if (Boolean(user) && Boolean(game)) {
+        if (Boolean(user) && Boolean(gameId)) {
             const db = getFirestore();
             
-            const unsub = onSnapshot(collection(db, `gameAssets/${game.gameId}/assets`), ({docs}) => {
+            const unsub = onSnapshot(collection(db, `gameAssets/${gameId}/assets`), ({docs}) => {
                 const assets: Asset[] = docs.map((doc) => new Asset(doc.data() as IAsset));
                 
                 setAssets(assets);
@@ -30,7 +27,7 @@ export function useAssets() {
 
             return () => {unsub()};
         }
-    }, [user, game]);
+    }, [user, gameId]);
 
     async function addAsset(file: File): Promise<void> {
         const assetId = uuid();
@@ -43,7 +40,7 @@ export function useAssets() {
     async function storeAsset(asset: Asset): Promise<void> {
         const db = getFirestore();
 
-        await setDoc(doc(db, `gameAssets/${game.gameId}/assets`, `${asset.assetId}`), {
+        await setDoc(doc(db, `gameAssets/${gameId}/assets`, `${asset.assetId}`), {
             creator: user.uid,
             assetId: asset.assetId,
             name: asset.name,
@@ -53,7 +50,7 @@ export function useAssets() {
 
     async function storeAssetFile(assetId: string, file: File): Promise<string> {
         const storage = getStorage();
-        const storageRef = ref(storage, `${game.gameId}/${assetId}`);
+        const storageRef = ref(storage, `${gameId}/${assetId}`);
 
         const uploadResult = await uploadBytes(storageRef, file);
         const downloadUrl = await getDownloadURL(uploadResult.ref);
@@ -70,7 +67,7 @@ export function useAssets() {
 
         // need to get both info from asset in firestore and image url from storage;
         const storage = getStorage();
-        const storageRef = ref(storage, `${game.gameId}/${assetId}`);
+        const storageRef = ref(storage, `${gameId}/${assetId}`);
 
         return undefined;
     }

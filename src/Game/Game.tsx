@@ -4,6 +4,7 @@ import { useWorldContext } from '../Utils/engine/world/world.context';
 import { ContextMenu } from './ContextMenu';
 import ControlBar from './ControlBar';
 import BuildControls from './ControlBar/BuildControls';
+import { GameManagerContextProvider } from './gameManager/GameManagerContext';
 import { World } from './World';
 
 export function Game() {
@@ -14,7 +15,7 @@ export function Game() {
     }, [backgroundColor]);
 
     return (
-        <>
+        <GameManagerContextProvider>
             <World />
 
             <ControlBar>
@@ -22,6 +23,6 @@ export function Game() {
             </ControlBar>
 
             <ContextMenu />
-        </>
+        </GameManagerContextProvider>
     )
 }

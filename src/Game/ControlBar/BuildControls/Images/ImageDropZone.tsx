@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { useAssetManagerContext } from '../../../../Utils/engine/assetManager/assetManager.context';
+import { useGameManagerContext } from '../../../gameManager';
 
 interface ImageDropZoneProps {
     children: ReactNode | ReactNode[];
@@ -8,7 +8,7 @@ interface ImageDropZoneProps {
 }
 
 export function ImageDropZone({children, imageStoragePath}: ImageDropZoneProps) {
-    const { addAsset } = useAssetManagerContext();
+    const { addAsset } = useGameManagerContext();
 
     function onDragOver(event: DragEvent): void {
         if (event.dataTransfer.items.length > 0) {

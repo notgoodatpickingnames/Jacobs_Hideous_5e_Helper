@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
+import { GameObjectTypes } from '../../../Game/gameManager/scene/gameObjectTypes';
 import { Engine } from '../Engine';
 import { Input } from '../input/input';
 import { Rect } from './rect';
@@ -13,6 +14,7 @@ interface IGameObject {
     color?: string,
     image?: HTMLImageElement,
     layer?: number
+    type?: GameObjectTypes;
 }
 
 export class GameObject {
@@ -28,6 +30,7 @@ export class GameObject {
     public height: number;
 
     public layer: number;
+    public type: GameObjectTypes;
 
     private halfWidth: number;
     private halfHeight: number;
@@ -42,11 +45,10 @@ export class GameObject {
         this.height = gameObject.height;
         this.color = gameObject.color;
         this.image = gameObject.image;
+        this.type = gameObject.type;
 
         this.halfWidth = this.width / 2;
         this.halfHeight = this.height / 2;
-
-        
         
         this.layer = gameObject.layer || 0;
     }
