@@ -31,6 +31,23 @@ service cloud.firestore {
       return isUserPlayerInGame;
     }
     
+    // ---- Game Object Specific ----
+    function isGameObjectVisible(gameId, sceneId, gameObjectId) {
+    	return get(/databases/$(database)/documents/gameObjectsInScene/$(gameId)/scenes/$(sceneId)/gameObjects/$(gameObjectId)).data.isVisible;
+    }
+    
+    function canUserPlace(userId, gameId, gameObjectId) {
+    	return exists(/databases/$(database)/documents/gameObjects/$(gameId)/gameObjects/$(gameObjectId)/playersWhoCanPlace/$(userId));
+    }
+    
+    function canUserMove(userId, gameId, gameObjectId) {
+    	return exists(/databases/$(database)/documents/gameObjects/$(gameId)/gameObjects/$(gameObjectId)/playersWhoControl/$(userId));
+    }
+    
+    function canUserRead(userId, gameId, gameObjectId) {
+    	return exists(/databases/$(database)/documents/gameObjects/$(gameId)/gameObjects/$(gameObjectId)/playersWhoCanRead/$(userId));
+    }
+    
     // ---------------- Games ----------------------
     function valid_games_read() {
     	let userIsPlayer = request.auth.uid in resource.data.players;
@@ -49,6 +66,28 @@ service cloud.firestore {
     	allow read : if isUser() && valid_games_read();
       allow update: if isUser();
       allow create : if isUser() && valid_games_create();
+    }
+    
+     // ---------------- Game Players In Scene ----------------------
+    
+    function valid_game_players_read(playerId, gameId) {
+    	return request.auth.uid == playerId || isUserOwnerOfGame(gameId);
+    }
+    
+    function valid_game_players_update(playerId, gameId) {
+    	// TODO - Scenes Will Be Connected, Need to make sure a player's standing on that connection before
+      // a switch can be made. (or the user is the owner).
+    	return request.auth.uid == playerId || isUserOwnerOfGame(gameId);
+    }
+    
+    function valid_game_players_create(gameId) {
+    	return isUserOwnerOfGame(gameId);
+    }
+    
+    match /gamePlayersInScene/{gameId}/players/{playerId} {
+    	allow read : if isUser() && valid_game_players_read(playerId, gameId);
+      allow update: if isUser() && valid_game_players_update(playerId, gameId);
+      allow create: if isUser() && valid_game_players_create(gameId);
     }
     
     // ---------------- Game Assets ----------------------
@@ -73,6 +112,69 @@ service cloud.firestore {
       allow create: if isUser() && valid_game_asset_create(gameId);
     }
     
+    // ---------------- Game Objects ----------------------
+    
+    function valid_game_objects_read(gameId) {
+    	let isUserPlayerInGame = isUserPlayerInGame(gameId);
+      let isUserOwnerOfGame = isUserOwnerOfGame(gameId);
+      
+      return isUserOwnerOfGame || isUserPlayerInGame;
+    }
+    
+    function valid_game_objects_create(gameId) {
+    	return isUserOwnerOfGame(gameId);
+    }
+    
+    function valid_game_objects_update(gameId) {
+    	let isUserOwner = isUserOwnerOfGame(gameId);
+      
+      let existingReadPerms = resource.data.playersWhoCanRead;
+      let newReadPerms = request.resource.data.playersWhoCanRead;
+      let changingWhoCanRead = existingReadPerms.hasAll(newReadPerms);
+      
+      let existingControlPerms = resource.data.playersWhoControl;
+      let newControlPerms = request.resource.data.playersWhoControl;
+      let changingWhoCanControl = existingControlPerms.hasAll(newControlPerms);
+      
+      
+      let isUserAbleToControl = request.auth.uid in resource.data.playersWhoControl;
+      
+      return isUserOwner || (isUserAbleToControl && !changingWhoCanRead && !changingWhoCanControl);
+    }
+    
+    match /gameObjects/{gameId}/gameObjects/{gameObjectId} {
+    	allow read : if isUser() && valid_game_objects_read(gameId);
+      allow update: if isUser() && valid_game_objects_update(gameId);
+      allow create: if isUser() && valid_game_objects_create(gameId);
+    }
+    
+    // ---------------- Games Objects In Scene ----------------------
+    function valid_game_object_in_scene_read(gameId, gameObjectId) {
+      let isUserOwner = isUserOwnerOfGame(gameId);
+      let isVisible = resource.data.isVisible;
+      
+    	return isUserOwner || isVisible;
+    }
+    
+    function valid_game_object_in_scene_update(gameId, gameObjectId) {
+  		let isUserOwner = isUserOwnerOfGame(gameId);
+      
+      let userId = request.auth.uid;
+      let canUserMove = exists(/databases/$(database)/documents/gameObjects/$(gameId)/gameObjects/$(gameObjectId));
+      
+    	return isUserOwner || canUserMove;
+    }
+    
+    function valid_game_object_in_scene_create(gameId) {
+    	return isUserOwnerOfGame(gameId);
+    }
+    
+    match /gameObjectsInScene/{gameId}/scenes/{sceneId}/gameObjects/{gameObjectId} {
+    	allow read : if isUser() && valid_game_object_in_scene_read(gameId);
+      allow update: if isUser() && valid_game_object_in_scene_update(gameId, gameObjectId);
+      allow create : if isUser() && valid_game_object_in_scene_create(gameId);
+    }
+    
     // ---------------- Profile ----------------------
     function valid_profile_update() {
       let isUserRequestingUpdate = request.auth.uid == request.resource.id;
@@ -81,16 +183,16 @@ service cloud.firestore {
     }
     
     function valid_profile_create(userId) {
-    	let doesUserNotExist = !exists(/databases/$(database)/documents/profiles/$(request.auth.uid));
-      let isUserSameAsUserBeingCreated = userId == request.auth.uid;
+        let doesUserNotExist = !exists(/databases/$(database)/documents/profiles/$(request.auth.uid));
+        let isUserSameAsUserBeingCreated = userId == request.auth.uid;
       
-      return doesUserNotExist && isUserSameAsUserBeingCreated;
+        return doesUserNotExist && isUserSameAsUserBeingCreated;
     }
     
     match /profiles/{userId} {
-    	allow read : if request.auth != null;
-      allow update: if isUser() && valid_profile_update();
-      allow create: if request.auth != null && valid_profile_create(userId);
+        allow read : if request.auth != null;
+        allow update: if isUser() && valid_profile_update();
+        allow create: if request.auth != null && valid_profile_create(userId);
     }
   }
 }
