@@ -82,8 +82,8 @@ export class ImageObject extends GameObject {
             height: this.height,
             width: this.width,
             layer: this.layer,
-            x: this.position.x,
-            y: this.position.y,
+            x: this.transform.positionInWorld.x,
+            y: this.transform.positionInWorld.y,
             rotation: 0, // TODO - Make Dynamic After Adding Rotation
             isVisible: true, // TODO - Make Dynamic After Adding Is Visible
         }
