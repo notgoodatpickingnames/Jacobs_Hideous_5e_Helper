@@ -14,7 +14,6 @@ export function useGame(gameId: string) {
         const db = getFirestore();
 
         const unsubscribe = onSnapshot(doc(db, 'games', gameId), (doc) => {
-            console.log('Game', doc.data());
             const _game = doc.data() as IGame;
             _game.gameId = doc.id;
 

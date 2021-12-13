@@ -8,12 +8,13 @@ import { Transform } from './Transform';
 import { Vector2 } from './Vector2';
 
 interface IGameObject {
-    position: Vector2,
-    width: number,
-    height: number,
-    color?: string,
-    image?: HTMLImageElement,
-    layer?: number
+    gameObjectId?: string;
+    position: Vector2;
+    width: number;
+    height: number;
+    color?: string;
+    image?: HTMLImageElement;
+    layer?: number;
     type?: GameObjectTypes;
 }
 
@@ -38,7 +39,7 @@ export class GameObject {
     protected engine: Engine;
 
     constructor(gameObject: IGameObject) {
-        this.gameObjectId = uuid();
+        this.gameObjectId = Boolean(gameObject.gameObjectId) ? gameObject.gameObjectId : uuid();
 
         this.transform.setPositionInWorld(gameObject.position);
         this.width = gameObject.width;

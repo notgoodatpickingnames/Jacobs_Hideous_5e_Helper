@@ -1,6 +1,7 @@
 import { makeStyles } from '@mui/styles';
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 
 import { useEngineContext } from '../../../../Utils/engine';
 import { useInputContext } from '../../../../Utils/engine/input/input.context';
@@ -35,13 +36,14 @@ export function TokensMenu() {
     const {gameId} = useParams();
     
     const {addGameObject} = useEngineContext();
+    const {createGameObject} = useGameManagerContext();
     const {scale} = useWorldContext();
     const {gridPositionMouseIsOver, mousePositionInWorld} = useInputContext();
     const {assets} = useGameManagerContext();
     const {tokenBeingDragged, onDragStart} = useMouseFollowImage(onDragEnd);
 
     const tokens = useMemo(() => {
-        return Boolean(assets) ? assets.map((asset) =>  new ImageObject(Vector2.zero, 40, 40, asset.image, asset.name)) : [];
+        return Boolean(assets) ? assets.map((asset) =>  new ImageObject(uuid(), Vector2.zero, 40, 40, asset.image, asset.assetId, asset.name)) : [];
     }, [assets]);
 
     function onDragEnd(event: MouseEvent, token: ImageObject) {
@@ -49,12 +51,13 @@ export function TokensMenu() {
             let gameObject;
             
             if (event.shiftKey) {
-                gameObject = token.clone(gridPositionMouseIsOver.current);
+                gameObject = token.clone(uuid(), gridPositionMouseIsOver.current);
             } else {
-                gameObject = token.clone(mousePositionInWorld.current);
+                gameObject = token.clone(uuid(), mousePositionInWorld.current);
             }
             
             addGameObject(gameObject);
+            createGameObject(gameObject);
         }
     }
 

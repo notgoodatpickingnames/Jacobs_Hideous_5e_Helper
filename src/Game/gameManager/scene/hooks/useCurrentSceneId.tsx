@@ -6,7 +6,6 @@ export function useCurrentSceneId(userId: string, gameId: string) {
 
     useEffect(() => {
         if (Boolean(userId) && Boolean(gameId)) {
-            console.log('CURRENT GAME', gameId, 'CURRENT USER', userId);
             const db = getFirestore();
 
             const unsub = onSnapshot(doc(db, `gamePlayersInScene/${gameId}/players/${userId}`), (doc) => {

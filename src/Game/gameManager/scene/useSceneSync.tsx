@@ -1,19 +1,16 @@
 import { useEffect } from 'react';
 
 import { useAuth } from '../../../Utils/auth/auth.context';
+import { Asset } from '../assets/models/asset';
 import { useCurrentSceneId } from './hooks/useCurrentSceneId';
-import { useGamesGameObjects } from './hooks/useGamesGameObjects';
-import { useScenesGameObjects } from './hooks/useScenesGameObjects';
+import { useGameObjects } from './hooks/useGameObjects';
 
-export function useSceneSync(gameId: string) {
+export function useSceneSync(gameId: string, assets: Asset[]) {
     const { user } = useAuth();
     const userId = user.uid;
 
     const currentSceneId = useCurrentSceneId(userId, gameId);
-    useGamesGameObjects(gameId);
-    useScenesGameObjects(gameId, currentSceneId);
+    const {gameObjects, createGameObject} = useGameObjects(gameId, currentSceneId, assets);
 
-    useEffect(() => {
-        console.log('Current Scene Id', currentSceneId);
-    }, [currentSceneId]);
+    return {gameObjects, createGameObject} as const;
 }

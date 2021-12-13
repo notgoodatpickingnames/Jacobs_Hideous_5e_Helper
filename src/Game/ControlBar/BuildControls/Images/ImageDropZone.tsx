@@ -21,7 +21,6 @@ export function ImageDropZone({children, imageStoragePath}: ImageDropZoneProps) 
 
         if (files.length > 0) {
             event.preventDefault();
-            console.log('Gonna upload files', files, 'test');
 
             for (let i = 0; i < files.length; i++) {
                 addAsset(files[i]);
