@@ -1,6 +1,5 @@
 import { GameObject } from '../../Utils/engine';
 import { MenuItem } from '../../Utils/engine/contextMenu/contextMenu.context';
-import { Engine } from '../../Utils/engine/Engine';
 import { Vector2 } from '../../Utils/engine/models/Vector2';
 import { GameObjectTypes } from '../gameManager/scene/gameObjectTypes';
 import { GameObjectSceneDetail } from '../gameManager/scene/models/gameObjectSceneDetail';
@@ -18,7 +17,7 @@ export class ImageObject extends GameObject {
     private pickedUp = false;
 
     protected contextMenuOptions: MenuItem[] = [
-        {label: 'Pick Up', onClick: (engine: Engine) => this.onPickUp()}
+        {label: 'Pick Up', onClick: () => this.onPickUp()}
     ]
 
     constructor(gameObjectId: string, position: Vector2, width: number, height: number, image: HTMLImageElement, assetId: string, name: string) {
