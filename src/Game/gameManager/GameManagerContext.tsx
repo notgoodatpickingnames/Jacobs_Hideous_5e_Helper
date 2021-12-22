@@ -40,6 +40,7 @@ export function GameManagerContextProvider({children}: GameManagerContextProvide
         gameObjects.forEach((gameObject) => {
             engineContext.addGameObject(gameObject);
         });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gameObjects]);
 
     const gameManagerContextObject: GameManagerContextObject = {

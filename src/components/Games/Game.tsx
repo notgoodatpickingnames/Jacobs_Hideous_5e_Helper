@@ -1,5 +1,4 @@
 import { makeStyles } from '@mui/styles';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Card } from '../Card';

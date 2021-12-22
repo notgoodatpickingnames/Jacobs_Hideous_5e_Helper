@@ -23,9 +23,7 @@ export function useClickableGameObjects(gameObjectsByLayer: MutableRefObject<Map
                 for (let y = gameObjectKeys.length - 1; y >= 0; y--) {
                     const gameObjectKey = gameObjectKeys[y];
                     const gameObject = gameObjectsByLayer.current.get(layerKey).get(gameObjectKey);
-                    console.log('Checking if clicked on gameObject', gameObject);
                     if (gameObject.doesPointCollide(mousePositionInWorld.current)) {
-                        console.log('CLICKED OBJECT', gameObject, gameObject.onClick);
                         gameObject.onClick();
 
                         return;

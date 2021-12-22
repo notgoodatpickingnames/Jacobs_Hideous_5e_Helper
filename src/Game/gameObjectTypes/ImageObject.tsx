@@ -36,8 +36,12 @@ export class ImageObject extends SyncableObject {
     }
 
     public onClick(): void {
+        if (this.inputs.getKeyHeld('ControlLeft')) {
+            this.onPickUp();
+            return;
+        }
+
         if (!this.pickedUp) {
-            console.log('DOING THE THING');
             this.engine.contextMenuContext.openContextMenu(this, this.contextMenuOptions);
         } else {
             this.onDrop();
@@ -46,7 +50,7 @@ export class ImageObject extends SyncableObject {
 
     public update(): void {
         if (this.pickedUp) {
-            if (this.inputs.getKeyHeld('shift')) {
+            if (this.inputs.getKeyHeld('ShiftLeft') || this.inputs.getKeyHeld('ShiftRight')) {
                 const mousePositionInWorldSpace = this.engine.inputContext.gridPositionMouseIsOver.current;
                 this.transform.position = mousePositionInWorldSpace;
             } else {

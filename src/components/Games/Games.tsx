@@ -50,10 +50,12 @@ export function Games() {
                 }
             }, (games.length * gameLoadingGlitchEffectOffset) + gameLoadingGlitchEffectLength);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [games]);
 
 
     // This solves the problem and happens to have good timing. The actual value is not needed because we are just resorting the games... TODO - Make this not so disgusting.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const sortedGames = useMemo(() => {
         if (initialLoadInDone) {
             games.sort((game1, game2) => game1.modifiedOn.getTime() - game2.modifiedOn.getTime());

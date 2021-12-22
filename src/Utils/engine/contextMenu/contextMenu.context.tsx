@@ -3,6 +3,8 @@ import React, { createContext, ReactNode, useContext, useState } from 'react';
 import { GameObject } from '..';
 import { Engine } from '../Engine';
 
+// TODO - This whole concept probably needs to be converted into a gameobject and anywhere its used it should be gotten from the engine as a reference. 
+
 export interface MenuItem {
     label: string,
     onClick: (engine: Engine) => void;

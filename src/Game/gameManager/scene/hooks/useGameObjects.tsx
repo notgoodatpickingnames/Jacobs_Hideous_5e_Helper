@@ -1,5 +1,5 @@
-import { collection, doc, getFirestore, onSnapshot } from '@firebase/firestore';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { collection, getFirestore, onSnapshot } from '@firebase/firestore';
+import { useEffect, useMemo, useState } from 'react';
 
 import { GameObject } from '../../../../Utils/engine';
 import { Vector2 } from '../../../../Utils/engine/models/Vector2';

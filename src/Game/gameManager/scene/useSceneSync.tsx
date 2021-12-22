@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import { useAuth } from '../../../Utils/auth/auth.context';
 import { Asset } from '../assets/models/asset';
 import { useCurrentSceneId } from './hooks/useCurrentSceneId';

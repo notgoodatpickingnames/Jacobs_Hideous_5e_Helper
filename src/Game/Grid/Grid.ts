@@ -24,6 +24,10 @@ export class Grid extends GameObject {
         this.name = 'Grid';
     }
 
+    public onClick(): void {
+        this.engine.contextMenuContext.closeContextMenu();
+    }
+
     public update(): void {
         this.resetGridPosition();
     }

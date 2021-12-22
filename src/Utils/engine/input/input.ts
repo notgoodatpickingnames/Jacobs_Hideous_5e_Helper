@@ -1,3 +1,5 @@
+import { Keys } from './keys';
+
 enum KeyState {
     Up = 'Up',
     Down = 'Down',
@@ -6,34 +8,34 @@ enum KeyState {
 }
 
 export class Input {
-    private upInputs = new Map<string, string>([]);
-    private downInputs = new Map<string, string>([]);
+    private upInputs = new Map<Keys, Keys>([]);
+    private downInputs = new Map<Keys, Keys>([]);
     
-    private inputs = new Map<string, KeyState>([]);
+    private inputs = new Map<Keys, KeyState>([]);
 
-    public onKeyDown(key: string): void {
-        this.downInputs.set(key.toLocaleLowerCase(), key.toLocaleLowerCase());
+    public onKeyDown(key: Keys): void {
+        this.downInputs.set(key, key);
     }
 
-    public onKeyUp(key: string): void {
-        this.upInputs.set(key.toLocaleLowerCase(), key.toLocaleLowerCase());
-        this.downInputs.delete(key.toLocaleLowerCase());
+    public onKeyUp(key: Keys): void {
+        this.upInputs.set(key, key);
+        this.downInputs.delete(key);
     }
 
-    public getKeyDown(key: string): boolean {
-        const keyState = this.inputs.get(key.toLocaleLowerCase());
+    public getKeyDown(key: Keys): boolean {
+        const keyState = this.inputs.get(key);
 
         return Boolean(keyState) && keyState === KeyState.Down;
     }
 
-    public getKeyHeld(key: string): boolean {
-        const keyState = this.inputs.get(key.toLocaleLowerCase());
+    public getKeyHeld(key: Keys): boolean {
+        const keyState = this.inputs.get(key);
 
         return Boolean(keyState) && keyState === KeyState.held;
     }
 
-    public getKeyUp(key: string): boolean {
-        const keyState = this.inputs.get(key.toLocaleLowerCase());
+    public getKeyUp(key: Keys): boolean {
+        const keyState = this.inputs.get(key);
 
         return Boolean(keyState) && keyState === KeyState.Up;
     }
@@ -63,7 +65,7 @@ export class Input {
     public onFrameEnd(): void {
         this.inputs.forEach((keyState, key) => {
             if (keyState === KeyState.Up) {
-                this.inputs.set(key.toLocaleLowerCase(), KeyState.released);
+                this.inputs.set(key, KeyState.released);
             }
         });
 

@@ -66,8 +66,8 @@ export function useAssets(gameId: string) {
         }
 
         // need to get both info from asset in firestore and image url from storage;
-        const storage = getStorage();
-        const storageRef = ref(storage, `${gameId}/${assetId}`);
+        // const storage = getStorage();
+        // const storageRef = ref(storage, `${gameId}/${assetId}`);
 
         return undefined;
     }

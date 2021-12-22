@@ -5,6 +5,7 @@ import { useEventListener } from '../../hooks/useEventListener';
 import { Vector2 } from '../models/Vector2';
 import { useWorldContext } from '../world/world.context';
 import { Input } from './input';
+import { Keys } from './keys';
 
 export interface InputContextObject {
     inputs: MutableRefObject<Input>;
@@ -29,11 +30,11 @@ export function InputContextProvider({children}: InputContextProviderProps) {
     const inputs = useRef<Input>(new Input());
 
     function onKeyUp(event: KeyboardEvent): void {
-        inputs.current.onKeyUp(event.key);
+        inputs.current.onKeyUp(event.code as Keys);
     }
 
     function onKeyDown(event: KeyboardEvent): void {
-        inputs.current.onKeyDown(event.key);
+        inputs.current.onKeyDown(event.code as Keys);
     }
 
     useEventListener('keydown', (event: any) => onKeyDown(event as KeyboardEvent));
