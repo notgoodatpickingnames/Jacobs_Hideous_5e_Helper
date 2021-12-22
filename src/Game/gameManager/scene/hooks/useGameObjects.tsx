@@ -39,7 +39,6 @@ export function useGameObjects(gameId: string, sceneId: string, assets: Asset[])
                             ...typedUnfinishedGameObject,
                             position,
                             image,
-                            type: GameObjectTypes.image,
                             gameId,
                             sceneId,
                         });

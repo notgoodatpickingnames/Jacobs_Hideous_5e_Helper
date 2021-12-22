@@ -1,6 +1,5 @@
 import { v4 as uuid } from 'uuid';
 
-import { GameObjectTypes } from '../../../Game/gameManager/scene/gameObjectTypes';
 import { Engine } from '../Engine';
 import { Input } from '../input/input';
 import { Rect } from './rect';
@@ -14,8 +13,7 @@ export interface IGameObject {
     height: number;
     color?: string;
     image?: HTMLImageElement;
-    layer?: number;
-    type?: GameObjectTypes;
+    layer: number;
     isVisible?: boolean;
 }
 
@@ -52,6 +50,7 @@ export class GameObject {
         this.halfWidth = this.width / 2;
         this.halfHeight = this.height / 2;
         
+        console.log('Making GameObject', gameObject.layer);
         this.layer = gameObject.layer || 0;
 
         this.isVisible = gameObject.isVisible || true;

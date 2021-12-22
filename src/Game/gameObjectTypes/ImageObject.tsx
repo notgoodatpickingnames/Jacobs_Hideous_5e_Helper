@@ -73,6 +73,7 @@ export class ImageObject extends SyncableObject {
             name: this.name,
             gameId: this.gameId,
             sceneId: this.sceneId,
+            layer: this.layer,
         });
     }
 
