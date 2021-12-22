@@ -1,32 +1,26 @@
-import { Engine } from '../../Utils/engine/Engine';
-import { Vector2 } from '../../Utils/engine/models/Vector2';
-import { Asset } from '../gameManager/assets/models/asset';
-import { ImageObject } from './ImageObject';
+import { IImageObject, ImageObject } from './ImageObject';
+
+export interface INPCObject extends IImageObject {
+    health: number;
+}
 
 export class NPCObject extends ImageObject {
     public health: number;
 
-    constructor(gameObjectId: string, position: Vector2, width: number, height: number, imageAsset: Asset, name: string, health: number) {
-        super(
-            gameObjectId,
-            position,
-            height,
-            width,
-            imageAsset.image,
-            imageAsset.assetId,
-            name
-        );
+    constructor(npcObject: INPCObject) {
+        super(npcObject);
 
-        this.health = health;
+        this.health = npcObject.health;
+
         this.contextMenuOptions.push(
-            {label: 'Reduce Health', onClick: (engine: Engine) => this.onReduceHealth()}
+            {label: 'Reduce Health', onClick: () => this.onReduceHealth()}
         )
     }
 
     public render(): void {
-        const canvasContext = this.engine.worldContext.canvasContext.current;
+        super.render();
 
-        canvasContext.drawImage(this.image, this.transform.position.x - (this.image.width / 2), this.transform.position.y - (this.image.height / 2), this.image.width, this.image.height);
+        // Render health bar somewhere.
     }
 
     private onReduceHealth(): void {

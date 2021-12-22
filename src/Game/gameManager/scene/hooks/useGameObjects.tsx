@@ -1,16 +1,16 @@
-import { collection, doc, getFirestore, onSnapshot, setDoc } from '@firebase/firestore';
+import { collection, doc, getFirestore, onSnapshot } from '@firebase/firestore';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { GameObject } from '../../../../Utils/engine';
 import { Vector2 } from '../../../../Utils/engine/models/Vector2';
 import { FirestoreImageObject, ImageObject } from '../../../gameObjectTypes/ImageObject';
-import { NPCObject } from '../../../gameObjectTypes/npcObject';
+import { SyncableObject } from '../../../gameObjectTypes/syncableObject';
 import { Asset } from '../../assets/models/asset';
 import { GameObjectTypes } from '../gameObjectTypes';
 import { useScenesGameObjectDetails } from './useScenesGameObjectDetails';
 
 export function useGameObjects(gameId: string, sceneId: string, assets: Asset[]) {
-    const {gameObjectSceneDetails, updateGameObjectSceneDetail} = useScenesGameObjectDetails(gameId, sceneId);
+    const {gameObjectSceneDetails} = useScenesGameObjectDetails(gameId, sceneId);
 
     const [unfinishedGameObjects, setUnfinishedGameObjects] = useState<any[]>([]);
 
@@ -30,17 +30,26 @@ export function useGameObjects(gameId: string, sceneId: string, assets: Asset[])
             if (Boolean(gameObjectDetail)) {
                 switch (gameObjectType) {
                     case GameObjectTypes.image: {
-                        const object = unfinishedGameObject as FirestoreImageObject;
-                        const asset = assets.find((asset) => asset.assetId = object.assetId);
+                        const typedUnfinishedGameObject = unfinishedGameObject as FirestoreImageObject;
+                        const { image } = assets.find((asset) => asset.assetId = typedUnfinishedGameObject.assetId);
     
-                        objectAfterMutationIntoType = new ImageObject(gameObjectId, position, gameObjectDetail.width, gameObjectDetail.height, asset.image, asset.assetId, object.name);
+                        objectAfterMutationIntoType = new ImageObject({
+                            gameObjectId,
+                            ...gameObjectDetail,
+                            ...typedUnfinishedGameObject,
+                            position,
+                            image,
+                            type: GameObjectTypes.image,
+                            gameId,
+                            sceneId,
+                        });
                     };
                 }
             }
 
             return objectAfterMutationIntoType;
         }).filter((gameObject) => gameObject !== undefined);
-    }, [gameObjectSceneDetails, unfinishedGameObjects, assets]);
+    }, [gameObjectSceneDetails, unfinishedGameObjects, assets, gameId, sceneId]);
     // gameObjectsInScene = useMemo( game objects in current scene (that have detail) );
 
     useEffect(() => {
@@ -62,22 +71,9 @@ export function useGameObjects(gameId: string, sceneId: string, assets: Asset[])
         }
     }, [gameId]);
 
-    function createGameObject(gameObject: GameObject | ImageObject | NPCObject) {
-        const db = getFirestore();
-
-        if ((gameObject as ImageObject).type === GameObjectTypes.image) {
-            const fireStoreImageObject = (gameObject as ImageObject).asFirestoreObject();
-            const fireStoreDetailObject = (gameObject as ImageObject).asFirestoreSceneDetailObject();
-
-            setDoc(doc(db, `gameObjects/${gameId}/gameObjects/${gameObject.gameObjectId}`), {
-                type: GameObjectTypes.image,
-                name: fireStoreImageObject.name,
-                assetId: fireStoreImageObject.assetId,
-            });
-
-            updateGameObjectSceneDetail(fireStoreDetailObject);
-        }
+    function syncGameObject(gameObject: SyncableObject) {
+        gameObject.sync();
     }
 
-    return {gameObjects, createGameObject} as const;
+    return {gameObjects, syncGameObject} as const;
 }

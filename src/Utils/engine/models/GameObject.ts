@@ -7,7 +7,7 @@ import { Rect } from './rect';
 import { Transform } from './Transform';
 import { Vector2 } from './Vector2';
 
-interface IGameObject {
+export interface IGameObject {
     gameObjectId?: string;
     position: Vector2;
     width: number;
@@ -16,6 +16,7 @@ interface IGameObject {
     image?: HTMLImageElement;
     layer?: number;
     type?: GameObjectTypes;
+    isVisible?: boolean;
 }
 
 export class GameObject {
@@ -31,10 +32,11 @@ export class GameObject {
     public height: number;
 
     public layer: number;
-    public type: GameObjectTypes;
 
     private halfWidth: number;
     private halfHeight: number;
+    
+    private isVisible: boolean;
 
     protected engine: Engine;
 
@@ -46,12 +48,13 @@ export class GameObject {
         this.height = gameObject.height;
         this.color = gameObject.color;
         this.image = gameObject.image;
-        this.type = gameObject.type;
 
         this.halfWidth = this.width / 2;
         this.halfHeight = this.height / 2;
         
         this.layer = gameObject.layer || 0;
+
+        this.isVisible = gameObject.isVisible || true;
     }
 
     public get position(): Vector2 {

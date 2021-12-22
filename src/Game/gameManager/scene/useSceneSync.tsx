@@ -10,7 +10,7 @@ export function useSceneSync(gameId: string, assets: Asset[]) {
     const userId = user.uid;
 
     const currentSceneId = useCurrentSceneId(userId, gameId);
-    const {gameObjects, createGameObject} = useGameObjects(gameId, currentSceneId, assets);
+    const {gameObjects, syncGameObject} = useGameObjects(gameId, currentSceneId, assets);
 
-    return {gameObjects, createGameObject} as const;
+    return {gameObjects, syncGameObject, sceneId: currentSceneId} as const;
 }

@@ -1,6 +1,5 @@
 import { makeStyles } from '@mui/styles';
 import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
 import { useEngineContext } from '../../../../Utils/engine';
@@ -33,18 +32,27 @@ const useStyles = makeStyles(() => ({
 export function TokensMenu() {
     const classes = useStyles();
 
-    const {gameId} = useParams();
-    
     const {addGameObject} = useEngineContext();
-    const {createGameObject} = useGameManagerContext();
+    const {syncGameObject, gameId, sceneId} = useGameManagerContext();
     const {scale} = useWorldContext();
     const {gridPositionMouseIsOver, mousePositionInWorld} = useInputContext();
     const {assets} = useGameManagerContext();
     const {tokenBeingDragged, onDragStart} = useMouseFollowImage(onDragEnd);
 
     const tokens = useMemo(() => {
-        return Boolean(assets) ? assets.map((asset) =>  new ImageObject(uuid(), Vector2.zero, 40, 40, asset.image, asset.assetId, asset.name)) : [];
-    }, [assets]);
+        return Boolean(assets) && Boolean(gameId) && Boolean(sceneId) ? assets.map((asset) =>  new ImageObject({
+            gameObjectId: uuid(),
+            position: Vector2.zero, 
+            width: 40,
+            height: 40,
+            image: asset.image,
+            assetId: asset.assetId,
+            name: asset.name,
+            gameId,
+            sceneId,
+            layer: 100,
+        })) : [];
+    }, [assets, gameId, sceneId]);
 
     function onDragEnd(event: MouseEvent, token: ImageObject) {
         if (Boolean(tokenBeingDragged)) {
@@ -57,7 +65,7 @@ export function TokensMenu() {
             }
             
             addGameObject(gameObject);
-            createGameObject(gameObject);
+            syncGameObject(gameObject);
         }
     }
 

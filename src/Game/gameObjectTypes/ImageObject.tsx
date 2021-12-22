@@ -1,48 +1,46 @@
-import { GameObject } from '../../Utils/engine';
 import { MenuItem } from '../../Utils/engine/contextMenu/contextMenu.context';
 import { Vector2 } from '../../Utils/engine/models/Vector2';
 import { GameObjectTypes } from '../gameManager/scene/gameObjectTypes';
-import { GameObjectSceneDetail } from '../gameManager/scene/models/gameObjectSceneDetail';
+import { ISyncableObject, SyncableObject } from './syncableObject';
 
 export interface FirestoreImageObject {
     assetId: string,
     name: string,
 }
 
-export class ImageObject extends GameObject {
+export interface IImageObject extends ISyncableObject {
+    assetId: string;
+    name: string;
+}
+
+export class ImageObject extends SyncableObject {
     public assetId: string;
-    public type = GameObjectTypes.image;
     
     private clicked = false;
     private pickedUp = false;
 
     protected contextMenuOptions: MenuItem[] = [
         {label: 'Pick Up', onClick: () => this.onPickUp()}
-    ]
+    ];
 
-    constructor(gameObjectId: string, position: Vector2, width: number, height: number, image: HTMLImageElement, assetId: string, name: string) {
-        super({
-            gameObjectId,
-            position,
-            height,
-            width,
-            image,
-            layer: 100, // TODO - Make this dynamicly set by user.
-        });
+    constructor(imageObject: IImageObject) {
+        super(imageObject);
 
         this.image.height = this.height;
         this.image.width = this.width;
 
-        this.assetId = assetId;
+        this.assetId = imageObject.assetId;
+        this.name = imageObject.name;
 
-        this.name = name;
+        this.type = GameObjectTypes.image;
     }
 
     public onClick(): void {
         if (!this.pickedUp) {
+            console.log('DOING THE THING');
             this.engine.contextMenuContext.openContextMenu(this, this.contextMenuOptions);
         } else {
-            this.pickedUp = false;
+            this.onDrop();
         }
     }
 
@@ -65,7 +63,17 @@ export class ImageObject extends GameObject {
     }
 
     public clone(gameObjectId: string, position: Vector2): ImageObject {
-        return new ImageObject(gameObjectId, position, this.width, this.height, this.image, this.assetId, this.name);
+        return new ImageObject({
+            gameObjectId,
+            position,
+            width: this.width,
+            height: this.height,
+            image: this.image,
+            assetId: this.assetId,
+            name: this.name,
+            gameId: this.gameId,
+            sceneId: this.sceneId,
+        });
     }
 
     public asFirestoreObject(): FirestoreImageObject {
@@ -75,21 +83,15 @@ export class ImageObject extends GameObject {
         }
     }
 
-    public asFirestoreSceneDetailObject(): GameObjectSceneDetail {
-        return {
-            gameObjectId: this.gameObjectId,
-            height: this.height,
-            width: this.width,
-            layer: this.layer,
-            x: this.transform.positionInWorld.x,
-            y: this.transform.positionInWorld.y,
-            rotation: 0, // TODO - Make Dynamic After Adding Rotation
-            isVisible: true, // TODO - Make Dynamic After Adding Is Visible
-        }
-    }
-
     private onPickUp(): void {
         this.engine.contextMenuContext.closeContextMenu();
         this.pickedUp = true;
+    }
+
+    private onDrop(): void {
+        this.pickedUp = false;
+        console.log('On Drop');
+
+        this.sync();
     }
 }

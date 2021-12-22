@@ -1,4 +1,4 @@
-import { collection, doc, getFirestore, onSnapshot, setDoc } from 'firebase/firestore';
+import { collection, getFirestore, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 import { GameObjectSceneDetail } from '../models/gameObjectSceneDetail';
@@ -25,19 +25,5 @@ export function useScenesGameObjectDetails(gameId: string, sceneId: string) {
         }
     }, [gameId, sceneId]);
 
-    function updateGameObjectSceneDetail(gameObjectSceneDetail: GameObjectSceneDetail) {
-        const db = getFirestore();
-
-        setDoc(doc(db, `gameObjectsInScene/${gameId}/scenes/${sceneId}/gameObjects/${gameObjectSceneDetail.gameObjectId}`), {
-            isVisible: gameObjectSceneDetail.isVisible,
-            rotation: gameObjectSceneDetail.rotation,
-            x: gameObjectSceneDetail.x,
-            y: gameObjectSceneDetail.y,
-            height: gameObjectSceneDetail.height,
-            width: gameObjectSceneDetail.width,
-            layer: gameObjectSceneDetail.layer,
-        });
-    }
-
-    return {gameObjectSceneDetails, updateGameObjectSceneDetail} as const;
+    return {gameObjectSceneDetails} as const;
 }
