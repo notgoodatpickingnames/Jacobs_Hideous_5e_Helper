@@ -201,5 +201,41 @@ service cloud.firestore {
       allow update: if isUser() && valid_profile_update();
       allow create: if request.auth != null && valid_profile_create(userId);
     }
+    
+    // ---------------- Friend Requests ----------------------
+    function valid_friend_request_read() {
+    	let isReaderToPlayer = request.resource.data.to == request.auth.uid;
+      let isReaderFromPlayer = request.resource.data.from == request.auth.uid;
+      
+      return isReaderToPlayer || isReaderFromPlayer;
+    }
+    
+    function valid_friend_request_create() {
+    	let toPlayerId = request.resource.data.to;
+      let fromPlayerId = request.resource.data.from;
+      
+      let isCreatorTheFromPlayer = request.auth.uid == fromPlayerId;
+      let doesToPlayerExist = exists(/databases/$(database)/documents/profiles/$(toPlayerId));
+      let doesFromPlayerExist = exists(/databases/$(database)/documents/profiles/$(fromPlayerId));
+      
+      return doesToPlayerExist && doesFromPlayerExist && isCreatorTheFromPlayer;
+    }
+    
+    function valid_friend_request_delete() {
+    	let toPlayerId = request.resource.data.to;
+    	let fromPlayerId = request.resource.data.from;
+    	
+    	let doesToPlayerExist = exists(/databases/$(database)/documents/profiles/$(toPlayerId));
+    	let doesFromPlayerExist = exists(/databases/$(database)/documents/profiles/$(fromPlayerId));
+      
+    	return doesToPlayerExist && doesFromPlayerExist;
+    }
+    
+    match /friendRequests/{friendRequestId} {
+    	allow read : if isUser() && valid_friend_request_read();
+      allow update: if false;
+      allow create: if isUser() && valid_friend_request_create();
+      allow delete: if isUser() && valid_friend_request_delete();
+    }
   }
 }

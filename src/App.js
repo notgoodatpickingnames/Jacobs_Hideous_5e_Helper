@@ -2,11 +2,14 @@ import './App.css';
 
 import { AppRouter } from './routing/AppRouter';
 import { AuthProvider } from './Utils/auth/auth.context';
+import { FriendsProvider } from './Utils/profile/friends/friends.context';
 
 function App() {
     return (
         <AuthProvider>
-            <AppRouter />
+            <FriendsProvider>
+                <AppRouter />
+            </FriendsProvider>
         </AuthProvider>
     );
 }

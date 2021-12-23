@@ -1,0 +1,1 @@
+export { useFriendsContext, FriendsProvider } from './friends.context';

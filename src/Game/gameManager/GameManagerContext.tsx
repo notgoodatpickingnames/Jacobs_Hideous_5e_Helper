@@ -1,6 +1,7 @@
 import React, { createContext, ReactNode, useContext, useEffect } from 'react';
 import { useParams } from 'react-router';
 
+import { Game } from '../../components/Games/models/game';
 import { useEngine } from '../../Utils/engine/Engine';
 import { SyncableObject } from '../gameObjectTypes/syncableObject';
 import { Asset } from './assets/models/asset';
@@ -14,6 +15,7 @@ export interface GameManagerContextObject {
     syncGameObject: (gameObject: SyncableObject) => void;
     gameId: string;
     sceneId: string;
+    game: Game;
 }
 
 export const GameManagerContext = createContext<GameManagerContextObject>({} as GameManagerContextObject);
@@ -49,6 +51,7 @@ export function GameManagerContextProvider({children}: GameManagerContextProvide
         syncGameObject,
         gameId,
         sceneId,
+        game,
     }
 
     return (
