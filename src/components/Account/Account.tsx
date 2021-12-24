@@ -4,6 +4,7 @@ import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 
 import { useAuth } from '../../Utils/auth/auth.context';
+import { DisplayName } from './DisplayName';
 
 const useStyles = makeStyles(() => ({
     accountButton: {
@@ -13,18 +14,29 @@ const useStyles = makeStyles(() => ({
     },
 
     menu: {
-        height: '150px',
-        width: '150px',
+        paddingTop: '60px',
+        height: '100vh',
+        width: '220px',
         top: '0px',
-        left: '-200px',
+        left: '-220px',
         position: 'fixed',
         zIndex: 99,
         transition: 'all .5s',
         backgroundColor: 'black',
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
+        justifyContent: 'flex-start',
+        flexDirection: 'column',
+        alignItems: 'center',
         paddingBottom: '12px',
+    },
+
+    menuItem: {
+        marginBottom: '24px',
+    },
+
+    email: {
+        color: 'white',
+        fontSize: '10px',
     },
 
     open: {
@@ -33,7 +45,7 @@ const useStyles = makeStyles(() => ({
 
     logOutButton: {
         height: 'min-content'
-    }
+    },
 }));
 
 export function Account() {
@@ -41,15 +53,25 @@ export function Account() {
 
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
-    const {logOut} = useAuth();
+    const { logOut, user } = useAuth();
 
     return (
         <ClickAwayListener onClickAway={() => setMenuOpen(false)}>
             <div>
                 <AccountCircleIcon onClick={() => setMenuOpen(!menuOpen)} className={classes.accountButton} fontSize={'large'} />
-
+                
                 <div className={`${classes.menu} ${menuOpen && classes.open}`}>
-                    <Button className={classes.logOutButton} onClick={logOut}>Log Out</Button>
+                    <div>
+                        <DisplayName />
+                    </div>
+
+                    <div className={classes.menuItem}>
+                        <span className={classes.email}>{user.email}</span>
+                    </div>
+
+                    <div>
+                        <Button className={classes.logOutButton} onClick={logOut}>Log Out</Button>
+                    </div>
                 </div>
             </div>
         </ClickAwayListener>

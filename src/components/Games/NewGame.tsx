@@ -4,7 +4,6 @@ import { useRef, useState } from 'react';
 import { theme } from '../../Utils/theme/theme';
 import { Card } from '../Card';
 import { Input, PrimaryButton } from '../Controls';
-import { useGames } from './useGames';
 
 const useStyles = makeStyles(() => ({
     gameContainer: {
@@ -60,7 +59,11 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export function NewGame() {
+interface NewGameProps {
+    createGame: (name: string) => Promise<void>
+}
+
+export function NewGame({createGame}: NewGameProps) {
     const classes = useStyles();
 
     const [enteringGameData, setEnteringGameData] = useState<boolean>(false);
@@ -68,8 +71,6 @@ export function NewGame() {
 
     const newGameInputSubmitted = useRef<boolean>(false);
     const [newGameNameError, setNewGameNameError] = useState<boolean>(false);
-
-    const {createGame} = useGames();
 
     function onInputChange(inputValue: string): void {
         setNewGameName(inputValue);
@@ -116,7 +117,8 @@ export function NewGame() {
                             <div className={classes.newGame}>
                                 <Input
                                     autoFocus={true}
-                                    label={'Name'} value={newGameName}
+                                    label={'Name'}
+                                    value={newGameName}
                                     onChange={(event) => onInputChange(event.target.value)} 
                                     variant={'standard'}
                                     onKeyDown={(event: any) => onKeyDownOnInput(event as KeyboardEvent)}

@@ -185,6 +185,7 @@ service cloud.firestore {
     // ---------------- Profile ----------------------
     function valid_profile_update() {
       let isUserRequestingUpdate = request.auth.uid == request.resource.id;
+      // let doesEmailMatch = request.auth.token.email == request.resource.data.email;
       
       return isUserRequestingUpdate;
     }
@@ -192,25 +193,51 @@ service cloud.firestore {
     function valid_profile_create(userId) {
     	let doesUserNotExist = !exists(/databases/$(database)/documents/profiles/$(request.auth.uid));
       let isUserSameAsUserBeingCreated = userId == request.auth.uid;
+      // let doesEmailMatch = request.auth.token.email == request.resource.data.email;
       
       return doesUserNotExist && isUserSameAsUserBeingCreated;
     }
     
     match /profiles/{userId} {
-    	allow read : if request.auth != null;
+    	allow read : if isUser();
       allow update: if isUser() && valid_profile_update();
       allow create: if request.auth != null && valid_profile_create(userId);
     }
     
-    // ---------------- Friend Requests ----------------------
-    function valid_friend_request_read() {
-    	let isReaderToPlayer = request.resource.data.to == request.auth.uid;
-      let isReaderFromPlayer = request.resource.data.from == request.auth.uid;
+    // ---------------- Used User Names ----------------------
+    function valid_used_user_name_create() {
+      let isUserSettingOwnerToSelf = request.auth.uid == request.resource.data.userId;
+			
+      // Can't figure out regex for this so this is a work around to avoid using .matches.
+      let idWithoutWhitespace = request.resource.id.replace(" ", "");
+      let doesIdHaveWhiteSpace = request.resource.id != idWithoutWhitespace;
+      
+      return isUserSettingOwnerToSelf && !doesIdHaveWhiteSpace;
+    }
+    
+    function valid_used_user_name_delete() {
+    	let userId = request.auth.uid;
+      let doesUserOwnUserName = resource.data.userId == userId;
+      
+      return doesUserOwnUserName;
+    }
+    
+    match /usedUserNames/{userName} {
+    	allow read : if isUser();
+      allow update: if false;
+      allow create: if isUser() && valid_used_user_name_create();
+      allow delete: if isUser() && valid_used_user_name_delete();
+    }
+    
+    // ---------------- Friends ----------------------
+    function valid_friend_read() {
+    	let isReaderToPlayer = resource.data.to == request.auth.uid;
+      let isReaderFromPlayer = resource.data.from == request.auth.uid;
       
       return isReaderToPlayer || isReaderFromPlayer;
     }
     
-    function valid_friend_request_create() {
+    function valid_friend_create() {
     	let toPlayerId = request.resource.data.to;
       let fromPlayerId = request.resource.data.from;
       
@@ -221,21 +248,37 @@ service cloud.firestore {
       return doesToPlayerExist && doesFromPlayerExist && isCreatorTheFromPlayer;
     }
     
-    function valid_friend_request_delete() {
-    	let toPlayerId = request.resource.data.to;
-    	let fromPlayerId = request.resource.data.from;
-    	
-    	let doesToPlayerExist = exists(/databases/$(database)/documents/profiles/$(toPlayerId));
-    	let doesFromPlayerExist = exists(/databases/$(database)/documents/profiles/$(fromPlayerId));
+    function valid_friend_update() {
+    	let newToPlayerId = request.resource.data.to;
+      let newFromPlayerId = request.resource.data.from;
       
-    	return doesToPlayerExist && doesFromPlayerExist;
+      let oldToPlayerId = resource.data.to;
+      let oldFromPlayerId = resource.data.from;
+      
+      let doesNotChangeToPlayer = newToPlayerId == oldToPlayerId;
+      let doesNotChangeFromPlayer = newFromPlayerId == oldFromPlayerId;
+      
+      let doesNotChangeAnyPlayers = doesNotChangeToPlayer && doesNotChangeFromPlayer;
+      
+      return doesNotChangeAnyPlayers;
     }
     
-    match /friendRequests/{friendRequestId} {
-    	allow read : if isUser() && valid_friend_request_read();
-      allow update: if false;
-      allow create: if isUser() && valid_friend_request_create();
-      allow delete: if isUser() && valid_friend_request_delete();
+    function valid_friend_delete() {
+    	let toPlayerId = resource.data.to;
+    	let fromPlayerId = resource.data.from;
+      
+      let userId = request.auth.uid;
+      
+      let isUserInFriendShip = userId == toPlayerId || userId == fromPlayerId;
+    	
+    	return isUserInFriendShip;
+    }
+    
+    match /friends/{friendsId} {
+    	allow read : if isUser() && valid_friend_read();
+      allow update: if isUser() && valid_friend_update();
+      allow create: if isUser() && valid_friend_create();
+      allow delete: if isUser() && valid_friend_delete();
     }
   }
 }

@@ -13,21 +13,23 @@ export function useGames() {
     const [games, setGames] = useState<Game[]>([]);
 
     useEffect(() => {
-        const db = getFirestore();
-        const q = query(collection(db, gamesPath), where('players', 'array-contains', user.uid));
-        
-        const unsub = onSnapshot(q, ({docs}) => {
-            const games: IGame[] = docs.map((doc) => {
-                const game = doc.data() as IGame;
-                game.gameId = doc.id;
-
-                return game;
+        if (Boolean(user)) {
+            const db = getFirestore();
+            const q = query(collection(db, gamesPath), where('players', 'array-contains', user.uid));
+            
+            const unsub = onSnapshot(q, ({docs}) => {
+                const games: IGame[] = docs.map((doc) => {
+                    const game = doc.data() as IGame;
+                    game.gameId = doc.id;
+    
+                    return game;
+                });
+    
+                setGames(games.map((game) => new Game(game)).sort((game1, game2) => game2.modifiedOn.getTime() - game1.modifiedOn.getTime()));
             });
-
-            setGames(games.map((game) => new Game(game)).sort((game1, game2) => game2.modifiedOn.getTime() - game1.modifiedOn.getTime()));
-        });
-
-        return () => {unsub()};
+    
+            return () => {unsub()};
+        }
     }, [user]);
 
     async function createGame(name: string): Promise<void> {

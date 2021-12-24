@@ -38,7 +38,6 @@ export function GameManagerContextProvider({children}: GameManagerContextProvide
     const { engineContext } = useEngine();
 
     useEffect(() => {
-        console.log('Server Changed So updating all Game Objects', gameObjects);
         gameObjects.forEach((gameObject) => {
             engineContext.addGameObject(gameObject);
         });

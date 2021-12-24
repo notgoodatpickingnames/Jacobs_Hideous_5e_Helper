@@ -50,7 +50,6 @@ export class GameObject {
         this.halfWidth = this.width / 2;
         this.halfHeight = this.height / 2;
         
-        console.log('Making GameObject', gameObject.layer);
         this.layer = gameObject.layer || 0;
 
         this.isVisible = gameObject.isVisible || true;

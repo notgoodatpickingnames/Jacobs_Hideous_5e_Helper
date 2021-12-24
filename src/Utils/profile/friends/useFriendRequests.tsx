@@ -1,18 +1,18 @@
 import { Unsubscribe } from 'firebase/auth';
 import { collection, getFirestore, onSnapshot, query, where } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useAuth } from '../../auth/auth.context';
-import { FriendRequest } from './friendRequest';
+import { FriendRelationship } from './friendRelationship';
 
 export function useFriendRequests() {
     const { user } = useAuth();
 
-    const [outgoingFriendRequests, setOutgoingFriendRequests] = useState<FriendRequest[]>([]);
-    const [incomingFriendRequests, setIncomingFriendRequests] = useState<FriendRequest[]>([]);
+    const [outgoingFriendRequests, setOutgoingFriendRequests] = useState<FriendRelationship[]>([]);
+    const [incomingFriendRequests, setIncomingFriendRequests] = useState<FriendRelationship[]>([]);
 
     useEffect(() => {
-        if (Boolean(user)) {
+        if (Boolean(user?.uid)) {
             const unsubscribeFromOutgoingRequests = listenForOutgoingRequests(user.uid);
             const unsubscribeFromIncomingRequests = listenForIncomingRequests(user.uid);
             
@@ -22,11 +22,11 @@ export function useFriendRequests() {
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+    }, [user?.uid]);
 
     function listenForOutgoingRequests(userId: string): Unsubscribe {
         const db = getFirestore();
-        const outgoingRequestsQuery = query(collection(db, 'friendRequests'), where('from', '==', userId));
+        const outgoingRequestsQuery = query(collection(db, 'friends'), where('from', '==', userId), where('accepted', '==', false));
 
         const unsubscribeFromOutgoingRequests = onSnapshot(outgoingRequestsQuery, ({docs}) => {
             console.log('OUTGOING FRIEND REQUESTS', docs.map((doc) => doc.data()));
@@ -37,7 +37,7 @@ export function useFriendRequests() {
 
     function listenForIncomingRequests(userId: string): Unsubscribe {
         const db = getFirestore();
-        const incomingRequestsQuery = query(collection(db, 'friendRequests'), where('from', '==', user.uid));
+        const incomingRequestsQuery = query(collection(db, 'friends'), where('to', '==', userId), where('accepted', '==', false));
 
         const unsubscribeFromIncomingRequests = onSnapshot(incomingRequestsQuery, ({docs}) => {
             console.log('INCOMING FRIEND REQUESTS', docs.map((doc) => doc.data()));

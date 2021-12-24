@@ -1,5 +1,4 @@
 import React, { createContext, ReactNode, useContext } from 'react';
-import { useEffect, useState } from 'react';
 
 import { useFriendRequests } from './useFriendRequests';
 import { useFriends } from './useFriends';
@@ -19,7 +18,7 @@ interface FriendsProviderProps {
 }
 
 export function FriendsProvider({ children }: FriendsProviderProps) {
-    const friends = useFriends();
+    useFriends();
     useFriendRequests();
 
     const FriendsContextObject: FriendsContextObject = {

@@ -32,12 +32,12 @@ const useStyles = makeStyles(() => ({
 
     newGame: {
         marginRight: '12px',
-    }
+    },
 }));
 
 export function Games() {
     const classes = useStyles();
-    const { games } = useGames();
+    const { games, createGame } = useGames();
     const [initialLoadInDone, setInitialLoadInDone] = useState<boolean>(false);
 
     const isMounted = useIsMounted();
@@ -67,7 +67,7 @@ export function Games() {
     return (
         <div className={classes.games}>
             <div className={classes.newGame}>
-                <NewGame />
+                <NewGame createGame={createGame}/>
             </div>
 
             <div className={`${classes.existingGames} ${initialLoadInDone && classes.afterInitialLoad}`}>

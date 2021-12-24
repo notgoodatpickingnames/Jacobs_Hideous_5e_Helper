@@ -3,7 +3,7 @@ import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
 import React, { createContext, ReactNode, useContext } from 'react';
 import { useEffect, useState } from 'react';
 
-import { UserProfile } from './userProfile';
+import { UserProfile } from '../profile/profile/userProfile';
 
 interface AuthContextObject {
     user: User;
@@ -23,7 +23,7 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User>(undefined);
     const [userProfile, setUserProfile] = useState<UserProfile>(undefined);
 
     useEffect(() => {
@@ -51,7 +51,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 if (Boolean(userProfile)) {
                     setUserProfile(userProfile);
                 } else {
-                    createUserProfile(userCredentials.user.uid);
+                    createUserProfile(userCredentials.user);
                 }
             }
         });
@@ -73,11 +73,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         signInWithRedirect(getAuth(), googleProvider);
     }
 
-    function createUserProfile(userId: string): void {
+    function createUserProfile(user: User): void {
         const db = getFirestore();
         
-        setDoc(doc(db, 'profiles', userId), {
+        setDoc(doc(db, 'profiles', user.uid), {
             name: '',
+            email: user.email,
         });
     }
 
