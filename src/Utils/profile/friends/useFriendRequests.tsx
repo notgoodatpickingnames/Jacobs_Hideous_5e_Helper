@@ -13,13 +13,13 @@ export function useFriendRequests() {
 
     useEffect(() => {
         if (Boolean(user?.uid)) {
-            const unsubscribeFromOutgoingRequests = listenForOutgoingRequests(user.uid);
-            const unsubscribeFromIncomingRequests = listenForIncomingRequests(user.uid);
+            // const unsubscribeFromOutgoingRequests = listenForOutgoingRequests(user.uid);
+            // const unsubscribeFromIncomingRequests = listenForIncomingRequests(user.uid);
             
-            return () => {
-                unsubscribeFromOutgoingRequests();
-                unsubscribeFromIncomingRequests();
-            }
+            // return () => {
+            //     unsubscribeFromOutgoingRequests();
+            //     unsubscribeFromIncomingRequests();
+            // }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.uid]);

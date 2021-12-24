@@ -45,12 +45,16 @@ export function DisplayName() {
 
     async function isNameInUse(displayName: string): Promise<boolean> {
         const db = getFirestore();
-        const q = query(collection(db, 'usedUserNames'), where(documentId(), '==', displayName), where('userId', '==', user.uid));
-        const docs = await getDocs(q);
+        const q = query(collection(db, 'usedUserNames'), where(documentId(), '==', displayName));
+        const {docs} = await getDocs(q);
 
-        console.log('Is name in use', docs.size > 0);
+        const userNamesNotTiedToUser = docs.filter((doc) => {
+            const {userId: documentUserId} = doc.data() as {userId: string};
 
-        return docs.size > 0;
+            return documentUserId !== user.uid;
+        })
+
+        return userNamesNotTiedToUser.length > 0;
     }
 
     return (
