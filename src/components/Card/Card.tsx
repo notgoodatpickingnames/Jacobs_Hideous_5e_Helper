@@ -23,11 +23,12 @@ const useStyles = makeStyles(() => ({
         border: `1px ${theme.lightBlue} solid`,
         borderRadius: '5px',
         boxSizing: 'border-box',
-        clipPath: 'polygon(calc(100% - 45px) 0, 100% 45px, 100% 100%, 0 100%, 0 0)',
         minHeight: '50px',
+    },
 
+    cardWithCorner: {
+        clipPath: 'polygon(calc(100% - 45px) 0, 100% 45px, 100% 100%, 0 100%, 0 0)',
         
-
         '&:before': {
             display: 'block',
             content: "' '",
@@ -67,9 +68,10 @@ interface FlickerSettings {
 interface CardProps {
     children?: ReactNode | ReactNode[];
     flickerSettings?: FlickerSettings;
+    variant?: 'corner' | 'default';
 }
 
-export function Card({children, flickerSettings}: CardProps) {
+export function Card({children, flickerSettings, variant = 'default'}: CardProps) {
     const classes = useStyles();
 
     const [cardVisible, setCardVisible] = useState<boolean>(false);
@@ -88,7 +90,7 @@ export function Card({children, flickerSettings}: CardProps) {
     }, [flickerSettings, isMounted]);
 
     const card = 
-        <div className={`${classes.card}`}>
+        <div className={`${classes.card} ${variant === 'corner' && classes.cardWithCorner}`}>
             {children}
         </div>;
 
@@ -105,8 +107,11 @@ export function Card({children, flickerSettings}: CardProps) {
             }
             
 
-            <div className={classes.triangle} style={{display: `${cardVisible ? 'block' : 'none'}`}}>
-            </div>
+            {
+                variant === 'corner' &&
+                    <div className={classes.triangle} style={{display: `${cardVisible ? 'block' : 'none'}`}}>
+                    </div>
+            }
         </div>
     );
 }

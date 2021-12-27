@@ -36,7 +36,7 @@ export function Game({game, index, delayVisibility, gameLoadingGlitchEffectLengt
 
     return (
         <div className={classes.gameCardContainer} onClick={onGameClick}>
-            <Card flickerSettings={{length: gameLoadingGlitchEffectLength, delay: delayTime, randomFlickers: true}}>
+            <Card flickerSettings={{length: gameLoadingGlitchEffectLength, delay: delayTime, randomFlickers: true}} variant='corner'>
                 <div className={classes.gameContainer}>
                     {game.name}
                 </div>

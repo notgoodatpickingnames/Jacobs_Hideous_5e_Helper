@@ -1,6 +1,7 @@
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 
+import { useAuth } from '../../../Utils/auth/auth.context';
 import { FriendRelationship } from '../../../Utils/profile/friends';
 
 const useStyles = makeStyles(() => ({
@@ -20,6 +21,9 @@ interface FriendListProps {
 
 export function FriendList({title, friends}: FriendListProps) {
     const classes = useStyles();
+    const { user } = useAuth();
+
+    console.log('Got the friends', friends);
 
     return (
         <div className={classes.container}>
@@ -28,9 +32,11 @@ export function FriendList({title, friends}: FriendListProps) {
             </div>
 
             {
-                friends.map((friend) => {
-
-                })
+                friends.map((friend) => 
+                    <div>
+                        {friend.getOtherUserName(user.uid)}
+                    </div>
+                )
             }
         </div>
     );

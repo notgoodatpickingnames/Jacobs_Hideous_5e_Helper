@@ -1,10 +1,12 @@
 import React, { createContext, ReactNode, useContext } from 'react';
 
-import { useFriendRequests } from './useFriendRequests';
-import { useFriends } from './useFriends';
+import { FriendRelationship } from '.';
+import { useFriendRelationships } from './useFriendRelationships';
 
 interface FriendsContextObject {
-    
+    friends: FriendRelationship[];
+    incomingRequests: FriendRelationship[];
+    outGoingRequests: FriendRelationship[];
 }
 
 export const FriendsContext = createContext<FriendsContextObject>({} as FriendsContextObject);
@@ -18,10 +20,12 @@ interface FriendsProviderProps {
 }
 
 export function FriendsProvider({ children }: FriendsProviderProps) {
-    useFriends();
-    useFriendRequests();
+    const {friends, outGoingRequests, incomingRequests, createFriendRequest, removeFriendRequest, acceptFriendRequest} = useFriendRelationships();
 
     const FriendsContextObject: FriendsContextObject = {
+        friends,
+        outGoingRequests,
+        incomingRequests,
         
     }
 

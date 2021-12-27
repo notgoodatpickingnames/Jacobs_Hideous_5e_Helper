@@ -19,10 +19,12 @@ export function UserSearch() {
     const [id] = useState<string>(uuid());
 
     useEffect(() => {
-        searchNames(nameSearch).then((names) => {
-            console.log('names', names);
-            setNames(names);
-        });
+        if (Boolean(nameSearch)) {
+            searchNames(nameSearch).then((names) => {
+                console.log('names', names);
+                setNames(names);
+            });
+        }
     }, [nameSearch]);
 
     async function searchNames(search: string): Promise<string[]> {
