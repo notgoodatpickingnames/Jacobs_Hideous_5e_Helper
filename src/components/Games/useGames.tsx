@@ -1,4 +1,6 @@
-import { addDoc, collection, getFirestore, onSnapshot, query, where } from '@firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, query, where } from '@firebase/firestore';
+import { getDocs } from 'firebase/firestore';
+import { deleteObject, getStorage, ref } from 'firebase/storage';
 import { useEffect, useState } from 'react';
 
 import { useAuth } from '../../Utils/auth/auth.context';
@@ -48,7 +50,23 @@ export function useGames() {
     }
 
     async function deleteGame(gameId: string): Promise<void> {
+        const db = getFirestore();
 
+        deleteDoc(doc(db, `${gamesPath}/${gameId}`));
+        deleteDoc(doc(db, `gameObjectsInScene/${gameId}`));
+        deleteDoc(doc(db, `gamePlayersInScene/${gameId}`));
+        deleteDoc(doc(db, `gameObjects/${gameId}`));
+
+        const storage = getStorage();
+        const assetIds = await (await getDocs(collection(db, `gameAssets/${gameId}/assets`))).docs.map((doc) => doc.id);
+        
+        assetIds.forEach((assetId) => {
+            const storageRef = ref(storage, `${gameId}/${assetId}`);
+            deleteObject(storageRef);
+        });
+
+        
+        deleteDoc(doc(db, `gameAssets/${gameId}`));
     }
 
     return {games, createGame, updateGame, deleteGame};

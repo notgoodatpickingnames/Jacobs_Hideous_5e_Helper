@@ -9,9 +9,9 @@ export function useCurrentSceneId(userId: string, gameId: string) {
             const db = getFirestore();
 
             const unsub = onSnapshot(doc(db, `gamePlayersInScene/${gameId}/players/${userId}`), (doc) => {
-                const {sceneId} = doc.data() as {sceneId: string};
+                const playerScene = doc.data() as {sceneId: string};
 
-                setCurrentSceneId(sceneId);
+                setCurrentSceneId(playerScene?.sceneId);
             });
 
             return () => {unsub()};

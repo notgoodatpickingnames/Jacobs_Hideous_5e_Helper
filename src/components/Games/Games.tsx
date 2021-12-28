@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
 
 export function Games() {
     const classes = useStyles();
-    const { games, createGame } = useGames();
+    const { games, createGame, deleteGame } = useGames();
     const [initialLoadInDone, setInitialLoadInDone] = useState<boolean>(false);
 
     const isMounted = useIsMounted();
@@ -80,6 +80,7 @@ export function Games() {
                                 delayVisibility={initialLoadInDone}
                                 gameLoadingGlitchEffectOffset={gameLoadingGlitchEffectOffset}
                                 gameLoadingGlitchEffectLength={gameLoadingGlitchEffectLength}
+                                onDeleteGame={deleteGame}
                             />
                         </div>
                     )
