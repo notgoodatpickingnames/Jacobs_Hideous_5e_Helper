@@ -59,7 +59,6 @@ export function useGameObjects(gameId: string, sceneId: string, assets: Asset[])
             const db = getFirestore();
 
             const unsub = onSnapshot(collection(db, `gameObjects/${gameId}/gameObjects`), ({docs}) => {
-                console.log('Got new list of game objects from server');
                 const unfinishedGameObjects = docs.map((doc) => {
                     const unfinishedObject = doc.data() as any;
                     unfinishedObject.gameObjectId = doc.id;

@@ -1,60 +1,52 @@
-import { Autocomplete } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { v4 as uuid } from 'uuid';
 
 import { UserProfile } from '../../../Utils/profile/profile/userProfile';
 import { Input } from '../../Controls';
 
-const useStyles = makeStyles(() => ({
-    container: {
+interface UserSearchProps {
+    onUsersChange: (users: UserProfile[]) => void;
+}
 
-    }
-}));
-
-export function UserSearch() {
-    const [names, setNames] = useState<string[]>([]);
+export function UserSearch({onUsersChange}: UserSearchProps) {
     const [nameSearch, setNameSearch] = useState<string>('');
-    const [id] = useState<string>(uuid());
 
     useEffect(() => {
         if (Boolean(nameSearch)) {
-            searchNames(nameSearch).then((names) => {
-                console.log('names', names);
-                setNames(names);
+            searchNames(nameSearch).then((users) => {
+                onUsersChange(users);
             });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [nameSearch]);
 
-    async function searchNames(search: string): Promise<string[]> {
+    useEffect(() => {
+        return () => {setNameSearch('')};
+    }, []);
+
+    async function searchNames(search: string): Promise<UserProfile[]> {
         const db = getFirestore();
         const q = query(collection(db, 'profiles'), where('name', '>=', search), where('name', '<=', search+ '\uf8ff'), where('name', '!=', ''));
         
         const querySnapshot = await getDocs(q);
-        const names = querySnapshot.docs.map((doc) => (doc.data() as UserProfile).name);
+        const users = querySnapshot.docs.map((doc) => {
+            const profile = (doc.data() as UserProfile);
+            profile.userId = doc.id;
+            
+            return profile;
+        });
 
-        return names;
+        return users;
     }
-
 
     return (
         <div>
-            <Autocomplete
-                options={names}
-                id={`friend_search_${id}`}
-                renderInput={(params) =>
-                    <Input
-                        {...params}
-                        inputProps={params.inputProps}
-                        label={'Friend Search'}
-                        value={nameSearch}
-                        placeholder="Friend's Email"
-                        onChange={(event) => setNameSearch(event.target.value)} 
-                    />
-                }
+            <Input
+                label={'Friend Search'}
+                value={nameSearch}
+                placeholder="Friend's Email"
+                onChange={(event) => setNameSearch(event.target.value)} 
             />
-            
         </div>
         
     )

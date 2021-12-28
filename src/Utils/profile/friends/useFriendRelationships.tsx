@@ -1,5 +1,16 @@
 import { Unsubscribe } from 'firebase/auth';
-import { collection, doc, getDoc, getFirestore, onSnapshot, query, where } from 'firebase/firestore';
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getFirestore,
+    onSnapshot,
+    query,
+    setDoc,
+    where,
+} from 'firebase/firestore';
 import { useEffect, useMemo, useState } from 'react';
 
 import { FriendRelationship } from '.';
@@ -73,17 +84,29 @@ export function useFriendRelationships() {
     }
 
     function createFriendRequest(userId: string): void {
-        // add friend to this users friends list
-        // create friend request with other users id in to field and this users id in from field
+        const db = getFirestore();
+        
+        addDoc(collection(db, 'friends'), {
+            accepted: false,
+            from: user.uid,
+            to: userId,
+        });
     }
     
-    function removeFriendRequest(friendRequestId: string): void {
-        // removes the friend request entirely which will remove it from any lists for both players
+    function removeFriendRequest(relationshipId: string): void {
+        const db = getFirestore();
+
+        deleteDoc(doc(db, `friends/${relationshipId}`));
     }
 
-    function acceptFriendRequest(friendRequestId: string): void {
-        // add the from players id to this users friends list
-        // remove friend request
+    function acceptFriendRequest(relationship: FriendRelationship): void {
+        const db = getFirestore();
+        
+        setDoc(doc(db, `friends/${relationship.friendRelationshipId}`), {
+            accepted: true,
+            from: relationship.from,
+            to: relationship.to,
+        });
     }
 
     return {friends, outGoingRequests, incomingRequests, createFriendRequest, removeFriendRequest, acceptFriendRequest};

@@ -33,11 +33,8 @@ export function ProfileProvider({ children }: ProfileProviderProps) {
         });
 
         if (Boolean(oldDisplayName)) {
-            console.log('Deleting old name', oldDisplayName);
             await deleteDoc(doc(db, `usedUserNames/${oldDisplayName}`));
         }
-
-        console.log('Creating New Name', profile.name);
 
         setDoc(doc(db, `usedUserNames/${profile.name}`), {
             userId,

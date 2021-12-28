@@ -34,6 +34,7 @@ const useStyles = makeStyles(() => ({
         textAlign: 'center',
         width: '100%',
         marginBottom: '10px',
+        whiteSpace: 'nowrap',
     },
 }));
 
@@ -55,7 +56,7 @@ export function Home() {
             <div className={classes.friendsContainer}>
                 <div>
                     <div className={classes.title}>
-                        F R I E N D S
+                        S O C I A L
                     </div>
 
                     <Friends />

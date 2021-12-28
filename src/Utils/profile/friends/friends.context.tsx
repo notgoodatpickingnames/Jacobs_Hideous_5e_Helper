@@ -7,6 +7,9 @@ interface FriendsContextObject {
     friends: FriendRelationship[];
     incomingRequests: FriendRelationship[];
     outGoingRequests: FriendRelationship[];
+    createFriendRequest: (userId: string) => void;
+    removeFriendRequest: (friendRequestId: string) => void;
+    acceptFriendRequest: (relationship: FriendRelationship) => void;
 }
 
 export const FriendsContext = createContext<FriendsContextObject>({} as FriendsContextObject);
@@ -26,7 +29,9 @@ export function FriendsProvider({ children }: FriendsProviderProps) {
         friends,
         outGoingRequests,
         incomingRequests,
-        
+        createFriendRequest,
+        removeFriendRequest,
+        acceptFriendRequest,
     }
 
     return (

@@ -244,8 +244,9 @@ service cloud.firestore {
       let isCreatorTheFromPlayer = request.auth.uid == fromPlayerId;
       let doesToPlayerExist = exists(/databases/$(database)/documents/profiles/$(toPlayerId));
       let doesFromPlayerExist = exists(/databases/$(database)/documents/profiles/$(fromPlayerId));
+      let isCreatingAsNotAccepted = request.resource.data.accepted == false;
       
-      return doesToPlayerExist && doesFromPlayerExist && isCreatorTheFromPlayer;
+      return doesToPlayerExist && doesFromPlayerExist && isCreatorTheFromPlayer && isCreatingAsNotAccepted;
     }
     
     function valid_friend_update() {
@@ -260,7 +261,9 @@ service cloud.firestore {
       
       let doesNotChangeAnyPlayers = doesNotChangeToPlayer && doesNotChangeFromPlayer;
       
-      return doesNotChangeAnyPlayers;
+      let isUpdaterToPlayer = resource.data.to == oldToPlayerId;
+      
+      return doesNotChangeAnyPlayers && isUpdaterToPlayer;
     }
     
     function valid_friend_delete() {

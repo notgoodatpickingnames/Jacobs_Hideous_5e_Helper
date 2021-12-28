@@ -95,7 +95,6 @@ export class ImageObject extends SyncableObject {
 
     private onDrop(): void {
         this.pickedUp = false;
-        console.log('On Drop');
 
         this.sync();
     }
