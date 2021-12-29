@@ -29,11 +29,11 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export function TokensMenu() {
+export function AssetsMenu() {
     const classes = useStyles();
 
-    const {addGameObject} = useEngineContext();
-    const {syncGameObject, gameId, sceneId} = useGameManagerContext();
+    const {setGameObject} = useEngineContext();
+    const {syncGameObject, gameId, sceneId, addAsset} = useGameManagerContext();
     const {scale} = useWorldContext();
     const {gridPositionMouseIsOver, mousePositionInWorld} = useInputContext();
     const {assets} = useGameManagerContext();
@@ -43,8 +43,8 @@ export function TokensMenu() {
         return Boolean(assets) && Boolean(gameId) && Boolean(sceneId) ? assets.map((asset) =>  new ImageObject({
             gameObjectId: uuid(),
             position: Vector2.zero, 
-            width: 40,
-            height: 40,
+            width: asset.image.width,
+            height: asset.image.height,
             image: asset.image,
             assetId: asset.assetId,
             name: asset.name,
@@ -64,14 +64,20 @@ export function TokensMenu() {
                 gameObject = token.clone(uuid(), mousePositionInWorld.current);
             }
             
-            addGameObject(gameObject);
+            setGameObject(gameObject);
             syncGameObject(gameObject);
+        }
+    }
+
+    function handleImageDrop(files: File[]): void {
+        for (let i = 0; i < files.length; i++) {
+            addAsset(files[i]);
         }
     }
 
     return (
         <>
-            <ImageDropZone imageStoragePath={`${gameId}`}>
+            <ImageDropZone onImagesDrop={handleImageDrop}>
                 <div className={classes.tokensMenuContainer}>
                     {
                         tokens.map((token, index) => 

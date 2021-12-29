@@ -40,7 +40,7 @@ export function World() {
 
     const {scale, panState, backgroundColor, canvas, canvasContext} = useWorldContext();
     const {mousePositionInWorld} = useInputContext();
-    const {addFunctionOnRender, addGameObject} = useEngineContext();
+    const {addFunctionOnRender, setGameObject} = useEngineContext();
 
     const mapContainer = useRef<HTMLDivElement>();
     const mapContainerSize = useElementSize(mapContainer);
@@ -53,7 +53,7 @@ export function World() {
     useEffect(() => {
         if (mapContainerSize.width !== 0 && mapContainerSize.height !== 0) {
             const grid = new Grid(mapContainerSize.width, mapContainerSize.height, gridSquareSize);
-            addGameObject(grid);
+            setGameObject(grid);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mapContainerSize]);

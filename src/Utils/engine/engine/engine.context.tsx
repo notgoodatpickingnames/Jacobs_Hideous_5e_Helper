@@ -10,7 +10,7 @@ import { useMainLoop } from './useMainLoop';
 export interface EngineContextObject {
     gameObjects: MutableRefObject<Map<string, GameObject>>;
     gameObjectsByLayer: MutableRefObject<Map<number, Map<string, GameObject>>>;
-    addGameObject: (gameObject: GameObject) => void;
+    setGameObject: (gameObject: GameObject) => void;
     getGameObject: (gameObjectId: string) => GameObject;
     removeGameObject: (gameObject: GameObject) => void;
     addFunctionOnRender: (functionOnRender: () => void) => void;
@@ -27,7 +27,7 @@ interface EngineContextProviderProps {
 }
 
 export function EngineContextProvider({children}: EngineContextProviderProps) {
-    const [gameObjects, gameObjectsByLayer, addGameObject, getGameObject, removeGameObject, onEngineCreated] = useGameObjects();
+    const {gameObjects, gameObjectsByLayer, setGameObject, getGameObject, removeGameObject, onEngineCreated} = useGameObjects();
     const functionsOnRender = useRef<(() => void)[]>([]);
     const {canvas, canvasContext} = useWorldContext();
 
@@ -40,7 +40,7 @@ export function EngineContextProvider({children}: EngineContextProviderProps) {
     const engineContextObject: EngineContextObject = {
         gameObjects,
         gameObjectsByLayer,
-        addGameObject,
+        setGameObject,
         getGameObject,
         removeGameObject,
         addFunctionOnRender,

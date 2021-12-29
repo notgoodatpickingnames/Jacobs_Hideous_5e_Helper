@@ -1,5 +1,5 @@
 import { doc, getFirestore, onSnapshot } from '@firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useAuth } from '../../../Utils/auth/auth.context';
 import { Game } from './models/game';
@@ -8,7 +8,6 @@ import { IGame } from './models/IGame';
 export function useGame(gameId: string) {
     const { user } = useAuth();
     const [game, setGame] = useState<Game>();
-    const [isUserOwnerOfGame, setIsUserOwnerOfGame] = useState<boolean>(false);
 
     useEffect(() => {
         const db = getFirestore();
@@ -20,14 +19,15 @@ export function useGame(gameId: string) {
             setGame(new Game(_game));
         });
 
-
         return () => {unsubscribe();};
     }, [gameId]);
 
-    useEffect(() => {
+    const isUserOwnerOfGame = useMemo(() => {
         if (Boolean(user) && Boolean(game)) {
-            setIsUserOwnerOfGame(user.uid === game.ownerId);
+            return user.uid === game.ownerId;
         }
+
+        return false;
     }, [user, game]);
 
     return { game, isUserOwnerOfGame };

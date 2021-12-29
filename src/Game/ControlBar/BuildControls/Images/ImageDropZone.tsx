@@ -1,15 +1,11 @@
 import React, { ReactNode } from 'react';
 
-import { useGameManagerContext } from '../../../gameManager';
-
 interface ImageDropZoneProps {
     children: ReactNode | ReactNode[];
-    imageStoragePath: string;
+    onImagesDrop: (images: File[]) => void;
 }
 
-export function ImageDropZone({children, imageStoragePath}: ImageDropZoneProps) {
-    const { addAsset } = useGameManagerContext();
-
+export function ImageDropZone({children, onImagesDrop}: ImageDropZoneProps) {
     function onDragOver(event: DragEvent): void {
         if (event.dataTransfer.items.length > 0) {
             event.preventDefault();
@@ -22,9 +18,7 @@ export function ImageDropZone({children, imageStoragePath}: ImageDropZoneProps) 
         if (files.length > 0) {
             event.preventDefault();
 
-            for (let i = 0; i < files.length; i++) {
-                addAsset(files[i]);
-            }
+            onImagesDrop(Array.from(files));
         }
     }
 

@@ -16,7 +16,7 @@ export function useGameObjects() {
         }
     }
 
-    function addGameObject(gameObject: GameObject): void {
+    function setGameObject(gameObject: GameObject): void {
         gameObject.addEngine(engine.current);
         gameObjects.current.set(gameObject.gameObjectId, gameObject);
 
@@ -41,5 +41,5 @@ export function useGameObjects() {
         layer.delete(gameObject.gameObjectId);
     }
 
-    return [gameObjects, gameObjectsByLayer, addGameObject, getGameObject, removeGameObject, onEngineCreated] as const;
+    return {gameObjects, gameObjectsByLayer, setGameObject, getGameObject, removeGameObject, onEngineCreated} as const;
 }

@@ -16,6 +16,7 @@ export interface GameManagerContextObject {
     gameId: string;
     sceneId: string;
     game: Game;
+    isUserOwnerOfGame: boolean;
 }
 
 export const GameManagerContext = createContext<GameManagerContextObject>({} as GameManagerContextObject);
@@ -39,7 +40,7 @@ export function GameManagerContextProvider({children}: GameManagerContextProvide
 
     useEffect(() => {
         gameObjects.forEach((gameObject) => {
-            engineContext.addGameObject(gameObject);
+            engineContext.setGameObject(gameObject);
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [gameObjects]);
@@ -51,6 +52,7 @@ export function GameManagerContextProvider({children}: GameManagerContextProvide
         gameId,
         sceneId,
         game,
+        isUserOwnerOfGame,
     }
 
     return (

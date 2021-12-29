@@ -3,7 +3,7 @@ import { Button as ButtonBase } from '@mui/material';
 import { makeStyles, withStyles } from '@mui/styles';
 import { useState } from 'react';
 
-import { TokensMenu } from './Tokens/TokensMenu';
+import { AssetsMenu } from './Assets';
 
 const buttonStyles = () => ({
     root: {
@@ -60,20 +60,20 @@ function BuildControls() {
                     </div>
                     
                     <div>
-                        Test 2
+                        Players
                     </div>
 
                     <div>
-                        Test 3
+                        NPCs
                     </div>
                     
                     <div>
-                        Test 4
+                        Map Pieces
                     </div>
                 </div>
             </div>
 
-            <TokensMenu />
+            <AssetsMenu />
         </>
     )
 }
